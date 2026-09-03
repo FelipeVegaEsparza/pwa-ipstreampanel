@@ -97,10 +97,10 @@ export function ShareModal({ open, onClose, title, url }: ShareModalProps) {
               href={option.href}
               target="_blank"
               rel="noreferrer"
+              aria-label={option.label}
               title={option.label}
             >
-              <option.icon size={22} />
-              <span>{option.label}</span>
+              <option.icon size={24} />
             </a>
           ))}
         </div>
