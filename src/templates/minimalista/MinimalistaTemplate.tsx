@@ -23,7 +23,7 @@ export function MinimalistaTemplate({ clientData, isLoading }: TemplateProps) {
   const basic = clientData?.basicData
   const name = basic?.projectName ?? tenant.clientId ?? 'IPStream'
   const streamUrl = basic?.radioStreamingUrl ?? null
-  const tvUrl = basic?.videoStreamingUrl ?? null
+  const tvUrl = (basic?.videoStreamingUrl ?? '').trim() || null
   const currentTrack = streaming?.currentTrack
   const trackCover = currentTrack?.coverUrl ?? null
   const trackKey =
