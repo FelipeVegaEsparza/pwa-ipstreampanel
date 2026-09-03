@@ -36,6 +36,9 @@ Ejemplo:
 
 ```bash
 npm run new-client -- radio-nueva cmxxxxxxxxxxxxxxxx "Radio Nueva FM"
+
+npm run new-client -- radio-prueba cmtlipo00000bojlehq2kezxn "Radio de Prueba"
+
 ```
 
 Qué hace el comando:
