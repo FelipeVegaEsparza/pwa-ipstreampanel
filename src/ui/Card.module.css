@@ -1,0 +1,8 @@
+.card {
+  background: var(--content-card-bg, #ffffff);
+  border: 1px solid var(--content-card-border, #e5e3de);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}

@@ -1,0 +1,11 @@
+.section {
+  margin: var(--space-6) 0;
+}
+
+.title {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--content-muted, #6b6761);
+  margin: 0 0 var(--space-4);
+}

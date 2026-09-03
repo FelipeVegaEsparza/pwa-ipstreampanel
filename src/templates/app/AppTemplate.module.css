@@ -1,0 +1,15 @@
+.page {
+  --tpl-bg: #17171c;
+  --tpl-text: #f3f4f6;
+  --tpl-muted: #9ca3af;
+  --tpl-accent: #22d3ee;
+  --tpl-accent-text: #082f36;
+  --tpl-card-bg: #23232a;
+  --tpl-card-border: #33333c;
+  --tpl-skeleton: rgba(255, 255, 255, 0.1);
+  --tpl-header-bg: #202027;
+  --hero-bg: #23232a;
+  --hero-radius: 12px;
+  --hero-cover-radius: 10px;
+  --hero-cover-size: 140px;
+}

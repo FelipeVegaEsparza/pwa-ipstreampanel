@@ -1,0 +1,15 @@
+.page {
+  --tpl-bg: #faf6f0;
+  --tpl-text: #2b2118;
+  --tpl-muted: #8a7a68;
+  --tpl-accent: #c0392b;
+  --tpl-accent-text: #ffffff;
+  --tpl-card-bg: #fffdf9;
+  --tpl-card-border: #e8ddcd;
+  --tpl-skeleton: rgba(0, 0, 0, 0.08);
+  --tpl-header-bg: #fffdf9;
+  --tpl-brand-font: Georgia, 'Times New Roman', serif;
+  --hero-bg: #fffdf9;
+  --hero-radius: 8px;
+  --hero-cover-radius: 6px;
+}

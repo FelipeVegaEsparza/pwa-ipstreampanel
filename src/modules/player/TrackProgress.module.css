@@ -1,0 +1,32 @@
+.full,
+.thin {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--tpl-skeleton, rgba(128, 128, 128, 0.18));
+  overflow: hidden;
+}
+
+.thin .bar {
+  height: 3px;
+}
+
+.fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--tpl-accent, #6366f1);
+  transition: width 0.3s linear;
+}
+
+.times {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--tpl-muted, #9ca3af);
+  font-variant-numeric: tabular-nums;
+}

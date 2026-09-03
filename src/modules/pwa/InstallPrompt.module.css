@@ -1,0 +1,14 @@
+.install {
+  border: 1px solid var(--content-card-border, #e5e3de);
+  background: transparent;
+  color: var(--content-text, inherit);
+  border-radius: 999px;
+  padding: var(--space-2) var(--space-4);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: opacity 150ms ease;
+}
+
+.install:hover {
+  opacity: 0.8;
+}

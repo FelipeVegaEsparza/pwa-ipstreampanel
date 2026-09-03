@@ -1,0 +1,13 @@
+.screen {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+}
+
+.text {
+  font-size: 1rem;
+  margin: 0;
+}

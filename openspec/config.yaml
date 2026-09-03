@@ -1,0 +1,150 @@
+schema: spec-driven
+
+context: |
+  Proyecto
+
+  Nombre: IPStream PWA
+  Directorio: app-pwa
+
+  Propósito
+
+  Este proyecto es una aplicación web/PWA multi-tenant para sitios de
+  radios y canales de TV administrados mediante IPStream Panel.
+
+  Cada instalación/sitio se identifica mediante un clientId único.
+  El frontend obtiene la información pública del cliente mediante la API
+  REST pública de IPStream Panel.
+
+  API
+
+  Base URL:
+  https://panelipstream.cl
+
+  API pública:
+  https://panelipstream.cl/api/public/{clientId}
+
+  La API es pública y no requiere autenticación.
+  CORS está habilitado para todos los orígenes.
+
+  La especificación completa de la API se encuentra en:
+  instruccionesapi.md
+
+  OpenCode DEBE leer y considerar instruccionesapi.md antes de diseñar
+  o implementar cualquier funcionalidad que dependa de la API.
+
+  Arquitectura
+
+  La aplicación debe diseñarse como una aplicación multi-tenant.
+  El clientId determina qué radio/TV se está mostrando.
+
+  No se debe asumir que todos los clientes tienen los mismos datos.
+  La aplicación debe manejar correctamente valores null, arrays vacíos,
+  contenido inexistente y respuestas incompletas.
+
+  La resolución del clientId es híbrida: subdominio → clientId mediante
+  un registro JSON estático, con fallback por ruta (/c/{clientId}).
+
+  Streaming
+
+  El reproductor de radio debe utilizar streamUrl proporcionada por la API.
+  El estado del streaming puede ser:
+
+  off
+  autodj
+  live
+
+  Los datos de streaming son dinámicos y no deben almacenarse en caché
+  de forma que impidan mostrar el estado actual.
+
+  El endpoint /streaming/status está destinado a consultas ligeras y
+  actualizaciones frecuentes del estado del reproductor.
+
+  PWA
+
+  El proyecto debe tratarse como una PWA real.
+  La instalación, manifest, service worker, cache strategy y experiencia
+  offline deben diseñarse considerando que el contenido de streaming
+  y los datos dinámicos no deben quedar obsoletos.
+
+  El registro de instalación se realiza mediante:
+  POST /api/public/{clientId}/pwa/register
+
+  El deviceId debe persistirse localmente y registrarse de forma
+  idempotente.
+
+  Encuestas
+
+  La API no proporciona protección server-side contra votos duplicados.
+  El frontend DEBE utilizar localStorage con la clave:
+  poll_{pollId}
+
+  Chat
+
+  El chat utiliza polling.
+  El frontend debe conservar serverTime de la respuesta anterior y
+  utilizarlo como parámetro since en las siguientes consultas.
+
+  El polling debe evitar solicitudes innecesarias y manejar errores
+  de red sin romper la interfaz.
+
+  Datos
+
+  Las fechas provenientes de la API utilizan ISO 8601.
+  Los IDs son strings generados por Prisma.
+  Los endpoints GET son de solo lectura.
+
+  Calidad
+
+  No inventar endpoints, campos ni comportamientos que no estén definidos
+  en instruccionesapi.md.
+
+  Antes de implementar una integración con la API, verificar el contrato
+  documentado en instruccionesapi.md.
+
+  Las funcionalidades deben diseñarse para degradar correctamente cuando
+  una API no tenga datos o devuelva null.
+
+  Desarrollo con OpenSpec
+
+  No comenzar una implementación importante sin una propuesta OpenSpec.
+  Primero analizar el problema y el estado actual del proyecto.
+  Luego definir propuesta, diseño, especificaciones y tareas.
+  La implementación debe seguir las tareas aprobadas.
+
+  Las decisiones arquitectónicas importantes deben quedar documentadas
+  en los artefactos OpenSpec correspondientes.
+
+rules:
+  proposal:
+    - Explicar claramente el problema que se quiere resolver.
+    - Incluir objetivos y no-objetivos.
+    - No inventar requisitos que no hayan sido solicitados o documentados.
+    - Considerar el carácter multi-tenant del proyecto.
+
+  design:
+    - Justificar las decisiones arquitectónicas importantes.
+    - Considerar rendimiento, PWA, responsive design y experiencia móvil.
+    - Considerar estados de carga, error, ausencia de datos y datos null.
+    - Mantener separación clara entre datos de API, lógica de negocio y UI.
+    - No duplicar innecesariamente la lógica de consumo de la API.
+
+  tasks:
+    - Dividir el trabajo en tareas pequeñas y verificables.
+    - Cada tarea debe indicar claramente qué se debe implementar.
+    - Incluir pruebas o validaciones cuando corresponda.
+    - Evitar tareas ambiguas como "mejorar frontend" o "hacer integración".
+
+operations:
+  apply:
+    guidance:
+      - Leer instruccionesapi.md antes de implementar funcionalidades relacionadas con la API.
+      - Respetar estrictamente los contratos documentados de la API.
+      - No modificar funcionalidades no relacionadas con el cambio aprobado.
+      - Ejecutar validaciones y pruebas disponibles después de implementar.
+      - Marcar las tareas completadas únicamente después de verificar su resultado.
+
+  archive:
+    guidance:
+      - Verificar que la implementación corresponda con la propuesta aprobada.
+      - Confirmar que las especificaciones reflejen el comportamiento final.
+      - Resumir cualquier desviación entre el diseño aprobado y la implementación.
