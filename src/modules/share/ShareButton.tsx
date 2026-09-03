@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ShareModal } from './ShareModal'
 import styles from './ShareButton.module.css'
 
 interface ShareButtonProps {
@@ -8,38 +9,27 @@ interface ShareButtonProps {
 }
 
 export function ShareButton({ title, url, className }: ShareButtonProps) {
-  const [copied, setCopied] = useState(false)
-
-  async function handleShare() {
-    const shareUrl = url ?? window.location.href
-
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: title ?? document.title, url: shareUrl })
-        return
-      } catch {
-        // usuario canceló o falló; continuar al fallback no es necesario
-        return
-      }
-    }
-
-    try {
-      await navigator.clipboard.writeText(shareUrl)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } catch {
-      // sin clipboard
-    }
-  }
+  const [open, setOpen] = useState(false)
+  const shareUrl = url ?? window.location.href
 
   return (
-    <button
-      type="button"
-      className={`${styles.share} ${className ?? ''}`}
-      onClick={() => void handleShare()}
-      aria-label="Compartir"
-    >
-      {copied ? '✓ Enlace copiado' : 'Compartir'}
-    </button>
+    <>
+      <button
+        type="button"
+        className={`${styles.share} ${className ?? ''}`}
+        onClick={() => setOpen(true)}
+        aria-label="Compartir"
+        aria-haspopup="dialog"
+      >
+        Compartir
+      </button>
+
+      <ShareModal
+        open={open}
+        onClose={() => setOpen(false)}
+        title={title ?? document.title}
+        url={shareUrl}
+      />
+    </>
   )
 }

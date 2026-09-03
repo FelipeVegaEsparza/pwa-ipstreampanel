@@ -1,0 +1,90 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+
+.card {
+  width: 100%;
+  max-width: 360px;
+  background: var(--content-card-bg, #ffffff);
+  color: var(--content-text, #17171c);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.close {
+  border: none;
+  background: transparent;
+  color: var(--content-muted, #5f6672);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.subtitle {
+  margin: var(--space-2) 0 var(--space-4);
+  color: var(--content-muted, #5f6672);
+  font-size: 0.9rem;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--content-card-border, #e6e8ec);
+  border-radius: var(--radius-md);
+  background: var(--content-card-bg, #ffffff);
+  color: var(--content-text, #17171c);
+  font-family: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+.option:hover {
+  opacity: 0.85;
+  transform: translateX(2px);
+}
+
+.optionIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--content-accent, #7c3aed);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.optionLabel {
+  text-align: left;
+}
