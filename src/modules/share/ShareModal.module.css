@@ -6,19 +6,21 @@
   align-items: center;
   justify-content: center;
   padding: var(--space-4);
-  background: rgba(10, 10, 16, 0.55);
-  backdrop-filter: blur(6px);
+  background: rgba(8, 8, 14, 0.6);
+  backdrop-filter: blur(8px);
 }
 
 .card {
   width: 100%;
   max-width: 360px;
-  background: #ffffff;
-  color: #14141a;
+  background: rgba(26, 26, 34, 0.86);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #f5f5f7;
   border-radius: 20px;
   padding: var(--space-6) var(--space-5);
   text-align: center;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
 }
 
 .headIcon {
@@ -37,11 +39,12 @@
   margin: 0;
   font-size: 1.25rem;
   font-weight: 800;
+  color: #ffffff;
 }
 
 .subtitle {
   margin: var(--space-2) 0 var(--space-5);
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.72);
   font-size: 0.9rem;
 }
 
@@ -58,7 +61,7 @@
   gap: 6px;
   padding: var(--space-3) var(--space-1);
   border-radius: 14px;
-  color: #14141a;
+  color: #f5f5f7;
   font-size: 0.72rem;
   font-weight: 600;
   text-decoration: none;
@@ -67,11 +70,11 @@
 
 .brand:hover {
   transform: translateY(-3px);
-  background: #f3f4f6;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .brand svg {
-  color: #111827;
+  color: #e5e7eb;
 }
 
 .brand_whatsapp svg {
@@ -79,15 +82,15 @@
 }
 
 .brand_facebook svg {
-  color: #1877f2;
+  color: #4d9bf0;
 }
 
 .brand_x svg {
-  color: #000000;
+  color: #ffffff;
 }
 
 .brand_telegram svg {
-  color: #26a5e4;
+  color: #2ab0ee;
 }
 
 .copy {
@@ -98,10 +101,10 @@
   width: 100%;
   margin-top: var(--space-4);
   padding: var(--space-3);
-  border: 1px solid #e5e7eb;
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 14px;
-  background: #f9fafb;
-  color: #14141a;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
   font-family: inherit;
   font-size: 0.9rem;
   font-weight: 600;
@@ -110,11 +113,11 @@
 }
 
 .copy:hover {
-  background: #f3f4f6;
+  background: rgba(255, 255, 255, 0.16);
 }
 
 .copy.copied {
-  border-color: #16a34a;
-  color: #16a34a;
-  background: #f0fdf4;
+  border-color: #4ade80;
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.12);
 }
