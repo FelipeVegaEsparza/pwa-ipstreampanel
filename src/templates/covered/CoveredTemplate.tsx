@@ -12,6 +12,7 @@ import { useTrackProgress } from '@/modules/player/useTrackProgress'
 import { VuMeter } from '@/modules/player/VuMeter'
 import { ShareButton } from '@/modules/share/ShareButton'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
+import { Weather } from '@/modules/weather/Weather'
 import { SmartImage } from '@/ui'
 import styles from './CoveredTemplate.module.css'
 
@@ -92,6 +93,7 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
             <SmartImage className={styles.logo} src={basic?.logoUrl} alt={name} />
             <div className={styles.headerRight}>
               <span className={styles.date}>{dateText}</span>
+              <Weather location={basic?.location} />
               <span className={styles.live}>
                 <span className={styles.liveDot} />
                 EN VIVO

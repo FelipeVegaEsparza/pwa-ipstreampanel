@@ -12,6 +12,7 @@ import { VuMeter } from '@/modules/player/VuMeter'
 import { ShareButton } from '@/modules/share/ShareButton'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
 import { useHlsVideo } from '@/modules/tv/useHlsVideo'
+import { Weather } from '@/modules/weather/Weather'
 import { DigitalClock, SmartImage } from '@/ui'
 import styles from './MinimalistaTemplate.module.css'
 
@@ -130,6 +131,7 @@ export function MinimalistaTemplate({ clientData, isLoading }: TemplateProps) {
           <aside className={styles.side}>
             <div className={styles.clockArea}>
               <DigitalClock />
+              <Weather location={basic?.location} />
             </div>
 
             <div className={styles.sideNext}>

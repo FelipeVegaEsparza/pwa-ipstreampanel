@@ -22,6 +22,14 @@ export interface FullClientData {
   videocasts: Videocast[]
 }
 
+export interface BasicLocation {
+  city?: string | null
+  region?: string | null
+  country?: string | null
+  latitude?: number | null
+  longitude?: number | null
+}
+
 export interface BasicData {
   projectName: string
   projectDescription: string
@@ -30,6 +38,7 @@ export interface BasicData {
   websiteUrl: string | null
   radioStreamingUrl: string | null
   videoStreamingUrl: string | null
+  location?: BasicLocation | null
   createdAt: string
   updatedAt: string
 }
