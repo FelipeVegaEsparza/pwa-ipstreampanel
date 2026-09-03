@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import {
   FaFacebookF,
   FaLink,
+  FaShareNodes,
   FaTelegram,
   FaWhatsapp,
   FaXTwitter
@@ -12,17 +13,16 @@ interface ShareOption {
   key: string
   label: string
   icon: React.ComponentType<{ size?: number }>
-  href?: string
+  href: string
 }
 
 function buildShareOptions(title: string, url: string): ShareOption[] {
-  const text = encodeURIComponent(`${title}: ${url}`)
   return [
     {
       key: 'whatsapp',
       label: 'WhatsApp',
       icon: FaWhatsapp,
-      href: `https://wa.me/?text=${text}`
+      href: `https://wa.me/?text=${encodeURIComponent(`${title}: ${url}`)}`
     },
     {
       key: 'facebook',
@@ -32,7 +32,7 @@ function buildShareOptions(title: string, url: string): ShareOption[] {
     },
     {
       key: 'x',
-      label: 'X (Twitter)',
+      label: 'X',
       icon: FaXTwitter,
       href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`
     },
@@ -81,44 +81,38 @@ export function ShareModal({ open, onClose, title, url }: ShareModalProps) {
   return (
     <div className={styles.overlay} role="dialog" aria-modal="true" onClick={onClose}>
       <div className={styles.card} onClick={(event) => event.stopPropagation()}>
-        <header className={styles.header}>
-          <h3 className={styles.title}>Compartir</h3>
-          <button
-            type="button"
-            className={styles.close}
-            onClick={onClose}
-            aria-label="Cerrar"
-          >
-            ×
-          </button>
-        </header>
-        <p className={styles.subtitle}>Comparte esta radio con tus amigos</p>
+        <div className={styles.headIcon}>
+          <FaShareNodes size={20} />
+        </div>
+        <h3 className={styles.title}>Compartir</h3>
+        <p className={styles.subtitle}>
+          Comparte {title || 'esta radio'} con tus amigos
+        </p>
 
-        <div className={styles.options}>
+        <div className={styles.grid}>
           {options.map((option) => (
             <a
               key={option.key}
-              className={styles.option}
+              className={`${styles.brand} ${styles[`brand_${option.key}`]}`}
               href={option.href}
               target="_blank"
               rel="noreferrer"
+              title={option.label}
             >
-              <span className={styles.optionIcon}>
-                <option.icon size={18} />
-              </span>
-              <span className={styles.optionLabel}>{option.label}</span>
+              <option.icon size={22} />
+              <span>{option.label}</span>
             </a>
           ))}
-
-          <button type="button" className={styles.option} onClick={() => void copyLink()}>
-            <span className={styles.optionIcon}>
-              <FaLink size={18} />
-            </span>
-            <span className={styles.optionLabel}>
-              {copied ? '✓ Enlace copiado' : 'Copiar enlace'}
-            </span>
-          </button>
         </div>
+
+        <button
+          type="button"
+          className={`${styles.copy} ${copied ? styles.copied : ''}`}
+          onClick={() => void copyLink()}
+        >
+          <FaLink size={16} />
+          <span>{copied ? '¡Enlace copiado!' : 'Copiar enlace'}</span>
+        </button>
       </div>
     </div>
   )
