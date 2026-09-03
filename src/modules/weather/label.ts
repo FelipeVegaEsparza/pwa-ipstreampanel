@@ -17,3 +17,33 @@ export function weatherLabel(code: number | null | undefined): string | null {
   if (code === 96 || code === 99) return 'Tormenta con granizo'
   return null
 }
+
+import type { ComponentType } from 'react'
+import {
+  FaBolt,
+  FaCloud,
+  FaCloudRain,
+  FaCloudShowersHeavy,
+  FaCloudSun,
+  FaSmog,
+  FaSnowflake,
+  FaSun
+} from 'react-icons/fa6'
+
+export type WeatherIcon = ComponentType<{ size?: number }>
+
+export function weatherIcon(code: number | null | undefined): WeatherIcon | null {
+  if (code === null || code === undefined) return null
+  if (code === 0) return FaSun
+  if (code === 1) return FaSun
+  if (code === 2) return FaCloudSun
+  if (code === 3) return FaCloud
+  if (code === 45 || code === 48) return FaSmog
+  if (code >= 51 && code <= 57) return FaCloudRain
+  if (code >= 61 && code <= 67) return FaCloudRain
+  if (code >= 71 && code <= 77) return FaSnowflake
+  if (code >= 80 && code <= 82) return FaCloudShowersHeavy
+  if (code >= 85 && code <= 86) return FaSnowflake
+  if (code >= 95) return FaBolt
+  return null
+}

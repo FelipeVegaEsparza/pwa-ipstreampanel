@@ -85,6 +85,7 @@ export function MinimalistaTemplate({ clientData, isLoading }: TemplateProps) {
       <div className={styles.shell}>
         <header className={styles.header}>
           <SmartImage className={styles.logo} src={basic?.logoUrl} alt={name} />
+          <Weather location={basic?.location} />
         </header>
 
         <div className={styles.columns}>
@@ -131,7 +132,6 @@ export function MinimalistaTemplate({ clientData, isLoading }: TemplateProps) {
           <aside className={styles.side}>
             <div className={styles.clockArea}>
               <DigitalClock />
-              <Weather location={basic?.location} />
             </div>
 
             <div className={styles.sideNext}>

@@ -1,5 +1,6 @@
+import { FaLocationDot } from 'react-icons/fa6'
 import type { BasicLocation } from '@/core/types'
-import { weatherLabel } from './label'
+import { weatherIcon, weatherLabel } from './label'
 import { useWeather } from './useWeather'
 import styles from './Weather.module.css'
 
@@ -13,21 +14,29 @@ export function Weather({ location, className }: WeatherProps) {
   if (!weather) return null
 
   const unit = location?.country === 'US' ? 'F' : 'C'
-  const city =
-    location?.city ||
-    (location?.region ? `${location.region}` : null) ||
-    ''
+  const city = location?.city || (location?.region ? location.region : null) || ''
   const label = weatherLabel(weather.code)
+  const Icon = weatherIcon(weather.code)
 
   return (
     <div
       className={`${styles.weather} ${className ?? ''}`}
       title={label ?? undefined}
     >
+      {Icon && (
+        <span className={styles.weatherIcon}>
+          <Icon size={16} />
+        </span>
+      )}
       <span className={styles.temp}>
         {Math.round(weather.temperature)}°{unit}
       </span>
-      <span className={styles.city}>{city}</span>
+      {city && (
+        <span className={styles.city}>
+          <FaLocationDot size={10} className={styles.pin} />
+          {city}
+        </span>
+      )}
       {label && <span className={styles.cond}>{label}</span>}
     </div>
   )
