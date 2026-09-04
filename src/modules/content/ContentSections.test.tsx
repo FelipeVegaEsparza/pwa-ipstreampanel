@@ -211,8 +211,7 @@ const DEFAULT_ORDER = [
   'Eventos',
   'Locutores',
   'Auspiciadores',
-  'Síguenos',
-  'Chat en vivo'
+  'Síguenos'
 ]
 
 const COVERED_ORDER = [
@@ -228,8 +227,7 @@ const COVERED_ORDER = [
   'Programación',
   'Videos',
   'Auspiciadores',
-  'Síguenos',
-  'Chat en vivo'
+  'Síguenos'
 ]
 
 describe('ContentSectionStack', () => {

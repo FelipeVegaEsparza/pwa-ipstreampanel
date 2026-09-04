@@ -2,7 +2,6 @@ import { Fragment, type ReactNode } from 'react'
 import { useTenant } from '@/core/config/TenantContext'
 import { useFullClientData } from '@/core/hooks/useFullClientData'
 import { PollsSection } from '@/modules/polls/PollsSection'
-import { ChatSection } from '@/modules/chat/ChatSection'
 import { SocialNetworksSection } from '@/modules/social/SocialNetworksSection'
 import { VideosSection } from '@/modules/videos/VideosSection'
 import { TvSection } from './TvSection'
@@ -31,7 +30,6 @@ type SectionId =
   | 'announcers'
   | 'sponsors'
   | 'social'
-  | 'chat'
 
 const EDITORIAL_ORDER: SectionId[] = [
   'news',
@@ -55,8 +53,7 @@ const DEFAULT_ORDER: SectionId[] = [
   'events',
   'announcers',
   'sponsors',
-  'social',
-  'chat'
+  'social'
 ]
 
 function orderFor(template: string | null | undefined): SectionId[] {
@@ -68,8 +65,11 @@ function orderFor(template: string | null | undefined): SectionId[] {
 function sectionFor(
   id: SectionId,
   { clientData, isLoading }: SectionDataProps,
-  programVariant: 'cards' | 'list'
+  template: string | null | undefined
 ): ReactNode {
+  const programVariant = template === 'covered' ? 'cards' : 'list'
+  const newsVariant = template === 'covered' ? 'featured' : 'grid'
+
   switch (id) {
     case 'polls':
       return <PollsSection clientData={clientData} isLoading={isLoading} />
@@ -78,7 +78,13 @@ function sectionFor(
     case 'promotions':
       return <PromotionsSection clientData={clientData} isLoading={isLoading} />
     case 'news':
-      return <NewsSection clientData={clientData} isLoading={isLoading} />
+      return (
+        <NewsSection
+          clientData={clientData}
+          isLoading={isLoading}
+          variant={newsVariant}
+        />
+      )
     case 'programs':
       return (
         <ProgramsSection
@@ -103,20 +109,17 @@ function sectionFor(
       return <SponsorsSection clientData={clientData} isLoading={isLoading} />
     case 'social':
       return <SocialNetworksSection clientData={clientData} isLoading={isLoading} />
-    case 'chat':
-      return <ChatSection />
   }
 }
 
 export function ContentSectionStack({ clientData, isLoading }: SectionDataProps) {
   const template = clientData?.selectedTemplate
-  const programVariant = template === 'covered' ? 'cards' : 'list'
 
   return (
     <>
       {orderFor(template).map((id) => (
         <Fragment key={id}>
-          {sectionFor(id, { clientData, isLoading }, programVariant)}
+          {sectionFor(id, { clientData, isLoading }, template)}
         </Fragment>
       ))}
     </>
