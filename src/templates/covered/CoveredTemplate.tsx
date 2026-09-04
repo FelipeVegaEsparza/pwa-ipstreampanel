@@ -192,6 +192,27 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
         </div>
       </main>
 
+      <section className={styles.about}>
+        <div className={styles.container}>
+          <div className={styles.aboutGrid}>
+            <SmartImage
+              className={styles.aboutCover}
+              src={basic?.coverUrl}
+              fallbacks={[basic?.logoUrl]}
+              alt=""
+            />
+            <div className={styles.aboutBody}>
+              <h2 className={styles.aboutTitle}>
+                {isLoading ? 'Cargando…' : name}
+              </h2>
+              {basic?.projectDescription && (
+                <p className={styles.aboutText}>{basic.projectDescription}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
       <footer className={styles.footer}>
         <div className={styles.container}>
           {name} · IPStream Panel
