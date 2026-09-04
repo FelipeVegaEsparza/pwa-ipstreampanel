@@ -1,8 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 import { asArray } from '@/core/adapters'
+import { getNewsBySlug } from '@/core/api'
+import { useTenant } from '@/core/config/TenantContext'
 import type { News } from '@/core/types'
-import { Card, Grid, Section, SmartImage } from '@/ui'
+import { Card, Grid, Section, Skeleton, SmartImage } from '@/ui'
+import { ShareModal } from '@/modules/share/ShareModal'
 import type { SectionDataProps } from './format'
 import { formatDate } from './format'
 import styles from './content.module.css'
@@ -22,15 +26,6 @@ export function NewsSection({
   const [featured, ...rest] = news
 
   const close = useCallback(() => setActive(null), [])
-
-  useEffect(() => {
-    if (!active) return
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') close()
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [active, close])
 
   return (
     <>
@@ -119,44 +114,98 @@ export function NewsSection({
         </p>
       </Section>
 
-      {active && (
-        <div className={newsStyles.overlay} role="dialog" aria-modal="true" onClick={close}>
-          <div className={newsStyles.modal} onClick={(event) => event.stopPropagation()}>
-            <div className={newsStyles.modalHeader}>
-              <span className={styles.muted}>{formatDate(active.createdAt)}</span>
-              <button
-                type="button"
-                className={newsStyles.close}
-                onClick={close}
-                aria-label="Cerrar noticia"
-              >
-                ×
-              </button>
-            </div>
+      {active && <NewsModal item={active} onClose={close} />}
+    </>
+  )
+}
 
-            <SmartImage
-              className={newsStyles.modalMedia}
-              src={active.imageUrl}
-              alt={active.name}
-            />
+interface NewsModalProps {
+  item: News
+  onClose: () => void
+}
 
-            <div className={newsStyles.modalBody}>
-              {active.category && (
-                <span className={styles.category}>{active.category.name}</span>
-              )}
-              <h3 className={newsStyles.modalTitle}>{active.name}</h3>
-              <p className={styles.sectionBody}>
-                {active.longText || active.shortText || 'Sin contenido disponible.'}
-              </p>
-              <p className={newsStyles.modalFooter}>
-                <Link to={`/noticias/${active.slug}`} className={styles.seeAll}>
-                  Ver noticia completa →
-                </Link>
-              </p>
-            </div>
+function NewsModal({ item, onClose }: NewsModalProps) {
+  const tenant = useTenant()
+  const clientId = tenant.status === 'ready' ? tenant.clientId : null
+  const [shareOpen, setShareOpen] = useState(false)
+
+  const { data: full, isFetching } = useQuery({
+    queryKey: ['news', clientId, item.slug],
+    queryFn: () => getNewsBySlug(clientId!, item.slug),
+    enabled: Boolean(clientId && item.slug),
+    retry: false
+  })
+
+  const news = full ?? item
+  const shareUrl = `${window.location.origin}/noticias/${item.slug}`
+
+  useEffect(() => {
+    if (shareOpen) return
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [shareOpen, onClose])
+
+  return (
+    <div className={newsStyles.overlay} role="dialog" aria-modal="true" onClick={onClose}>
+      <div className={newsStyles.modal} onClick={(event) => event.stopPropagation()}>
+        <div className={newsStyles.modalHeader}>
+          <span className={styles.muted}>{formatDate(news.createdAt)}</span>
+          <button
+            type="button"
+            className={newsStyles.close}
+            onClick={onClose}
+            aria-label="Cerrar noticia"
+          >
+            ×
+          </button>
+        </div>
+
+        <SmartImage
+          className={newsStyles.modalMedia}
+          src={news.imageUrl}
+          alt={news.name}
+        />
+
+        <div className={newsStyles.modalBody}>
+          {news.category && (
+            <span className={styles.category}>{news.category.name}</span>
+          )}
+          <h3 className={newsStyles.modalTitle}>{news.name}</h3>
+
+          {isFetching && !full ? (
+            <Skeleton rows={5} />
+          ) : (
+            <p className={styles.sectionBody}>
+              {news.longText || news.shortText || 'Sin contenido disponible.'}
+            </p>
+          )}
+
+          <div className={newsStyles.modalActions}>
+            <button
+              type="button"
+              className={newsStyles.share}
+              onClick={() => setShareOpen(true)}
+            >
+              Compartir
+            </button>
+            <Link to={`/noticias/${news.slug}`} className={styles.seeAll}>
+              Ver noticia completa →
+            </Link>
           </div>
         </div>
-      )}
-    </>
+      </div>
+
+      <div onClick={(event) => event.stopPropagation()}>
+        <ShareModal
+          open={shareOpen}
+          onClose={() => setShareOpen(false)}
+          title={news.name}
+          url={shareUrl}
+        />
+      </div>
+    </div>
   )
 }

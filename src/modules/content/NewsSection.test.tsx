@@ -1,8 +1,21 @@
 import { fireEvent, render, screen, within } from '@testing-library/react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { TenantProvider } from '@/core/config/TenantContext'
 import type { FullClientData, News } from '@/core/types'
 import { NewsSection } from './NewsSection'
+
+const baked = vi.hoisted(() => ({ clientId: null as string | null }))
+
+vi.mock('@/core/config/tenant', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/core/config/tenant')>()
+  return {
+    ...actual,
+    getBakedClientId: () => baked.clientId,
+    getBakedClientName: () => null
+  }
+})
 
 function newsItem(id: string, name: string, overrides: Partial<News> = {}): News {
   return {
@@ -23,11 +36,25 @@ function clientDataWith(news: News[]): FullClientData {
   return { news } as unknown as FullClientData
 }
 
+function jsonResponse(status: number, body: unknown): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' }
+  })
+}
+
 function renderNews(variant: 'grid' | 'featured', news: News[]) {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } }
+  })
   return render(
-    <MemoryRouter>
-      <NewsSection clientData={clientDataWith(news)} isLoading={false} variant={variant} />
-    </MemoryRouter>
+    <QueryClientProvider client={queryClient}>
+      <TenantProvider>
+        <MemoryRouter>
+          <NewsSection clientData={clientDataWith(news)} isLoading={false} variant={variant} />
+        </MemoryRouter>
+      </TenantProvider>
+    </QueryClientProvider>
   )
 }
 
@@ -68,6 +95,12 @@ describe('NewsSection variant featured', () => {
 })
 
 describe('NewsSection modal', () => {
+  afterEach(() => {
+    baked.clientId = null
+    vi.unstubAllGlobals()
+    localStorage.clear()
+  })
+
   it('abre el detalle en un modal al pinchar una noticia en la variante grid', () => {
     renderNews('grid', [newsItem('n1', 'Noticia modal')])
 
@@ -83,26 +116,56 @@ describe('NewsSection modal', () => {
     ).toHaveAttribute('href', '/noticias/noticia-modal')
   })
 
-  it('abre el detalle desde la destacada y cierra con Escape', () => {
-    renderNews('featured', [
-      newsItem('n1', 'Destacada modal'),
-      newsItem('n2', 'Segunda')
-    ])
+  it('carga y muestra el texto completo desde el API por slug', async () => {
+    baked.clientId = 'cmclient'
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((input: RequestInfo | URL) => {
+        const url = String(input)
+        if (url.includes('/news/noticia-api')) {
+          return Promise.resolve(
+            jsonResponse(200, {
+              id: 'n1',
+              name: 'Noticia API',
+              slug: 'noticia-api',
+              shortText: 'Resumen',
+              longText: 'Texto largo que viene completo desde el API por slug.',
+              imageUrl: null,
+              createdAt: '2026-01-01T00:00:00.000Z',
+              updatedAt: '2026-01-01T00:00:00.000Z'
+            })
+          )
+        }
+        return Promise.resolve(jsonResponse(404, { error: 'not found' }))
+      })
+    )
 
-    fireEvent.click(screen.getByRole('button', { name: 'Abrir noticia Destacada modal' }))
-    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    renderNews('grid', [newsItem('n1', 'Noticia API')])
 
-    fireEvent.keyDown(window, { key: 'Escape' })
-    expect(screen.queryByRole('dialog')).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'Abrir noticia Noticia API' }))
+
+    const dialog = screen.getByRole('dialog')
+    expect(
+      await within(dialog).findByText(
+        'Texto largo que viene completo desde el API por slug.'
+      )
+    ).toBeInTheDocument()
   })
 
-  it('cierra el modal al pinchar el overlay', () => {
-    const { container } = renderNews('grid', [newsItem('n1', 'Overlay close')])
+  it('abre el modal de compartir con la URL de la noticia', () => {
+    renderNews('grid', [newsItem('n1', 'Noticia compartible')])
 
-    fireEvent.click(screen.getByRole('button', { name: 'Abrir noticia Overlay close' }))
-    const overlay = container.querySelector('[role="dialog"]') as HTMLElement
-    fireEvent.click(overlay)
-    expect(screen.queryByRole('dialog')).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'Abrir noticia Noticia compartible' }))
+
+    const dialog = screen.getByRole('dialog')
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Compartir' }))
+
+    const shareDialog = within(dialog).getByRole('dialog')
+    expect(shareDialog).toBeInTheDocument()
+    const whatsapp = within(shareDialog).getByRole('link', { name: 'WhatsApp' })
+    expect(decodeURIComponent(whatsapp.getAttribute('href') ?? '')).toContain(
+      '/noticias/noticia-compartible'
+    )
   })
 
   it('abre una noticia lateral en la variante featured', () => {

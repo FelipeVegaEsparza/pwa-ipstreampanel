@@ -159,8 +159,34 @@
   color: var(--content-text, inherit);
 }
 
-.modalFooter {
-  margin: var(--space-2) 0 0;
+.modalActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-top: var(--space-2);
+}
+
+.modalActions .seeAll {
+  margin-top: 0;
+}
+
+.share {
+  border: 1px solid var(--content-card-border, #e5e3de);
+  background: var(--content-accent, #1c1b1a);
+  color: var(--content-card-bg, #ffffff);
+  border-radius: 999px;
+  padding: var(--space-2) var(--space-5);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 150ms ease;
+}
+
+.share:hover {
+  opacity: 0.85;
 }
 
 @media (max-width: 820px) {
