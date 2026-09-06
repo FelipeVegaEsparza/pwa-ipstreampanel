@@ -16,6 +16,14 @@ import { Weather } from '@/modules/weather/Weather'
 import { SmartImage } from '@/ui'
 import styles from './CoveredTemplate.module.css'
 
+function longDate(date: Date): string {
+  return date.toLocaleDateString('es-CL', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long'
+  })
+}
+
 export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
   const tenant = useTenant()
   const { setStreamUrl, isPlaying, toggle } = usePlayer()
@@ -66,11 +74,13 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
     currentTrack?.elapsed
   )
 
-  const dateText = new Date().toLocaleDateString('es-CL', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long'
-  })
+  const onAir = status !== 'off'
+
+  const [dateText, setDateText] = useState(() => longDate(new Date()))
+  useEffect(() => {
+    const id = setInterval(() => setDateText(longDate(new Date())), 30_000)
+    return () => clearInterval(id)
+  }, [])
 
   return (
     <div className={styles.page}>
@@ -94,10 +104,12 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
             <div className={styles.headerRight}>
               <span className={styles.date}>{dateText}</span>
               <Weather location={basic?.location} />
-              <span className={styles.live}>
-                <span className={styles.liveDot} />
-                EN VIVO
-              </span>
+              {onAir && (
+                <span className={styles.live}>
+                  <span className={styles.liveDot} />
+                  {isLive ? 'EN VIVO' : 'EN EL AIRE'}
+                </span>
+              )}
               {socialLinks.length > 0 && (
                 <div className={styles.social}>
                   {socialLinks.map((link) => (

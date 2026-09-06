@@ -88,6 +88,16 @@
   background: var(--content-skeleton-bg, rgba(128, 128, 128, 0.18));
 }
 
+.galleryCoverEmpty {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  background: var(--content-skeleton-bg, rgba(128, 128, 128, 0.18));
+}
+
 .tv {
   margin-top: var(--space-2);
 }

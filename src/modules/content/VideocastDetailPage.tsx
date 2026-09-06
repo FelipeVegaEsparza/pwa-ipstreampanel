@@ -4,6 +4,7 @@ import { buildImageUrl, getVideocastById } from '@/core/api'
 import { useTenant } from '@/core/config/TenantContext'
 import { ErrorScreen } from '@/app/ErrorScreen'
 import { SmartImage, Skeleton } from '@/ui'
+import { isDirectMediaFile, videoEmbedUrl } from '@/modules/videos/embed'
 import { episodeMeta } from './format'
 import styles from './content.module.css'
 
@@ -32,7 +33,9 @@ export function VideocastDetailPage() {
     return <Skeleton rows={6} />
   }
 
-  const videoUrl = buildImageUrl(data.videoUrl)
+  const videoUrl = data.videoUrl ? buildImageUrl(data.videoUrl) : null
+  const embedUrl = videoUrl ? videoEmbedUrl(videoUrl) : null
+  const isDirectFile = Boolean(videoUrl && isDirectMediaFile(videoUrl))
 
   return (
     <article>
@@ -40,9 +43,50 @@ export function VideocastDetailPage() {
       <p className={styles.muted}>
         {episodeMeta(data.season, data.episodeNumber, data.duration)}
       </p>
-      {videoUrl && (
+      {embedUrl ? (
+        <div className={styles.video} style={{ position: 'relative' }}>
+          <iframe
+            src={embedUrl}
+            title={data.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              border: 'none',
+              borderRadius: 'var(--radius-md)'
+            }}
+          />
+        </div>
+      ) : isDirectFile && videoUrl ? (
         <video className={styles.video} controls playsInline src={videoUrl} />
-      )}
+      ) : videoUrl ? (
+        <div
+          className={styles.video}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 'var(--space-3)',
+            textAlign: 'center',
+            color: '#fff',
+            padding: 'var(--space-4)'
+          }}
+        >
+          <p style={{ margin: 0 }}>Contenido no disponible para reproducción</p>
+          <a
+            href={videoUrl}
+            target="_blank"
+            rel="noreferrer"
+            style={{ color: 'inherit', textDecoration: 'underline' }}
+          >
+            Abrir en YouTube/Vimeo
+          </a>
+        </div>
+      ) : null}
       <SmartImage className={styles.media} src={data.imageUrl} alt={data.title} />
       <p className={styles.sectionBody}>{data.description}</p>
     </article>

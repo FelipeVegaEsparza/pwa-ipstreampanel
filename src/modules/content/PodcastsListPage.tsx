@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { asArray, normalizePagination } from '@/core/adapters'
 import { getPodcasts } from '@/core/api'
 import { useTenant } from '@/core/config/TenantContext'
 import { usePaginatedList } from '@/core/hooks/usePaginatedList'
+import { usePageParam } from '@/core/hooks/usePageParam'
+import { ErrorScreen } from '@/app/ErrorScreen'
 import { Card, EmptyState, Grid, Pagination, Skeleton, SmartImage } from '@/ui'
 import { episodeMeta } from './format'
 import styles from './content.module.css'
@@ -11,9 +13,9 @@ import styles from './content.module.css'
 export function PodcastsListPage() {
   const tenant = useTenant()
   const clientId = tenant.status === 'ready' ? tenant.clientId : null
-  const [page, setPage] = useState(1)
+  const [page, setPage] = usePageParam()
 
-  const { data, isLoading } = usePaginatedList(
+  const { data, isLoading, isError, refetch } = usePaginatedList(
     clientId,
     'podcastsList',
     (p, limit) => getPodcasts(clientId!, p, limit),
@@ -23,8 +25,25 @@ export function PodcastsListPage() {
   const items = asArray(data?.data)
   const pagination = normalizePagination(data?.pagination)
 
+  // Si el dataset encogió y la página quedó fuera de rango, volver a la última válida.
+  useEffect(() => {
+    if (data && pagination.pages > 0 && page > pagination.pages) {
+      setPage(pagination.pages)
+    }
+  }, [page, data, pagination.pages, setPage])
+
   if (isLoading && items.length === 0) {
     return <Skeleton rows={6} />
+  }
+
+  if (isError && items.length === 0) {
+    return (
+      <ErrorScreen
+        title="No se pudieron cargar los podcasts"
+        message="Hubo un problema de conexión. Revisa tu conexión e inténtalo de nuevo."
+        onRetry={() => void refetch()}
+      />
+    )
   }
 
   return (

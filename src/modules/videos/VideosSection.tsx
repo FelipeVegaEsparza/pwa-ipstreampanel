@@ -1,21 +1,36 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { asArray } from '@/core/adapters'
 import type { Video } from '@/core/types'
 import { Card, Grid, Section } from '@/ui'
 import type { SectionDataProps } from '@/modules/content/format'
-import { videoEmbedUrl } from './embed'
+import { isDirectMediaFile, videoEmbedUrl } from './embed'
 import styles from './VideosSection.module.css'
+
+const YOUTUBE_EMBED_PREFIX = 'https://www.youtube.com/embed/'
 
 export function VideosSection({ clientData, isLoading }: SectionDataProps) {
   const videos = asArray(clientData?.videos).filter((video) => Boolean(video.videoUrl))
   const [active, setActive] = useState<Video | null>(null)
+
+  useEffect(() => {
+    if (active && !videos.some((video) => video.id === active.id)) {
+      setActive(null)
+    }
+  }, [active, videos])
+
+  const activeUrl = active?.videoUrl ?? null
+  const activeEmbed = activeUrl ? videoEmbedUrl(activeUrl) : null
+  const activeIsFile = Boolean(activeUrl && isDirectMediaFile(activeUrl))
 
   return (
     <>
       <Section title="Videos" visible={videos.length > 0} loading={isLoading}>
         <Grid>
           {videos.map((video) => {
-            const embed = video.videoUrl ? videoEmbedUrl(video.videoUrl) : null
+            const embedUrl = video.videoUrl ? videoEmbedUrl(video.videoUrl) : null
+            const youtubeId = embedUrl?.startsWith(YOUTUBE_EMBED_PREFIX)
+              ? embedUrl.slice(YOUTUBE_EMBED_PREFIX.length)
+              : null
             return (
               <Card key={video.id}>
                 <button
@@ -24,10 +39,10 @@ export function VideosSection({ clientData, isLoading }: SectionDataProps) {
                   onClick={() => setActive(video)}
                   aria-label={`Reproducir ${video.name}`}
                 >
-                  {embed ? (
+                  {youtubeId ? (
                     <img
                       className={styles.thumb}
-                      src={`https://i.ytimg.com/vi/${embed.split('/').pop()}/hqdefault.jpg`}
+                      src={`https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`}
                       alt={video.name}
                       loading="lazy"
                     />
@@ -44,7 +59,7 @@ export function VideosSection({ clientData, isLoading }: SectionDataProps) {
         </Grid>
       </Section>
 
-      {active && active.videoUrl && (
+      {active && activeUrl && (
         <div
           className={styles.overlay}
           role="dialog"
@@ -60,16 +75,42 @@ export function VideosSection({ clientData, isLoading }: SectionDataProps) {
             >
               ×
             </button>
-            {videoEmbedUrl(active.videoUrl) ? (
+            {activeEmbed ? (
               <iframe
                 className={styles.iframe}
-                src={videoEmbedUrl(active.videoUrl)!}
+                src={activeEmbed}
                 title={active.name}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               />
+            ) : activeIsFile ? (
+              <video className={styles.video} controls playsInline src={activeUrl} />
             ) : (
-              <video className={styles.video} controls playsInline src={active.videoUrl} />
+              <div
+                className={styles.video}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 'var(--space-3)',
+                  textAlign: 'center',
+                  color: '#fff',
+                  padding: 'var(--space-4)'
+                }}
+              >
+                <p style={{ margin: 0, fontSize: '0.9rem' }}>
+                  Contenido no disponible para reproducción
+                </p>
+                <a
+                  href={activeUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ color: 'inherit', textDecoration: 'underline' }}
+                >
+                  Abrir en YouTube/Vimeo
+                </a>
+              </div>
             )}
           </div>
         </div>

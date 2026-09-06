@@ -32,6 +32,8 @@ export function ChatSection() {
   const clientId = tenant.status === 'ready' ? tenant.clientId : null
 
   const serverTimeRef = useRef<string | null>(null)
+  const listRef = useRef<HTMLUListElement>(null)
+  const stickToBottomRef = useRef(true)
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [name, setName] = useState(() => localStorage.getItem(NAME_KEY) ?? '')
   const [email, setEmail] = useState('')
@@ -48,13 +50,32 @@ export function ChatSection() {
     refetchIntervalInBackground: false,
     retry: 1
   })
+  const { data: chatData, refetch: chatRefetch } = messagesQuery
 
   useEffect(() => {
-    const data = messagesQuery.data
-    if (!data) return
-    setMessages((prev) => mergeMessages(prev, data.messages))
-    serverTimeRef.current = data.serverTime
-  }, [messagesQuery.data])
+    if (!chatData) return
+    const previousSince = serverTimeRef.current
+    setMessages((prev) => mergeMessages(prev, chatData.messages))
+    serverTimeRef.current = chatData.serverTime
+    // Si vienen exactamente tantos mensajes como el límite, puede haber un
+    // hueco (pestaña en segundo plano o más de `limit` mensajes): realinear
+    // el cursor pidiendo desde el principio una sola vez.
+    if (
+      previousSince !== null &&
+      chatData.messages.length >= 50 &&
+      chatData.serverTime !== previousSince
+    ) {
+      serverTimeRef.current = null
+      void chatRefetch()
+    }
+  }, [chatData, chatRefetch])
+
+  // Autoscroll: seguir el hilo salvo que el usuario haya subido a leer.
+  useEffect(() => {
+    const list = listRef.current
+    if (!list || !stickToBottomRef.current) return
+    list.scrollTop = list.scrollHeight
+  }, [messages])
 
   const onlineQuery = useQuery({
     queryKey: ['chatOnline', clientId],
@@ -85,14 +106,15 @@ export function ChatSection() {
         })
         localStorage.setItem(NAME_KEY, name.trim())
         setBody('')
-        void messagesQuery.refetch()
+        stickToBottomRef.current = true
+        void chatRefetch()
       } catch {
         setSendError('No se pudo enviar el mensaje. Intenta de nuevo (límite: 5 por minuto).')
       } finally {
         setSending(false)
       }
     },
-    [clientId, name, email, body, messagesQuery]
+    [clientId, name, email, body, chatRefetch]
   )
 
   return (
@@ -104,7 +126,16 @@ export function ChatSection() {
           </span>
         </div>
 
-        <ul className={styles.list}>
+        <ul
+          ref={listRef}
+          className={styles.list}
+          onScroll={() => {
+            const list = listRef.current
+            if (!list) return
+            stickToBottomRef.current =
+              list.scrollHeight - list.scrollTop - list.clientHeight < 80
+          }}
+        >
           {messages.map((message) => (
             <li
               key={message.id}

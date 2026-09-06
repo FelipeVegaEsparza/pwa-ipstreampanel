@@ -77,5 +77,16 @@ cp .env.example .env   # clientId por defecto (solo dev)
 npm run dev            # abre / con ese clientId
 ```
 
-Para probar otro cliente sin cambiar `.env`: `npm run dev` y abre
-`/c/{clientId}`.
+Para probar otro cliente no existe una ruta `/c/{clientId}`: el clientId se
+resuelve únicamente desde `VITE_CLIENT_ID` (horneado en el build/dev). Opciones:
+
+1. Editar `.env` con el cliente que quieras probar (variables `VITE_CLIENT_ID`
+   y `VITE_CLIENT_NAME`) y ejecutar `npm run dev`.
+
+2. Probar un cliente real (crea `clients/<nombre>/client.json`, valida el build
+   y genera `dist/<nombre>`) y servirlo:
+
+```bash
+npm run new-client -- radio-nueva cmXXXXXXXXXXXX "Nombre de la Radio"
+npx vite preview --outDir dist/radio-nueva
+```

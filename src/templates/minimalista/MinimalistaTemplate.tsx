@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
 import { firstPublicImageUrl } from '@/core/api'
 import { useTenant } from '@/core/config/TenantContext'
 import { useStreaming } from '@/core/hooks/useStreaming'
@@ -20,6 +21,8 @@ export function MinimalistaTemplate({ clientData, isLoading }: TemplateProps) {
   const tenant = useTenant()
   const { setStreamUrl, isPlaying, toggle } = usePlayer()
   const { data: streaming } = useStreaming(tenant.clientId ?? '')
+  const { pathname } = useLocation()
+  const isHome = pathname === '/'
 
   const basic = clientData?.basicData
   const name = basic?.projectName ?? tenant.clientId ?? 'IPStream'
@@ -88,97 +91,103 @@ export function MinimalistaTemplate({ clientData, isLoading }: TemplateProps) {
           <Weather location={basic?.location} />
         </header>
 
-        <div className={styles.columns}>
-          <section className={styles.current}>
-            <div className={styles.artworkWrap}>
-              <SmartImage
-                className={styles.artwork}
-                src={trackCover}
-                fallbacks={[basic?.coverUrl, basic?.logoUrl]}
-                alt=""
-              />
-              <div className={styles.coverBar}>
-                <div
-                  className={styles.coverBarFill}
-                  style={{ width: `${progress * 100}%` }}
+        {isHome ? (
+          <div className={styles.columns}>
+            <section className={styles.current}>
+              <div className={styles.artworkWrap}>
+                <SmartImage
+                  className={styles.artwork}
+                  src={trackCover}
+                  fallbacks={[basic?.coverUrl, basic?.logoUrl]}
+                  alt=""
                 />
+                <div className={styles.coverBar}>
+                  <div
+                    className={styles.coverBarFill}
+                    style={{ width: `${progress * 100}%` }}
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className={styles.status}>
-              {status === 'off' ? 'Fuera del aire' : isLive ? '● EN VIVO' : 'En el aire'}
-            </div>
+              <div className={styles.status}>
+                {status === 'off' ? 'Fuera del aire' : isLive ? '● EN VIVO' : 'En el aire'}
+              </div>
 
-            <h1 className={styles.title}>
-              {isLoading ? 'Cargando…' : currentTrack?.title ?? 'Sintoniza nuestra señal'}
-            </h1>
-            <p className={styles.artist}>
-              {currentTrack?.artist ?? (isLoading ? '' : name)}
-            </p>
+              <h1 className={styles.title}>
+                {isLoading ? 'Cargando…' : currentTrack?.title ?? 'Sintoniza nuestra señal'}
+              </h1>
+              <p className={styles.artist}>
+                {currentTrack?.artist ?? (isLoading ? '' : name)}
+              </p>
 
-            <div className={styles.playerArea}>
-              <button
-                type="button"
-                className={styles.play}
-                onClick={toggle}
-                disabled={!streamUrl}
-                aria-label={isPlaying ? 'Pausar' : 'Reproducir'}
-              >
-                {isPlaying ? '❚❚' : '▶'}
-              </button>
-            </div>
-          </section>
-
-          <aside className={styles.side}>
-            <div className={styles.clockArea}>
-              <DigitalClock />
-            </div>
-
-            <div className={styles.sideNext}>
-              <NextTrack
-                variant="large"
-                next={streaming?.nextTrack}
-                fallbackCover={basic?.coverUrl}
-              />
-            </div>
-
-            <div className={styles.toolbar}>
-              {tvUrl && (
+              <div className={styles.playerArea}>
                 <button
                   type="button"
-                  className={styles.toolbarBtn}
-                  onClick={() => setTvOpen(true)}
+                  className={styles.play}
+                  onClick={toggle}
+                  disabled={!streamUrl}
+                  aria-label={isPlaying ? 'Pausar' : 'Reproducir'}
                 >
-                  Señal de TV
+                  {isPlaying ? '❚❚' : '▶'}
                 </button>
-              )}
-              <span className={styles.toolbarShare}>
-                <ShareButton title={name} />
-              </span>
-              <span className={styles.toolbarInstall}>
-                <InstallPrompt />
-              </span>
-            </div>
-
-            {socialLinks.length > 0 && (
-              <div className={styles.social}>
-                {socialLinks.map((link) => (
-                  <a
-                    key={link.key}
-                    className={styles.socialLink}
-                    href={link.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={link.label}
-                    title={link.label}
-                  >
-                    <BrandIcon name={link.key} size={18} />
-                  </a>
-                ))}
               </div>
-            )}
-          </aside>
-        </div>
+            </section>
+
+            <aside className={styles.side}>
+              <div className={styles.clockArea}>
+                <DigitalClock />
+              </div>
+
+              <div className={styles.sideNext}>
+                <NextTrack
+                  variant="large"
+                  next={streaming?.nextTrack}
+                  fallbackCover={basic?.coverUrl}
+                />
+              </div>
+
+              <div className={styles.toolbar}>
+                {tvUrl && (
+                  <button
+                    type="button"
+                    className={styles.toolbarBtn}
+                    onClick={() => setTvOpen(true)}
+                  >
+                    Señal de TV
+                  </button>
+                )}
+                <span className={styles.toolbarShare}>
+                  <ShareButton title={name} />
+                </span>
+                <span className={styles.toolbarInstall}>
+                  <InstallPrompt />
+                </span>
+              </div>
+
+              {socialLinks.length > 0 && (
+                <div className={styles.social}>
+                  {socialLinks.map((link) => (
+                    <a
+                      key={link.key}
+                      className={styles.socialLink}
+                      href={link.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={link.label}
+                      title={link.label}
+                    >
+                      <BrandIcon name={link.key} size={18} />
+                    </a>
+                  ))}
+                </div>
+              )}
+            </aside>
+          </div>
+        ) : (
+          <main className={styles.routes}>
+            <Outlet />
+          </main>
+        )}
 
         <footer className={styles.footer}>{name} · IPStream Panel</footer>
       </div>

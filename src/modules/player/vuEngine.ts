@@ -1,20 +1,27 @@
 let analyser: AnalyserNode | null = null
-let created = false
+let graphState: 'idle' | 'ready' | 'failed' = 'idle'
 
 /**
  * Crea una sola vez el grafo Web Audio para el elemento de audio compartido
  * (source -> analyser -> destination). No debe llamarse si el stream no es
  * CORS-capable, porque silenciaría la salida del elemento.
+ *
+ * Si la primera creación falla (p. ej. AudioContext no disponible todavía),
+ * el siguiente intento vuelve a intentarlo en lugar de quedar roto para
+ * siempre en la sesión.
  */
 export function ensureAudioGraph(audio: HTMLAudioElement): AnalyserNode | null {
-  if (created) return analyser
-  created = true
+  if (graphState === 'ready') return analyser
+
   try {
     const Ctx =
       window.AudioContext ??
       (window as unknown as { webkitAudioContext?: typeof AudioContext })
         .webkitAudioContext
-    if (!Ctx) return null
+    if (!Ctx) {
+      graphState = 'failed'
+      return null
+    }
 
     const ctx = new Ctx()
     const source = ctx.createMediaElementSource(audio)
@@ -34,8 +41,10 @@ export function ensureAudioGraph(audio: HTMLAudioElement): AnalyserNode | null {
     window.addEventListener('pointerdown', resume, { once: true })
 
     analyser = node
+    graphState = 'ready'
   } catch {
     analyser = null
+    graphState = 'failed'
   }
   return analyser
 }

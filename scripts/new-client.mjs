@@ -8,7 +8,7 @@
  * para confirmar que queda listo para desplegar.
  */
 import { spawnSync } from 'node:child_process'
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -38,6 +38,24 @@ const clientPath = resolve(clientDir, 'client.json')
 if (existsSync(clientPath)) {
   console.error(`Ya existe clients/${name}/client.json. Usa otro nombre o edítalo directamente.`)
   process.exit(1)
+}
+
+// El clientId debe ser único entre todos los clientes: escanea clients/*/client.json.
+for (const dir of readdirSync(resolve(root, 'clients'))) {
+  const existingPath = resolve(root, 'clients', dir, 'client.json')
+  if (!existsSync(existingPath)) continue
+  let existing
+  try {
+    existing = JSON.parse(readFileSync(existingPath, 'utf8'))
+  } catch {
+    continue // client.json ilegible/inválido: no se puede comparar su clientId
+  }
+  if (existing.clientId === clientId) {
+    console.error(
+      `Ya existe un cliente con clientId "${clientId}" en clients/${dir}/client.json. Usa un clientId distinto.`
+    )
+    process.exit(1)
+  }
 }
 
 const clientConfig = {

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { Poll } from '@/core/types'
 import { votePoll } from '@/core/api'
 import { useTenant } from '@/core/config/TenantContext'
@@ -7,6 +7,10 @@ import styles from './PollCard.module.css'
 
 function pollKey(pollId: string): string {
   return `poll_${pollId}`
+}
+
+function totalVotes(poll: Poll): number {
+  return poll.options.reduce((sum, option) => sum + option.votes, 0)
 }
 
 interface PollCardProps {
@@ -20,22 +24,40 @@ export function PollCard({ poll }: PollCardProps) {
   const [updated, setUpdated] = useState<Poll | null>(null)
   const [voting, setVoting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const votingRef = useRef(false)
+
+  // El snapshot local del voto no debe congelar los resultados: cuando llegan
+  // datos más frescos del servidor (mismo o mayor total de votos), se descarta.
+  useEffect(() => {
+    if (!updated) return
+    if (poll.id === updated.id && totalVotes(poll) >= totalVotes(updated)) {
+      setUpdated(null)
+    }
+  }, [poll, updated])
 
   const data = updated ?? poll
-  const totalVotes = data.options.reduce((sum, option) => sum + option.votes, 0)
+  const total = totalVotes(data)
 
   async function handleVote(optionId: string) {
-    if (!clientId || voting) return
+    if (!clientId || votingRef.current) return
+    votingRef.current = true
     setVoting(true)
     setError(null)
     try {
       const updatedPoll = await votePoll(clientId, poll.id, optionId)
-      localStorage.setItem(pollKey(poll.id), 'true')
       setUpdated(updatedPoll)
       setVoted(true)
+      // La persistencia es solo una ayuda local: un fallo aquí no debe
+      // presentarse como error de voto (el voto ya se registró en el servidor).
+      try {
+        localStorage.setItem(pollKey(poll.id), 'true')
+      } catch {
+        // noop
+      }
     } catch {
       setError('No se pudo enviar tu voto. Intenta de nuevo.')
     } finally {
+      votingRef.current = false
       setVoting(false)
     }
   }
@@ -48,7 +70,7 @@ export function PollCard({ poll }: PollCardProps) {
         {voted ? (
           <ul className={styles.results}>
             {data.options.map((option) => {
-              const pct = totalVotes > 0 ? Math.round((option.votes / totalVotes) * 100) : 0
+              const pct = total > 0 ? Math.round((option.votes / total) * 100) : 0
               return (
                 <li key={option.id} className={styles.resultRow}>
                   <div className={styles.resultMeta}>

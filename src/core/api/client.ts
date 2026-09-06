@@ -13,8 +13,12 @@ const MAX_JITTER = 0.5
 
 const inFlight = new Map<string, Promise<Response>>()
 
-function requestKey(method: string, url: string): string {
-  return `${method}:${url}`
+function requestKey(method: string, url: string, body?: string): string {
+  // Los GET idénticos concurrentes pueden compartir petición, pero dos
+  // escrituras (POST/PUT/...) a la misma URL con distinto body NO deben
+  // deduplicarse (se perdería la segunda).
+  if (method === 'GET' || method === 'HEAD') return `${method}:${url}`
+  return `${method}:${url}:${body ?? ''}`
 }
 
 function isRetryableStatus(status: number): boolean {
@@ -38,7 +42,7 @@ export async function request(
   const method = options.method ?? 'GET'
   const timeout = options.timeout ?? DEFAULT_TIMEOUT
   const retries = options.retries ?? DEFAULT_RETRIES
-  const key = requestKey(method, url)
+  const key = requestKey(method, url, options.body)
 
   const run = async (attempt: number): Promise<Response> => {
     const controller = new AbortController()

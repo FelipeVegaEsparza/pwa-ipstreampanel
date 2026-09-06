@@ -15,6 +15,7 @@ export function GalleriesSection({ clientData, isLoading }: SectionDataProps) {
   const images = active ? asArray(active.images) : []
 
   const open = (gallery: Gallery) => {
+    if (asArray(gallery.images).length === 0) return
     setActive(gallery)
     setIndex(0)
   }
@@ -53,14 +54,19 @@ export function GalleriesSection({ clientData, isLoading }: SectionDataProps) {
                   onClick={() => open(gallery)}
                   aria-label={`Ver galería ${gallery.title}`}
                 >
-                  <img
-                    className={styles.galleryCover}
-                    src={cover ?? ''}
-                    alt={gallery.title}
-                    loading="lazy"
-                    decoding="async"
-                    hidden={!cover}
-                  />
+                  {cover ? (
+                    <img
+                      className={styles.galleryCover}
+                      src={cover}
+                      alt={gallery.title}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <div className={styles.galleryCoverEmpty} aria-hidden="true">
+                      🖼️
+                    </div>
+                  )}
                   <div className={styles.body}>
                     <h3 className={styles.itemTitle}>{gallery.title}</h3>
                     {gallery.description && (

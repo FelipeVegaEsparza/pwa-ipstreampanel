@@ -1,6 +1,5 @@
 import { useTenant } from '@/core/config/TenantContext'
 import { useStreaming } from '@/core/hooks/useStreaming'
-import { useStreamingStatus } from '@/core/hooks/useStreamingStatus'
 import { usePlayer } from './PlayerContext'
 import { TrackProgress } from './TrackProgress'
 import styles from './PlayerBar.module.css'
@@ -9,7 +8,6 @@ export function PlayerBar() {
   const { streamUrl, isPlaying, toggle } = usePlayer()
   const tenant = useTenant()
   const clientId = tenant.status === 'ready' ? tenant.clientId : null
-  const { data: status } = useStreamingStatus(clientId ?? '')
   const { data: streaming } = useStreaming(clientId ?? '')
 
   const currentTrack = streaming?.currentTrack
@@ -41,7 +39,7 @@ export function PlayerBar() {
             {currentTrack?.title || 'En Vivo'}
           </span>
           <span className={styles.meta}>
-            {status?.listeners ? `${status.listeners} oyentes · ` : ''}
+            {streaming?.listeners ? `${streaming.listeners} oyentes · ` : ''}
             {currentTrack?.artist || (streamUrl ? 'Reproduciendo' : 'Reproductor listo')}
           </span>
         </div>

@@ -454,3 +454,29 @@
     display: none;
   }
 }
+
+/* Contenido de rutas hijas (listados, detalle, 404) sobre el fondo dinámico */
+.routes {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--space-5);
+  background: rgba(8, 8, 14, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  backdrop-filter: blur(10px);
+  box-sizing: border-box;
+}
+
+.routes h1 {
+  color: var(--tpl-text);
+}
+
+@media (max-width: 640px) {
+  .routes {
+    padding: var(--space-3);
+  }
+}
