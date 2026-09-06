@@ -102,7 +102,7 @@ export function ModernaTemplate({ clientData, isLoading }: TemplateProps) {
       </main>
 
       <footer className={styles.footer}>{name} · IPStream Panel</footer>
-      <PlayerBar />
+      <PlayerBar fallbackCovers={[basic?.coverUrl, basic?.logoUrl]} />
     </div>
   )
 }

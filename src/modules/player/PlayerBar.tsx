@@ -1,10 +1,16 @@
 import { useTenant } from '@/core/config/TenantContext'
 import { useStreaming } from '@/core/hooks/useStreaming'
+import { SmartImage } from '@/ui'
 import { usePlayer } from './PlayerContext'
 import { TrackProgress } from './TrackProgress'
 import styles from './PlayerBar.module.css'
 
-export function PlayerBar() {
+interface PlayerBarProps {
+  /** Covers alternativos (portada de la radio/logo) si el tema no trae portada. */
+  fallbackCovers?: Array<string | null | undefined>
+}
+
+export function PlayerBar({ fallbackCovers }: PlayerBarProps = {}) {
   const { streamUrl, isPlaying, toggle } = usePlayer()
   const tenant = useTenant()
   const clientId = tenant.status === 'ready' ? tenant.clientId : null
@@ -15,6 +21,7 @@ export function PlayerBar() {
   const trackCover = currentTrack?.coverUrl ?? null
   const trackKey =
     trackCover ?? `${currentTrack?.title ?? ''}|${currentTrack?.artist ?? ''}`
+  const hasCoverInput = Boolean(trackCover || fallbackCovers?.some(Boolean))
 
   const status = streaming?.status ?? 'off'
   const onAir = status !== 'off'
@@ -26,52 +33,71 @@ export function PlayerBar() {
 
   return (
     <div className={styles.bar}>
-      <TrackProgress
-        variant="thin"
-        duration={currentTrack?.duration}
-        trackKey={trackKey}
-        isPlaying={isPlaying}
-        serverElapsed={currentTrack?.elapsed}
-      />
-      <div className={styles.content}>
-        <button
-          type="button"
-          className={styles.playButton}
-          onClick={toggle}
-          disabled={!streamUrl}
-          aria-label={isPlaying ? 'Pausar' : 'Reproducir'}
-        >
-          {isPlaying ? '❚❚' : '▶'}
-        </button>
-        <div className={styles.info}>
-          <div className={styles.statusRow}>
-            <span
-              className={`${styles.statusDot} ${onAir ? styles.statusDotOn : ''}`}
-              aria-hidden="true"
+      <div className={styles.inner}>
+        <TrackProgress
+          variant="thin"
+          duration={currentTrack?.duration}
+          trackKey={trackKey}
+          isPlaying={isPlaying}
+          serverElapsed={currentTrack?.elapsed}
+        />
+        <div className={styles.content}>
+          {hasCoverInput ? (
+            <SmartImage
+              className={styles.cover}
+              src={trackCover}
+              fallbacks={fallbackCovers}
+              alt=""
             />
-            <span className={styles.statusText}>{statusText}</span>
-            {streaming?.listeners ? (
-              <span className={styles.statusMeta}>· {streaming.listeners} oyentes</span>
-            ) : null}
-          </div>
-          <span className={styles.label}>
-            {currentTrack?.title || 'En Vivo'}
-          </span>
-          <span className={styles.meta}>
-            {currentTrack?.artist || (streamUrl ? 'Reproduciendo en vivo' : 'Reproductor listo')}
-            {streaming?.bitrate ? ` · ${streaming.bitrate} kbps` : ''}
-          </span>
-        </div>
+          ) : (
+            <div className={styles.coverPlaceholder} aria-hidden="true">
+              ♪
+            </div>
+          )}
 
-        {nextTrack && (
-          <div className={styles.next}>
-            <span className={styles.nextLabel}>Sigue ahora</span>
-            <span className={styles.nextTitle}>{nextTrack.title}</span>
-            {nextTrack.artist && (
-              <span className={styles.nextArtist}>{nextTrack.artist}</span>
-            )}
+          <div className={styles.info}>
+            <div className={styles.statusRow}>
+              <span
+                className={`${styles.statusDot} ${onAir ? styles.statusDotOn : ''}`}
+                aria-hidden="true"
+              />
+              <span className={styles.statusText}>{statusText}</span>
+              {streaming?.listeners ? (
+                <span className={styles.statusMeta}>· {streaming.listeners} oyentes</span>
+              ) : null}
+              {streaming?.bitrate ? (
+                <span className={styles.statusMeta}>· {streaming.bitrate} kbps</span>
+              ) : null}
+            </div>
+            <span className={styles.label}>
+              {currentTrack?.title || 'En Vivo'}
+            </span>
+            <span className={styles.meta}>
+              {currentTrack?.artist ||
+                (streamUrl ? 'Reproduciendo en vivo' : 'Reproductor listo')}
+            </span>
           </div>
-        )}
+
+          {nextTrack && (
+            <div className={styles.next}>
+              <span className={styles.nextLabel}>Sigue ahora</span>
+              <span className={styles.nextTitle}>{nextTrack.title}</span>
+              {nextTrack.artist && (
+                <span className={styles.nextArtist}>{nextTrack.artist}</span>
+              )}
+            </div>
+          )}
+
+          <button
+            type="button"
+            className={styles.playButton}
+            onClick={toggle}
+            disabled={!streamUrl}
+            aria-label={isPlaying ? 'Pausar' : 'Reproducir'}
+          >
+            {isPlaying ? '❚❚' : '▶'}
+          </button>
+        </div>
       </div>
     </div>
   )

@@ -137,7 +137,7 @@ export function BlueTemplate({ clientData, isLoading }: TemplateProps) {
       </main>
 
       <footer className={styles.footer}>{displayName} · IPStream Panel</footer>
-      <PlayerBar />
+      <PlayerBar fallbackCovers={[live.basic?.coverUrl, live.basic?.logoUrl]} />
 
       {isHome && navItems.length > 0 && (
         <>

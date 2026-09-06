@@ -211,7 +211,7 @@ export function ModernoTemplate({ clientData, isLoading }: TemplateProps) {
           © {displayName} · Todos los derechos reservados · IPStream Panel
         </div>
       </footer>
-      <PlayerBar />
+      <PlayerBar fallbackCovers={[live.basic?.coverUrl, live.basic?.logoUrl]} />
     </div>
   )
 }

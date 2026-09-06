@@ -122,7 +122,7 @@ export function TradicionalTemplate({ clientData, isLoading }: TemplateProps) {
         <span className={styles.footerDot}>·</span>
         <span>IPStream Panel</span>
       </footer>
-      <PlayerBar />
+      <PlayerBar fallbackCovers={[live.basic?.coverUrl, live.basic?.logoUrl]} />
     </div>
   )
 }
