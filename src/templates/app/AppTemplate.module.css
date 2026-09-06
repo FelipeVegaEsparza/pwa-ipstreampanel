@@ -1,15 +1,300 @@
 .page {
-  --tpl-bg: #17171c;
-  --tpl-text: #f3f4f6;
-  --tpl-muted: #9ca3af;
-  --tpl-accent: #22d3ee;
-  --tpl-accent-text: #082f36;
-  --tpl-card-bg: #23232a;
-  --tpl-card-border: #33333c;
-  --tpl-skeleton: rgba(255, 255, 255, 0.1);
-  --tpl-header-bg: #202027;
-  --hero-bg: #23232a;
-  --hero-radius: 12px;
-  --hero-cover-radius: 10px;
-  --hero-cover-size: 140px;
+  --color-bg: #eef1fa;
+  --color-surface: #ffffff;
+  --color-surface-alt: #e3e8f7;
+  --color-text: #0f172a;
+  --color-text-muted: #64748b;
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-border: rgba(15, 23, 42, 0.1);
+  --content-card-bg: #ffffff;
+  --content-card-border: rgba(15, 23, 42, 0.1);
+  --content-text: #0f172a;
+  --content-muted: #64748b;
+  --content-accent: #4f46e5;
+  --content-skeleton-bg: rgba(15, 23, 42, 0.08);
+
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(var(--player-height) + var(--space-3));
+  background:
+    radial-gradient(900px 420px at 100% -10%, rgba(79, 70, 229, 0.16), transparent 60%),
+    var(--color-bg);
+  color: var(--color-text);
+}
+
+.appBar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-5);
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.appBrand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.logo {
+  height: 40px;
+  width: 40px;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 6px 14px rgba(79, 70, 229, 0.25);
+}
+
+.appTitles {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.appName {
+  font-size: 1.05rem;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 6px;
+  font-size: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  background: var(--color-surface-alt);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.appStatus {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.onDot,
+.offDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.onDot {
+  background: #22c55e;
+}
+
+.offDot {
+  background: #94a3b8;
+}
+
+.appActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.main {
+  flex: 1;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-4) var(--space-6);
+}
+
+.heroCard {
+  display: grid;
+  grid-template-columns: minmax(140px, 210px) 1fr;
+  gap: var(--space-5);
+  align-items: center;
+  padding: var(--space-5);
+  background: linear-gradient(140deg, #ffffff, #eef0fe);
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  box-shadow: 0 24px 50px rgba(79, 70, 229, 0.14);
+}
+
+.heroCoverWrap {
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.25);
+}
+
+.heroCover {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+}
+
+.heroBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.eyebrow {
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.song {
+  margin: 0;
+  font-size: clamp(1.35rem, 3.6vw, 1.9rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+}
+
+.artist {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.heroMeta {
+  display: flex;
+  gap: var(--space-2);
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.play {
+  align-self: flex-start;
+  margin-top: var(--space-2);
+  border: none;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 800;
+  padding: var(--space-2) var(--space-5);
+  cursor: pointer;
+  transition: background 150ms ease, transform 150ms ease;
+}
+
+.play:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+  transform: translateY(-1px);
+}
+
+.play:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.progressWrap {
+  margin-top: var(--space-2);
+}
+
+.nextCard {
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+}
+
+.nextTitle {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.feed {
+  margin-top: var(--space-5);
+}
+
+.feed :global(section) {
+  margin-top: var(--space-5);
+  padding: var(--space-4);
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+}
+
+.socialBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  padding: var(--space-3);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+}
+
+.socialHint {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+}
+
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--color-text);
+  background: var(--color-bg);
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.socialLink:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.footer {
+  padding: var(--space-4);
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  border-top: 1px solid var(--color-border);
+}
+
+@media (max-width: 640px) {
+  .heroCard {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .heroCoverWrap {
+    max-width: 200px;
+    margin: 0 auto;
+  }
+
+  .play {
+    align-self: center;
+  }
 }
