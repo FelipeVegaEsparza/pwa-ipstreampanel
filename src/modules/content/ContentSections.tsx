@@ -56,6 +56,24 @@ const DEFAULT_ORDER: SectionId[] = [
   'social'
 ]
 
+// Estilo "portal de radio" (referencia radiosomos.cl): lo último primero,
+// luego la programación, los podcasts y el resto del contenido.
+const MODERNO_ORDER: SectionId[] = [
+  'news',
+  'programs',
+  'podcasts',
+  'videocasts',
+  'videos',
+  'promotions',
+  'polls',
+  'tv',
+  'galleries',
+  'events',
+  'announcers',
+  'sponsors',
+  'social'
+]
+
 type NewsVariant = 'grid' | 'featured' | 'rows' | 'overlay'
 type ProgramVariant = 'list' | 'cards'
 
@@ -86,9 +104,12 @@ function programVariantFor(template: string | null | undefined): ProgramVariant 
 }
 
 function orderFor(template: string | null | undefined): SectionId[] {
-  if (template !== 'covered') return DEFAULT_ORDER
-  const rest = DEFAULT_ORDER.filter((id) => !EDITORIAL_ORDER.includes(id))
-  return [...EDITORIAL_ORDER, ...rest]
+  if (template === 'covered') {
+    const rest = DEFAULT_ORDER.filter((id) => !EDITORIAL_ORDER.includes(id))
+    return [...EDITORIAL_ORDER, ...rest]
+  }
+  if (template === 'moderno') return MODERNO_ORDER
+  return DEFAULT_ORDER
 }
 
 function sectionFor(
