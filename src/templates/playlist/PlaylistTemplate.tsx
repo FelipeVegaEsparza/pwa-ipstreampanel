@@ -1,7 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import { useLiveRadio } from '@/modules/player/useLiveRadio'
 import { NextTrack } from '@/modules/player/NextTrack'
-import { PlayerBar } from '@/modules/player/PlayerBar'
 import { TrackProgress } from '@/modules/player/TrackProgress'
 import { InstallPrompt } from '@/modules/pwa/InstallPrompt'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
@@ -16,15 +15,16 @@ export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
   const displayName = isLoading ? 'Cargando…' : live.name
   const liveTag =
     live.status === 'off' ? 'SIN SEÑAL' : live.isLive ? 'EN VIVO' : 'AUTODJ'
+  const showArtist = Boolean(live.currentTrack?.artist)
 
   return (
     <div className={styles.page}>
       <div className={styles.layout}>
         <aside className={styles.deck}>
           <div className={styles.deckHead}>
-            <SmartImage className={styles.logo} src={live.basic?.logoUrl} alt="" />
-            <span className={styles.deckBrand}>{displayName}</span>
-            <span className={styles.badge}>Playlist</span>
+            <SmartImage className={styles.logo} src={live.basic?.logoUrl} alt={displayName} />
+            <span className={styles.srOnly}>{displayName}</span>
+            <span className={styles.srOnly}>Playlist</span>
           </div>
 
           <div className={styles.coverWrap}>
@@ -51,7 +51,7 @@ export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
           <h1 className={styles.song}>
             {live.currentTrack?.title ?? 'La lista suena sola'}
           </h1>
-          <p className={styles.artist}>{live.currentTrack?.artist ?? live.name}</p>
+          {showArtist && <p className={styles.artist}>{live.currentTrack?.artist}</p>}
 
           <div className={styles.progressWrap}>
             <TrackProgress
@@ -103,10 +103,7 @@ export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
 
         <div className={styles.column}>
           <header className={styles.topbar}>
-            <div className={styles.topTitles}>
-              <span className={styles.kicker}>Tu radio en lista de reproducción</span>
-              <span className={styles.topName}>{displayName}</span>
-            </div>
+            <span className={styles.kicker}>Tu radio en lista de reproducción</span>
             <div className={styles.topActions}>
               <Weather location={live.basic?.location} />
               <InstallPrompt />
@@ -117,10 +114,13 @@ export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
             <Outlet />
           </main>
 
-          <footer className={styles.footer}>{displayName} · IPStream Panel</footer>
+          <footer className={styles.footer}>
+            <span className={styles.srOnly}>{displayName}</span>
+            <SmartImage className={styles.footerLogo} src={live.basic?.logoUrl} alt="" />
+            <span>IPStream Panel</span>
+          </footer>
         </div>
       </div>
-      <PlayerBar />
     </div>
   )
 }
