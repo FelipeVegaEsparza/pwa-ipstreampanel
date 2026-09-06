@@ -1,4 +1,4 @@
-import { type ComponentType } from 'react'
+import { useEffect, useState, type ComponentType } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { useLiveRadio } from '@/modules/player/useLiveRadio'
 import { PlayerBar } from '@/modules/player/PlayerBar'
@@ -53,10 +53,26 @@ export function BlueTemplate({ clientData, isLoading }: TemplateProps) {
   const displayName = isLoading ? 'Cargando…' : live.name
   const { pathname } = useLocation()
   const isHome = pathname === '/'
+  const [menuOpen, setMenuOpen] = useState(false)
 
+  // Solo se listan las secciones que realmente tienen contenido visible.
   const navItems = getSectionOrder('blue').filter((id) =>
     sectionHasContent(id, clientData, socialLinks.length)
   )
+
+  useEffect(() => {
+    if (!menuOpen) return
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMenuOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = previousOverflow
+    }
+  }, [menuOpen])
 
   return (
     <div className={styles.page}>
@@ -82,6 +98,18 @@ export function BlueTemplate({ clientData, isLoading }: TemplateProps) {
         )}
 
         <div className={styles.actions}>
+          {isHome && navItems.length > 0 && (
+            <button
+              type="button"
+              className={styles.menuBtn}
+              onClick={() => setMenuOpen(true)}
+              aria-label="Abrir menú de secciones"
+              aria-controls="menu-secciones"
+              aria-expanded={menuOpen}
+            >
+              ☰
+            </button>
+          )}
           <Weather location={live.basic?.location} />
           {socialLinks.length > 0 && (
             <div className={styles.socials}>
@@ -110,6 +138,55 @@ export function BlueTemplate({ clientData, isLoading }: TemplateProps) {
 
       <footer className={styles.footer}>{displayName} · IPStream Panel</footer>
       <PlayerBar />
+
+      {isHome && navItems.length > 0 && (
+        <>
+          <div
+            className={`${styles.scrim} ${menuOpen ? styles.scrimOpen : ''}`}
+            onClick={() => setMenuOpen(false)}
+            aria-hidden="true"
+          />
+          <nav
+            id="menu-secciones"
+            className={`${styles.drawer} ${menuOpen ? styles.drawerOpen : ''}`}
+            aria-label="Secciones del sitio"
+          >
+            <div className={styles.drawerHead}>
+              <SmartImage
+                className={styles.drawerLogo}
+                src={live.basic?.logoUrl}
+                alt={displayName}
+              />
+              <span className={styles.drawerTitle}>Secciones</span>
+              <button
+                type="button"
+                className={styles.drawerClose}
+                onClick={() => setMenuOpen(false)}
+                aria-label="Cerrar menú"
+              >
+                ×
+              </button>
+            </div>
+            <ul className={styles.drawerList}>
+              {navItems.map((id) => {
+                const Icon = SECTION_ICONS[id]
+                return (
+                  <li key={id}>
+                    <a
+                      className={styles.drawerLink}
+                      href={`#${sectionAnchorId(id)}`}
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <Icon size={16} aria-hidden="true" />
+                      {SECTION_LABELS[id]}
+                    </a>
+                  </li>
+                )
+              })}
+            </ul>
+          </nav>
+        </>
+      )}
     </div>
   )
 }

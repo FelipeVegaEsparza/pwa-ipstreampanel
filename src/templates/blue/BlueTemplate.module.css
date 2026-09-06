@@ -204,3 +204,147 @@
     display: none;
   }
 }
+
+/* ----- Botón hamburguesa y menú lateral (pantallas pequeñas) ----- */
+.menuBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(125, 211, 252, 0.35);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-text);
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+
+.menuBtn:hover {
+  border-color: var(--color-primary);
+  background: rgba(125, 211, 252, 0.14);
+}
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(2, 8, 26, 0.6);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+}
+
+.scrimOpen {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 70;
+  width: min(320px, 86vw);
+  display: flex;
+  flex-direction: column;
+  background: #081a3c;
+  border-right: 1px solid rgba(125, 211, 252, 0.25);
+  box-shadow: 20px 0 50px rgba(2, 8, 26, 0.6);
+  transform: translateX(-102%);
+  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.drawerOpen {
+  transform: translateX(0);
+}
+
+.drawerHead {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid rgba(125, 211, 252, 0.2);
+}
+
+.drawerLogo {
+  height: 34px;
+  max-width: 150px;
+  width: auto;
+  object-fit: contain;
+}
+
+.drawerTitle {
+  margin-right: auto;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #7dd3fc;
+}
+
+.drawerClose {
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.drawerClose:hover {
+  color: var(--color-text);
+}
+
+.drawerList {
+  list-style: none;
+  margin: 0;
+  padding: var(--space-3);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.drawerLink {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: 10px;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: color 150ms ease, background 150ms ease;
+}
+
+.drawerLink svg {
+  color: #7dd3fc;
+}
+
+.drawerLink:hover {
+  color: #fff;
+  background: rgba(125, 211, 252, 0.14);
+}
+
+@media (max-width: 820px) {
+  .nav {
+    display: none;
+  }
+
+  .menuBtn {
+    display: inline-flex;
+  }
+}
+
+@media (min-width: 821px) {
+  .scrim,
+  .drawer {
+    display: none;
+  }
+}

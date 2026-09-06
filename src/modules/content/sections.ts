@@ -57,7 +57,8 @@ export function sectionHasContent(
     case 'videocasts':
       return (clientData?.videocasts?.length ?? 0) > 0
     case 'videos':
-      return (clientData?.videos?.length ?? 0) > 0
+      // VideosSection solo muestra videos con URL de reproducción.
+      return (clientData?.videos?.filter((video) => Boolean(video.videoUrl))?.length ?? 0) > 0
     case 'tv':
       return Boolean(clientData?.basicData?.videoStreamingUrl)
     case 'promotions':
@@ -71,7 +72,12 @@ export function sectionHasContent(
     case 'sponsors':
       return (clientData?.sponsors?.length ?? 0) > 0
     case 'polls':
-      return (clientData?.polls?.length ?? 0) > 0
+      // PollsSection solo muestra encuestas activas con opciones.
+      return (
+        (clientData?.polls?.filter(
+          (poll) => poll.active !== false && poll.options.length > 0
+        )?.length ?? 0) > 0
+      )
     case 'social':
       return socialCount > 0
   }
