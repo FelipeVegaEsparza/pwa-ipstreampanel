@@ -8,7 +8,7 @@
 .bar {
   height: 6px;
   border-radius: 999px;
-  background: var(--tpl-skeleton, rgba(128, 128, 128, 0.18));
+  background: var(--bar-bg, var(--tpl-skeleton, var(--color-border, rgba(128, 128, 128, 0.18))));
   overflow: hidden;
 }
 
@@ -19,8 +19,30 @@
 .fill {
   height: 100%;
   border-radius: 999px;
-  background: var(--tpl-accent, #6366f1);
+  background: var(--bar-fill, var(--color-primary, #6366f1));
   transition: width 0.3s linear;
+}
+
+/* Estado "en vivo" sin duración conocida: barra activa animada */
+.fillLive {
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-primary, #6366f1) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: liveSlide 1.6s linear infinite;
+}
+
+@keyframes liveSlide {
+  0% {
+    background-position: 120% 0;
+  }
+  100% {
+    background-position: -120% 0;
+  }
 }
 
 .times {

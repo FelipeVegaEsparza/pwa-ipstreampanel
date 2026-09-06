@@ -11,9 +11,18 @@ export function PlayerBar() {
   const { data: streaming } = useStreaming(clientId ?? '')
 
   const currentTrack = streaming?.currentTrack
+  const nextTrack = streaming?.nextTrack
   const trackCover = currentTrack?.coverUrl ?? null
   const trackKey =
     trackCover ?? `${currentTrack?.title ?? ''}|${currentTrack?.artist ?? ''}`
+
+  const status = streaming?.status ?? 'off'
+  const onAir = status !== 'off'
+  const statusText = !onAir
+    ? 'Fuera del aire'
+    : streaming?.isLive
+      ? 'EN VIVO'
+      : 'Al aire'
 
   return (
     <div className={styles.bar}>
@@ -35,14 +44,34 @@ export function PlayerBar() {
           {isPlaying ? '❚❚' : '▶'}
         </button>
         <div className={styles.info}>
+          <div className={styles.statusRow}>
+            <span
+              className={`${styles.statusDot} ${onAir ? styles.statusDotOn : ''}`}
+              aria-hidden="true"
+            />
+            <span className={styles.statusText}>{statusText}</span>
+            {streaming?.listeners ? (
+              <span className={styles.statusMeta}>· {streaming.listeners} oyentes</span>
+            ) : null}
+          </div>
           <span className={styles.label}>
             {currentTrack?.title || 'En Vivo'}
           </span>
           <span className={styles.meta}>
-            {streaming?.listeners ? `${streaming.listeners} oyentes · ` : ''}
-            {currentTrack?.artist || (streamUrl ? 'Reproduciendo' : 'Reproductor listo')}
+            {currentTrack?.artist || (streamUrl ? 'Reproduciendo en vivo' : 'Reproductor listo')}
+            {streaming?.bitrate ? ` · ${streaming.bitrate} kbps` : ''}
           </span>
         </div>
+
+        {nextTrack && (
+          <div className={styles.next}>
+            <span className={styles.nextLabel}>Sigue ahora</span>
+            <span className={styles.nextTitle}>{nextTrack.title}</span>
+            {nextTrack.artist && (
+              <span className={styles.nextArtist}>{nextTrack.artist}</span>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )

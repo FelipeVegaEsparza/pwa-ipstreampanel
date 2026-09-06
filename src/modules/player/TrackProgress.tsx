@@ -30,17 +30,28 @@ export function TrackProgress({
     serverElapsed
   )
 
-  if (!durationSec) return null
+  const live = !durationSec && isPlaying
+
+  if (!durationSec && variant !== 'thin') return null
 
   if (variant === 'thin') {
     return (
       <div className={styles.thin}>
         <div className={styles.bar}>
-          <div className={styles.fill} style={{ width: `${progress * 100}%` }} />
+          {live ? (
+            <div className={`${styles.fill} ${styles.fillLive}`} />
+          ) : (
+            <div
+              className={styles.fill}
+              style={{ width: `${durationSec ? progress * 100 : 0}%` }}
+            />
+          )}
         </div>
       </div>
     )
   }
+
+  if (!durationSec) return null
 
   return (
     <div className={styles.full}>
