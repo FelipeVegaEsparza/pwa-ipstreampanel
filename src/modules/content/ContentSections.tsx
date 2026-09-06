@@ -74,6 +74,24 @@ const MODERNO_ORDER: SectionId[] = [
   'social'
 ]
 
+// Estilo cultural/editorial (referencia radio13c.cl): la parrilla de
+// programación es protagonista y las noticias/ideas le siguen.
+const PETROLEO_ORDER: SectionId[] = [
+  'programs',
+  'news',
+  'podcasts',
+  'events',
+  'videos',
+  'videocasts',
+  'promotions',
+  'polls',
+  'tv',
+  'galleries',
+  'announcers',
+  'sponsors',
+  'social'
+]
+
 type NewsVariant = 'grid' | 'featured' | 'rows' | 'overlay'
 type ProgramVariant = 'list' | 'cards'
 
@@ -83,7 +101,6 @@ type ProgramVariant = 'list' | 'cards'
 const NEWS_VARIANTS: Record<string, NewsVariant> = {
   covered: 'featured',
   moderno: 'overlay',
-  petroleo: 'overlay',
   tradicional: 'rows',
   playlist: 'rows'
 }
@@ -91,7 +108,6 @@ const NEWS_VARIANTS: Record<string, NewsVariant> = {
 const PROGRAM_VARIANTS: Record<string, ProgramVariant> = {
   covered: 'cards',
   blue: 'cards',
-  petroleo: 'cards',
   playlist: 'cards'
 }
 
@@ -109,6 +125,7 @@ function orderFor(template: string | null | undefined): SectionId[] {
     return [...EDITORIAL_ORDER, ...rest]
   }
   if (template === 'moderno') return MODERNO_ORDER
+  if (template === 'petroleo') return PETROLEO_ORDER
   return DEFAULT_ORDER
 }
 
