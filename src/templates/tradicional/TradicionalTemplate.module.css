@@ -1,12 +1,38 @@
 .page {
-  --color-bg: #f4ecdd;
+  /* Sistema de tarjetas "Tradicional": papel, filetes y acento tinta/rojo */
+  --grid-min: 200px;
+  --grid-gap: 18px;
+  --card-radius: 2px;
+  --card-border-w: 1px;
+  --card-bg: #fffdf6;
+  --card-bg-img: linear-gradient(180deg, #fffef9, #fbf4e4);
+  --card-border: #e0d2b8;
+  --card-border-hover: #a3271c;
+  --card-shadow: 3px 3px 0 rgba(120, 84, 44, 0.1);
+  --card-shadow-hover: 5px 5px 0 rgba(163, 39, 28, 0.14);
+  --card-lift: -2px;
+  --card-accent: #a3271c;
+  --card-accent-h: 3px;
+
+  --section-title-font: Georgia, 'Times New Roman', serif;
+  --section-title-color: #6b2400;
+  --section-title-size: 1.05rem;
+  --section-title-weight: 700;
+  --section-title-transform: none;
+  --section-title-spacing: 0.02em;
+  --section-rule-w: 0;
+  --section-rule-h: 2px;
+  --section-rule-c: #a3271c;
+  --section-gap: 42px;
+
+  --color-bg: #f2e9d8;
   --color-surface: #fffdf6;
   --color-surface-alt: #efe3cd;
   --color-text: #2b2016;
   --color-text-muted: #7d6a53;
   --color-primary: #a3271c;
   --color-primary-hover: #8c2016;
-  --color-border: rgba(120, 84, 44, 0.28);
+  --color-border: rgba(120, 84, 44, 0.3);
   --content-card-bg: #fffdf6;
   --content-card-border: #e4d5b9;
   --content-text: #2b2016;
@@ -19,7 +45,8 @@
   flex-direction: column;
   padding-bottom: calc(var(--player-height) + var(--space-3));
   background:
-    radial-gradient(700px 300px at 100% 0%, rgba(163, 39, 28, 0.06), transparent 60%),
+    radial-gradient(760px 300px at 100% 0%, rgba(163, 39, 28, 0.05), transparent 60%),
+    repeating-linear-gradient(0deg, transparent 0 27px, rgba(120, 84, 44, 0.035) 27px 28px),
     var(--color-bg);
   color: var(--color-text);
 }
@@ -30,8 +57,8 @@
   justify-content: space-between;
   gap: var(--space-4);
   padding: var(--space-3) var(--space-5);
-  border-top: 5px solid var(--color-text);
-  border-bottom: 2px double var(--color-text);
+  border-top: 6px double var(--color-text);
+  border-bottom: 1px solid var(--color-text);
   background: var(--color-surface);
 }
 
@@ -43,10 +70,11 @@
 }
 
 .logo {
-  height: 46px;
+  height: 48px;
   width: auto;
   border: 1px solid var(--color-border);
-  border-radius: 6px;
+  border-radius: 50%;
+  padding: 2px;
   object-fit: contain;
   background: #fff;
 }
@@ -59,7 +87,7 @@
 
 .brandName {
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: 1.5rem;
+  font-size: 1.55rem;
   font-weight: 700;
   letter-spacing: 0.01em;
   line-height: 1.05;
@@ -72,19 +100,18 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-text-muted);
 }
 
 .badge {
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   font-weight: 800;
   color: #fff6ea;
   background: var(--color-primary);
-  border-radius: 999px;
+  border-radius: 2px;
   padding: 2px 8px;
   letter-spacing: 0.1em;
 }
@@ -123,7 +150,7 @@
 .main {
   flex: 1;
   width: 100%;
-  max-width: 980px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: var(--space-5);
 }
@@ -131,7 +158,7 @@
 .console {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  box-shadow: 6px 6px 0 rgba(120, 84, 44, 0.14);
+  box-shadow: 8px 8px 0 rgba(120, 84, 44, 0.16);
 }
 
 .consoleTop {
@@ -141,9 +168,8 @@
   gap: var(--space-3);
   padding: var(--space-2) var(--space-4);
   border-bottom: 1px solid var(--color-border);
-  font-family: var(--font-sans);
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
@@ -154,21 +180,22 @@
 
 .consoleMeta {
   color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
 }
 
 .consoleBody {
   display: grid;
-  grid-template-columns: 128px 1fr auto;
+  grid-template-columns: 136px 1fr auto;
   gap: var(--space-5);
   align-items: center;
   padding: var(--space-5);
 }
 
 .artwork {
-  width: 128px;
+  width: 136px;
   aspect-ratio: 1;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 2px;
   border: 4px double var(--color-text);
   display: block;
 }
@@ -181,9 +208,8 @@
 }
 
 .nowCaption {
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  letter-spacing: 0.22em;
+  font-size: 0.68rem;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--color-text-muted);
 }
@@ -191,20 +217,18 @@
 .song {
   margin: 0;
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(1.4rem, 3.4vw, 2.1rem);
-  line-height: 1.1;
+  font-size: clamp(1.45rem, 3.4vw, 2.2rem);
+  line-height: 1.08;
 }
 
 .singer {
   margin: 0;
-  font-family: var(--font-sans);
   color: var(--color-primary);
   font-weight: 700;
 }
 
 .progressWrap {
   margin-top: var(--space-3);
-  font-family: var(--font-sans);
 }
 
 .controls {
@@ -215,15 +239,18 @@
 }
 
 .play {
-  width: 74px;
-  height: 74px;
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
   border: none;
   background: var(--color-primary);
   color: #fff6ea;
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   cursor: pointer;
-  box-shadow: 0 0 0 4px var(--color-surface), 0 0 0 5px var(--color-primary);
+  box-shadow:
+    0 0 0 4px var(--color-surface),
+    0 0 0 5px var(--color-primary),
+    4px 4px 0 rgba(120, 84, 44, 0.25);
   transition: background 150ms ease, transform 150ms ease;
 }
 
@@ -238,9 +265,8 @@
 }
 
 .playLabel {
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-  letter-spacing: 0.16em;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-text-muted);
 }
@@ -252,8 +278,7 @@
   gap: var(--space-3);
   padding: var(--space-2) var(--space-4);
   border-top: 1px solid var(--color-border);
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-text-muted);
@@ -267,6 +292,7 @@
 .stationLine {
   font-style: italic;
   letter-spacing: 0.04em;
+  text-transform: none;
 }
 
 .nextBlock {
@@ -279,9 +305,8 @@
 .nextCaption {
   display: block;
   margin-bottom: var(--space-2);
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  letter-spacing: 0.22em;
+  font-size: 0.68rem;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--color-text-muted);
 }

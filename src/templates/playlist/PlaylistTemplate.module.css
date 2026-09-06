@@ -1,37 +1,62 @@
 .page {
-  --color-bg: #0c0f0d;
-  --color-surface: #131814;
-  --color-surface-alt: #1a211b;
+  /* Sistema de tarjetas "playlist": sin bordes gruesos, hover luminoso */
+  --grid-min: 200px;
+  --grid-gap: 14px;
+  --card-radius: 10px;
+  --card-border-w: 1px;
+  --card-bg: #1a1e1b;
+  --card-border: rgba(255, 255, 255, 0.04);
+  --card-border-hover: rgba(30, 215, 96, 0.35);
+  --card-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+  --card-shadow-hover: 0 14px 30px rgba(0, 0, 0, 0.45);
+  --card-lift: -3px;
+  --card-accent: #1ed760;
+  --card-accent-h: 0;
+
+  --section-title-color: #8fa496;
+  --section-title-size: 0.8rem;
+  --section-title-weight: 800;
+  --section-title-transform: uppercase;
+  --section-title-spacing: 0.18em;
+  --section-rule-c: transparent;
+  --section-gap: 40px;
+
+  --color-bg: #0b0e0c;
+  --color-surface: #131914;
+  --color-surface-alt: #1c241d;
   --color-text: #edf6ef;
   --color-text-muted: #93a59a;
   --color-primary: #1ed760;
   --color-primary-hover: #17b854;
-  --color-border: #263029;
-  --content-card-bg: #141a15;
-  --content-card-border: #26322a;
+  --color-border: #26302a;
+  --content-card-bg: #1a1e1b;
+  --content-card-border: #2b332c;
   --content-text: #edf6ef;
-  --content-muted: #93a59a;
+  --content-muted: #9db0a2;
   --content-accent: #1ed760;
-  --content-skeleton-bg: rgba(255, 255, 255, 0.1);
+  --content-skeleton-bg: rgba(255, 255, 255, 0.08);
 
   min-height: 100svh;
   background:
-    radial-gradient(1000px 500px at 0% 0%, rgba(30, 215, 96, 0.1), transparent 55%),
-    var(--color-bg);
+    radial-gradient(900px 420px at 12% -5%, rgba(30, 215, 96, 0.12), transparent 60%),
+    radial-gradient(700px 400px at 100% 0%, rgba(30, 215, 96, 0.05), transparent 55%),
+    #0b0e0c;
   color: var(--color-text);
   padding-bottom: calc(var(--player-height) + var(--space-2));
+  font-family: var(--font-sans);
 }
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(280px, 360px) 1fr;
+  grid-template-columns: minmax(290px, 360px) 1fr;
   gap: var(--space-5);
   width: 100%;
-  max-width: 1320px;
+  max-width: 1340px;
   margin: 0 auto;
   padding: var(--space-4);
 }
 
+/* ----- Panel izquierdo: el "deck" del reproductor ----- */
 .deck {
   position: sticky;
   top: var(--space-4);
@@ -40,10 +65,11 @@
   flex-direction: column;
   gap: var(--space-3);
   padding: var(--space-5);
-  border: 1px solid var(--color-border);
-  border-radius: 20px;
-  background: linear-gradient(180deg, #161d18, #10140f);
-  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.5);
+  border: 1px solid #212a23;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(30, 215, 96, 0.05), transparent 30%),
+    linear-gradient(180deg, #161d18, #10150f);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
 }
 
 .deckHead {
@@ -54,15 +80,17 @@
 }
 
 .logo {
-  height: 38px;
-  width: 38px;
-  border-radius: 10px;
+  height: 42px;
+  width: 42px;
+  border-radius: 8px;
   object-fit: cover;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
 }
 
 .deckBrand {
   font-weight: 800;
   letter-spacing: -0.01em;
+  font-size: 1.02rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -71,19 +99,20 @@
 .badge {
   margin-left: auto;
   flex-shrink: 0;
-  font-size: 0.66rem;
+  font-size: 0.62rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   color: var(--color-primary);
-  border: 1px solid rgba(30, 215, 96, 0.45);
+  border: 1px solid rgba(30, 215, 96, 0.4);
   border-radius: 999px;
-  padding: 2px 9px;
+  padding: 3px 10px;
+  background: rgba(30, 215, 96, 0.08);
 }
 
 .coverWrap {
   position: relative;
   border-radius: 14px;
-  overflow: visible;
 }
 
 .cover {
@@ -92,17 +121,77 @@
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
-  border-radius: 14px;
+  border-radius: 12px;
   display: block;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.6);
+}
+
+.coverWrap::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 14px;
+  padding: 1px;
+  background: linear-gradient(160deg, rgba(30, 215, 96, 0.7), rgba(30, 215, 96, 0.08) 45%, transparent);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 .coverGlow {
   position: absolute;
-  inset: 6%;
+  inset: 4%;
   z-index: 0;
-  background: radial-gradient(circle, rgba(30, 215, 96, 0.4), transparent 70%);
-  filter: blur(34px);
+  background: radial-gradient(circle, rgba(30, 215, 96, 0.28), transparent 68%);
+  filter: blur(30px);
+}
+
+/* Ecualizador animado cuando está sonando */
+.eq {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 18px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.eq span {
+  width: 3px;
+  border-radius: 2px;
+  background: var(--color-primary);
+  animation: eqBounce 0.9s ease-in-out infinite;
+}
+
+.eq span:nth-child(1) {
+  height: 60%;
+  animation-delay: -0.2s;
+}
+
+.eq span:nth-child(2) {
+  height: 100%;
+  animation-delay: -0.5s;
+}
+
+.eq span:nth-child(3) {
+  height: 75%;
+  animation-delay: -0.8s;
+}
+
+@keyframes eqBounce {
+  0%,
+  100% {
+    transform: scaleY(0.45);
+  }
+  50% {
+    transform: scaleY(1);
+  }
 }
 
 .liveTag {
@@ -110,9 +199,9 @@
   align-items: center;
   gap: 8px;
   margin: var(--space-2) 0 0;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 800;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   color: var(--color-primary);
   text-transform: uppercase;
 }
@@ -127,6 +216,7 @@
 .onDot {
   background: var(--color-primary);
   animation: breathe 1.8s ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(30, 215, 96, 0.8);
 }
 
 .offDot {
@@ -139,16 +229,16 @@
     opacity: 1;
   }
   50% {
-    opacity: 0.35;
+    opacity: 0.4;
   }
 }
 
 .song {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
 }
 
 .artist {
@@ -168,19 +258,20 @@
 }
 
 .play {
-  width: 56px;
-  height: 56px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
   border: none;
   background: var(--color-primary);
   color: #04120a;
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   cursor: pointer;
+  box-shadow: 0 10px 26px rgba(30, 215, 96, 0.35);
   transition: transform 150ms ease, background 150ms ease;
 }
 
 .play:hover:not(:disabled) {
-  transform: scale(1.06);
+  transform: scale(1.07);
   background: #25e06c;
 }
 
@@ -204,10 +295,11 @@
 
 .bitrate {
   text-transform: lowercase;
+  opacity: 0.8;
 }
 
 .deckNext {
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid #27302a;
   padding-top: var(--space-3);
 }
 
@@ -223,19 +315,21 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   color: var(--color-text-muted);
-  border: 1px solid var(--color-border);
-  transition: color 150ms ease, background 150ms ease, border-color 150ms ease;
+  border: 1px solid #2c352e;
+  transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
 }
 
 .socialLink:hover {
   color: var(--color-primary);
   border-color: var(--color-primary);
+  background: rgba(30, 215, 96, 0.08);
 }
 
+/* ----- Columna derecha: contenido ----- */
 .column {
   display: flex;
   flex-direction: column;
@@ -244,29 +338,31 @@
 
 .topbar {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   gap: var(--space-4);
   padding: var(--space-2) 0 var(--space-4);
+  border-bottom: 1px solid #1f2722;
 }
 
 .topTitles {
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
 
 .kicker {
-  font-size: 0.7rem;
+  font-size: 0.66rem;
   font-weight: 800;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--color-primary);
 }
 
 .topName {
-  font-size: 1.5rem;
+  font-size: clamp(1.6rem, 3.4vw, 2.4rem);
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 
 .topActions {
@@ -277,6 +373,7 @@
 
 .feed {
   flex: 1;
+  padding-top: var(--space-2);
 }
 
 .footer {
@@ -284,7 +381,7 @@
   text-align: center;
   color: var(--color-text-muted);
   font-size: 0.8rem;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid #1f2722;
   margin-top: var(--space-4);
 }
 
@@ -297,5 +394,6 @@
     position: static;
     max-width: 460px;
     margin: 0 auto;
+    width: 100%;
   }
 }

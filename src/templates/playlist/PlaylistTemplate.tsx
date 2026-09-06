@@ -35,6 +35,13 @@ export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
               alt=""
             />
             <div className={styles.coverGlow} aria-hidden="true" />
+            {live.isPlaying && (
+              <div className={styles.eq} aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </div>
+            )}
           </div>
 
           <p className={styles.liveTag}>

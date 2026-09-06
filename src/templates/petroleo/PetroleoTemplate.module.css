@@ -1,4 +1,31 @@
 .page {
+  /* Sistema de tarjetas "Petróleo": planas e industriales, acento naranja */
+  --grid-min: 220px;
+  --grid-gap: 14px;
+  --card-radius: 1px;
+  --card-border-w: 1px;
+  --card-bg: #16171a;
+  --card-bg-img: linear-gradient(180deg, #191a1d, #131417);
+  --card-border: #2e3035;
+  --card-border-hover: #ff5f1f;
+  --card-shadow: 0 1px 0 rgba(255, 255, 255, 0.02) inset, 0 8px 18px rgba(0, 0, 0, 0.4);
+  --card-shadow-hover: 0 0 0 1px rgba(255, 95, 31, 0.5), 0 14px 30px rgba(0, 0, 0, 0.5);
+  --card-lift: -2px;
+  --card-accent: #ff5f1f;
+  --card-accent-h: 3px;
+
+  --section-title-font: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --section-title-color: #a8aaa6;
+  --section-title-size: 0.78rem;
+  --section-title-weight: 800;
+  --section-title-transform: uppercase;
+  --section-title-spacing: 0.26em;
+  --section-rule-w: 34px;
+  --section-rule-h: 2px;
+  --section-rule-c: #ff5f1f;
+  --section-gap: 40px;
+  --overlay-min: 220px;
+
   --color-bg: #0a0a0b;
   --color-surface: #17181b;
   --color-surface-alt: #202226;
@@ -19,20 +46,21 @@
   flex-direction: column;
   padding-bottom: calc(var(--player-height) + var(--space-3));
   background:
-    repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255, 95, 31, 0.03) 3px, rgba(255, 95, 31, 0.03) 4px),
-    var(--color-bg);
+    repeating-linear-gradient(0deg, transparent 0 3px, rgba(255, 95, 31, 0.035) 3px 4px),
+    radial-gradient(900px 500px at 80% -10%, rgba(255, 95, 31, 0.1), transparent 60%),
+    #0a0a0b;
   color: var(--color-text);
 }
 
 .hazardTop,
 .hazardBottom {
-  height: 8px;
+  height: 10px;
+  flex-shrink: 0;
   background: repeating-linear-gradient(
     -45deg,
-    var(--color-primary) 0 14px,
-    #141414 14px 28px
+    var(--color-primary) 0 16px,
+    #141414 16px 32px
   );
-  flex-shrink: 0;
 }
 
 .header {
@@ -52,40 +80,40 @@
 }
 
 .logo {
-  height: 38px;
+  height: 40px;
   width: auto;
-  border: 1px solid #33353a;
+  border: 1px solid #3a3c42;
   padding: 2px;
   background: #111;
   object-fit: contain;
-  border-radius: 4px;
 }
 
 .brandName {
   font-size: 1.1rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.badge {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-primary);
-  border: 1px solid rgba(255, 95, 31, 0.6);
-  padding: 2px 8px;
 }
 
 .headerActions {
   display: flex;
   align-items: center;
   gap: var(--space-3);
+}
+
+.badge {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  border: 1px solid rgba(255, 95, 31, 0.6);
+  padding: 3px 9px;
+  background: rgba(255, 95, 31, 0.06);
 }
 
 .socials {
@@ -97,8 +125,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border: 1px solid #33353a;
   background: #17181b;
   color: var(--color-text);
@@ -114,41 +142,51 @@
 .main {
   flex: 1;
   width: 100%;
-  max-width: 1020px;
+  max-width: 1040px;
   margin: 0 auto;
   padding: var(--space-5);
 }
 
 .board {
   display: grid;
-  grid-template-columns: minmax(170px, 240px) 1fr;
+  grid-template-columns: minmax(180px, 250px) 1fr;
   grid-template-areas: 'plate readout' 'controls controls';
   gap: var(--space-5);
-  border: 1px solid #33353a;
+  border: 1px solid #3a3c42;
   background:
-    linear-gradient(90deg, rgba(255, 95, 31, 0.06), transparent 40%),
-    #141517;
+    linear-gradient(90deg, rgba(255, 95, 31, 0.07), transparent 42%),
+    linear-gradient(180deg, #191a1d, #121214);
   padding: var(--space-5);
-  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  clip-path: polygon(
+    0 0,
+    calc(100% - 16px) 0,
+    100% 16px,
+    100% 100%,
+    16px 100%,
+    0 calc(100% - 16px)
+  );
 }
 
 .plate {
   grid-area: plate;
   position: relative;
-  border: 1px solid #3a3c42;
+  border: 1px solid #41444b;
   padding: var(--space-2);
-  background: #0f1012;
+  background:
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.012) 0 6px, transparent 6px 12px),
+    #0f1012;
 }
 
 .plateNo {
   position: absolute;
-  top: -9px;
+  top: -10px;
   left: var(--space-2);
   background: var(--color-bg);
-  padding: 0 6px;
+  padding: 0 7px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.14em;
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
   color: var(--color-primary);
 }
 
@@ -157,7 +195,7 @@
   aspect-ratio: 1;
   object-fit: cover;
   display: block;
-  filter: grayscale(0.2) contrast(1.05);
+  filter: grayscale(0.25) contrast(1.08);
 }
 
 .readout {
@@ -178,28 +216,31 @@
 
 .readoutVal {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  font-size: clamp(1.7rem, 4.2vw, 2.8rem);
   font-weight: 800;
   letter-spacing: 0.06em;
   color: var(--color-primary);
+  text-shadow: 0 0 18px rgba(255, 95, 31, 0.4);
 }
 
 .offVal {
   color: #ff4b4b;
   text-decoration: line-through;
+  text-shadow: none;
 }
 
 .readoutSub {
-  font-size: 0.72rem;
-  letter-spacing: 0.3em;
+  font-size: 0.7rem;
+  letter-spacing: 0.32em;
   color: var(--color-text-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 .song {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 800;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
@@ -213,7 +254,7 @@
   align-items: center;
   gap: var(--space-3);
   flex-wrap: wrap;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: var(--color-text-muted);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
@@ -243,17 +284,18 @@
   color: var(--color-primary);
   font-family: inherit;
   font-weight: 900;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   font-size: 0.9rem;
   padding: var(--space-3) var(--space-5);
   cursor: pointer;
   text-transform: uppercase;
-  transition: background 150ms ease, color 150ms ease;
+  transition: background 150ms ease, color 150ms ease, box-shadow 150ms ease;
 }
 
 .play:hover:not(:disabled) {
   background: var(--color-primary);
   color: #0a0a0b;
+  box-shadow: 0 0 24px rgba(255, 95, 31, 0.35);
 }
 
 .play:disabled {
@@ -268,15 +310,16 @@
 
 .nextPanel {
   margin-top: var(--space-5);
-  border: 1px solid #33353a;
+  border: 1px solid #3a3c42;
   padding: var(--space-4);
-  background: #111214;
+  background: #121214;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
 }
 
 .panelLabel {
   display: block;
   margin-bottom: var(--space-2);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   letter-spacing: 0.3em;
   color: var(--color-text-muted);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -300,18 +343,18 @@
   padding: var(--space-3) var(--space-5);
   border-top: 2px solid #26272b;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
 }
 
 .footerMark {
   color: var(--color-primary);
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
 }
 
 .footerSub {
   color: var(--color-text-muted);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
 }
 
 @media (max-width: 720px) {
@@ -321,7 +364,7 @@
   }
 
   .plate {
-    max-width: 220px;
+    max-width: 230px;
   }
 
   .footer {

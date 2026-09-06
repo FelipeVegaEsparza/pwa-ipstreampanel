@@ -1,5 +1,30 @@
 .page {
-  --color-bg: #061027;
+  /* Sistema de tarjetas "Blue": vidrio luminoso sobre azul profundo */
+  --grid-min: 230px;
+  --grid-gap: 16px;
+  --card-radius: 16px;
+  --card-border-w: 1px;
+  --card-bg: rgba(255, 255, 255, 0.07);
+  --card-bg-img: linear-gradient(160deg, rgba(125, 211, 252, 0.1), rgba(255, 255, 255, 0.02) 45%);
+  --card-border: rgba(125, 211, 252, 0.22);
+  --card-border-hover: rgba(125, 211, 252, 0.6);
+  --card-shadow: 0 10px 26px rgba(2, 10, 30, 0.35);
+  --card-shadow-hover: 0 18px 42px rgba(2, 10, 30, 0.55);
+  --card-lift: -4px;
+  --card-accent: #38bdf8;
+  --card-accent-h: 2px;
+
+  --section-title-color: #7dd3fc;
+  --section-title-size: 0.78rem;
+  --section-title-weight: 800;
+  --section-title-transform: uppercase;
+  --section-title-spacing: 0.2em;
+  --section-rule-w: 44px;
+  --section-rule-h: 3px;
+  --section-rule-c: linear-gradient(90deg, #38bdf8, #6366f1);
+  --section-gap: 44px;
+
+  --color-bg: #060e22;
   --color-surface: #0d2247;
   --color-surface-alt: #12305f;
   --color-text: #eef6ff;
@@ -19,10 +44,23 @@
   flex-direction: column;
   padding-bottom: calc(var(--player-height) + var(--space-3));
   background:
-    radial-gradient(1200px 600px at 85% -10%, rgba(56, 189, 248, 0.28), transparent 60%),
-    radial-gradient(900px 500px at -10% 30%, rgba(79, 70, 229, 0.22), transparent 55%),
-    linear-gradient(160deg, #0a2a63 0%, #081b3f 55%, #050d22 100%);
+    radial-gradient(1100px 560px at 88% -12%, rgba(56, 189, 248, 0.3), transparent 62%),
+    radial-gradient(900px 520px at -12% 34%, rgba(99, 102, 241, 0.24), transparent 55%),
+    linear-gradient(165deg, #0a2a63 0%, #081b3f 52%, #050d22 100%);
   color: var(--color-text);
+}
+
+/* Rejilla técnica sutil sobre todo el fondo */
+.page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(125, 211, 252, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 211, 252, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.7), transparent 70%);
 }
 
 .topbar {
@@ -34,8 +72,8 @@
   justify-content: space-between;
   gap: var(--space-4);
   padding: var(--space-3) var(--space-5);
-  background: rgba(6, 16, 39, 0.72);
-  backdrop-filter: blur(12px);
+  background: rgba(6, 14, 34, 0.72);
+  backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -49,28 +87,29 @@
 .logo {
   height: 40px;
   width: auto;
-  border-radius: 10px;
+  border-radius: 12px;
   object-fit: contain;
+  box-shadow: 0 8px 22px rgba(56, 189, 248, 0.25);
 }
 
 .brandName {
-  font-size: 1.15rem;
+  font-size: 1.18rem;
   font-weight: 800;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .badge {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--color-primary);
-  border: 1px solid rgba(56, 189, 248, 0.5);
+  letter-spacing: 0.16em;
+  color: #061224;
+  background: linear-gradient(120deg, #38bdf8, #818cf8);
   border-radius: 999px;
-  padding: 2px 10px;
-  flex-shrink: 0;
+  padding: 3px 11px;
 }
 
 .actions {
@@ -89,24 +128,26 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
   color: var(--color-text);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.07);
   border: 1px solid var(--color-border);
-  transition: background 150ms ease, color 150ms ease;
+  transition: transform 150ms ease, background 150ms ease, color 150ms ease;
 }
 
 .socialLink:hover {
-  background: var(--color-primary);
-  color: #03122b;
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #38bdf8, #6366f1);
+  color: #04101f;
 }
 
 .main {
+  position: relative;
   flex: 1;
   width: 100%;
-  max-width: 1100px;
+  max-width: 1160px;
   margin: 0 auto;
   padding: var(--space-4) var(--space-5);
 }
@@ -114,24 +155,26 @@
 .hero {
   position: relative;
   overflow: hidden;
-  border-radius: 24px;
-  border: 1px solid rgba(125, 211, 252, 0.25);
-  background: linear-gradient(135deg, rgba(30, 64, 122, 0.55), rgba(11, 30, 64, 0.7));
-  backdrop-filter: blur(6px);
+  border-radius: 26px;
+  border: 1px solid rgba(125, 211, 252, 0.28);
+  background:
+    radial-gradient(700px 320px at 15% 0%, rgba(56, 189, 248, 0.2), transparent 60%),
+    linear-gradient(140deg, rgba(30, 64, 122, 0.6), rgba(10, 28, 62, 0.85));
+  backdrop-filter: blur(8px);
   padding: clamp(var(--space-5), 5vw, var(--space-6));
 }
 
 .heroGlow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(500px 260px at 20% 0%, rgba(125, 211, 252, 0.22), transparent 70%);
+  background: radial-gradient(460px 240px at 78% 10%, rgba(129, 140, 248, 0.24), transparent 70%);
   pointer-events: none;
 }
 
 .deck {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(160px, 230px) 1fr;
+  grid-template-columns: minmax(170px, 240px) 1fr;
   gap: clamp(var(--space-5), 5vw, var(--space-6));
   align-items: center;
 }
@@ -143,20 +186,23 @@
 .coverWrap::after {
   content: '';
   position: absolute;
-  inset: 10% -6% -6% 10%;
+  inset: 8% -8% -8% 8%;
   z-index: -1;
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.4), transparent 70%);
-  filter: blur(26px);
-  border-radius: 30px;
+  background: conic-gradient(from 210deg, #38bdf8, #6366f1, transparent 60%);
+  filter: blur(40px);
+  opacity: 0.55;
+  border-radius: 40px;
 }
 
 .cover {
+  position: relative;
   width: 100%;
   aspect-ratio: 1;
-  border-radius: 20px;
+  border-radius: 22px;
   object-fit: cover;
   display: block;
-  box-shadow: 0 24px 60px rgba(2, 8, 26, 0.55);
+  border: 1px solid rgba(125, 211, 252, 0.35);
+  box-shadow: 0 26px 60px rgba(2, 8, 26, 0.6);
 }
 
 .heroInfo {
@@ -168,25 +214,25 @@
 
 .status {
   margin: 0;
-  font-weight: 700;
-  font-size: 0.8rem;
+  font-weight: 800;
+  font-size: 0.74rem;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--color-primary);
+  letter-spacing: 0.22em;
+  color: #7dd3fc;
 }
 
 .track {
   margin: 0;
-  font-size: clamp(1.6rem, 4vw, 2.6rem);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
+  font-size: clamp(1.7rem, 4.2vw, 2.7rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
   font-weight: 800;
 }
 
 .artist {
   margin: 0;
   color: var(--color-text-muted);
-  font-size: 1.05rem;
+  font-size: 1.1rem;
 }
 
 .controls {
@@ -201,18 +247,18 @@
   border: none;
   border-radius: 999px;
   background: linear-gradient(135deg, #38bdf8, #6366f1);
-  color: #03122b;
+  color: #04101f;
   font-weight: 800;
   font-size: 1rem;
   padding: var(--space-3) var(--space-6);
   cursor: pointer;
-  box-shadow: 0 12px 30px rgba(56, 189, 248, 0.35);
+  box-shadow: 0 14px 34px rgba(56, 189, 248, 0.4);
   transition: transform 150ms ease, filter 150ms ease;
 }
 
 .play:hover:not(:disabled) {
   transform: translateY(-2px);
-  filter: brightness(1.08);
+  filter: brightness(1.1);
 }
 
 .play:disabled {
@@ -233,19 +279,19 @@
 .nextRow {
   position: relative;
   margin-top: var(--space-5);
-  padding-top: var(--space-4);
-  border-top: 1px dashed rgba(125, 211, 252, 0.28);
+  padding: var(--space-4);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed rgba(125, 211, 252, 0.3);
 }
 
 .content {
+  position: relative;
   margin-top: var(--space-5);
-  background: rgba(9, 26, 58, 0.45);
-  border: 1px solid var(--color-border);
-  border-radius: 20px;
-  padding: var(--space-5);
 }
 
 .footer {
+  position: relative;
   padding: var(--space-4) var(--space-5);
   text-align: center;
   color: var(--color-text-muted);
@@ -259,12 +305,8 @@
   }
 
   .coverWrap {
-    max-width: 240px;
+    max-width: 250px;
     margin: 0 auto;
-  }
-
-  .content {
-    padding: var(--space-3);
   }
 
   .socials {

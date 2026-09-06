@@ -56,6 +56,35 @@ const DEFAULT_ORDER: SectionId[] = [
   'social'
 ]
 
+type NewsVariant = 'grid' | 'featured' | 'rows' | 'overlay'
+type ProgramVariant = 'list' | 'cards'
+
+// Cada template presenta la información de forma distinta: aquí se define qué
+// "forma" usa para noticias y programación (el resto hereda la paleta propia
+// del template). covered y el resto no mapeados conservan sus valores actuales.
+const NEWS_VARIANTS: Record<string, NewsVariant> = {
+  covered: 'featured',
+  moderno: 'overlay',
+  petroleo: 'overlay',
+  tradicional: 'rows',
+  playlist: 'rows'
+}
+
+const PROGRAM_VARIANTS: Record<string, ProgramVariant> = {
+  covered: 'cards',
+  blue: 'cards',
+  petroleo: 'cards',
+  playlist: 'cards'
+}
+
+function newsVariantFor(template: string | null | undefined): NewsVariant {
+  return (template && NEWS_VARIANTS[template]) || 'grid'
+}
+
+function programVariantFor(template: string | null | undefined): ProgramVariant {
+  return (template && PROGRAM_VARIANTS[template]) || 'list'
+}
+
 function orderFor(template: string | null | undefined): SectionId[] {
   if (template !== 'covered') return DEFAULT_ORDER
   const rest = DEFAULT_ORDER.filter((id) => !EDITORIAL_ORDER.includes(id))
@@ -67,8 +96,8 @@ function sectionFor(
   { clientData, isLoading }: SectionDataProps,
   template: string | null | undefined
 ): ReactNode {
-  const programVariant = template === 'covered' ? 'cards' : 'list'
-  const newsVariant = template === 'covered' ? 'featured' : 'grid'
+  const programVariant = programVariantFor(template)
+  const newsVariant = newsVariantFor(template)
 
   switch (id) {
     case 'polls':

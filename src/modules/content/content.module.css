@@ -240,3 +240,17 @@
   cursor: pointer;
   flex: 1;
 }
+
+/* Micro-interacciones comunes: las imágenes se acercan sutilmente al pasar
+   sobre tarjetas/links clicables (heredan los tokens del template). */
+.media,
+.programCardMedia,
+.galleryCover {
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cardButton:hover .media,
+.link:hover .media,
+.galleryCard:hover .galleryCover {
+  transform: scale(1.045);
+}
