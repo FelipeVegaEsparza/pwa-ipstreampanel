@@ -23,3 +23,9 @@ COPY --from=build /app/dist/${CLIENT} /usr/share/nginx/html
 # ya bajan al usuario "nginx" mediante la config principal de la imagen, así que
 # NO usar "USER nginx": deja al contenedor sin responder (502 Bad Gateway).
 EXPOSE 80
+
+# Healthcheck: marca el contenedor como unhealthy si nginx deja de responder.
+# nginx:alpine incluye wget (busybox). Dockploy/Easypanel pueden usar este
+# estado para reiniciar el contenedor o avisar antes de un 502.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -q -O /dev/null http://127.0.0.1/ || exit 1
