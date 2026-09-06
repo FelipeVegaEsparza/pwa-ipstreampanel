@@ -79,6 +79,21 @@ export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
 
   return (
     <div className={styles.page}>
+      {isHome && menuItems.length > 0 && (
+        <div className={styles.mobTop}>
+          <button
+            type="button"
+            className={styles.menuBtn}
+            onClick={() => setMenuOpen(true)}
+            aria-label="Abrir menú de secciones"
+            aria-controls="menu-secciones"
+            aria-expanded={menuOpen}
+          >
+            ☰
+          </button>
+        </div>
+      )}
+
       <div className={styles.layout}>
         <aside className={styles.deck}>
           <div className={styles.deckHead}>
@@ -163,21 +178,6 @@ export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
 
         <div className={styles.column}>
           <header className={styles.topbar}>
-            <div className={styles.topLeft}>
-              {isHome && menuItems.length > 0 && (
-                <button
-                  type="button"
-                  className={styles.menuBtn}
-                  onClick={() => setMenuOpen(true)}
-                  aria-label="Abrir menú de secciones"
-                  aria-controls="menu-secciones"
-                  aria-expanded={menuOpen}
-                >
-                  ☰
-                </button>
-              )}
-              <span className={styles.kicker}>Tu radio en lista de reproducción</span>
-            </div>
             <div className={styles.topActions}>
               <Weather location={live.basic?.location} />
               <InstallPrompt />
@@ -209,6 +209,11 @@ export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
             aria-label="Secciones de la radio"
           >
             <div className={styles.drawerHead}>
+              <SmartImage
+                className={styles.drawerLogo}
+                src={live.basic?.logoUrl}
+                alt={displayName}
+              />
               <span className={styles.drawerTitle}>Secciones</span>
               <button
                 type="button"
@@ -233,6 +238,28 @@ export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
                 </li>
               ))}
             </ul>
+            <div className={styles.drawerFoot}>
+              {socialLinks.length > 0 && (
+                <div className={styles.drawerSocials}>
+                  {socialLinks.map((link) => (
+                    <a
+                      key={link.key}
+                      className={styles.socialLink}
+                      href={link.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={link.label}
+                      title={link.label}
+                    >
+                      <BrandIcon name={link.key} size={16} />
+                    </a>
+                  ))}
+                </div>
+              )}
+              <div className={styles.drawerInstall}>
+                <InstallPrompt />
+              </div>
+            </div>
           </nav>
         </>
       )}

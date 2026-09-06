@@ -524,3 +524,69 @@
     display: none;
   }
 }
+
+/* ----- Ajustes: botón de menú arriba del hero y drawer ampliado ----- */
+.topbar {
+  justify-content: flex-end;
+}
+
+/* Barra móvil con el botón del menú, justo sobre el hero */
+.mobTop {
+  display: none;
+  width: 100%;
+  max-width: 1340px;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-4) 0;
+  box-sizing: border-box;
+}
+
+.drawerHead {
+  justify-content: flex-start;
+  gap: var(--space-3);
+}
+
+.drawerLogo {
+  height: 34px;
+  max-width: 150px;
+  width: auto;
+  object-fit: contain;
+}
+
+.drawerTitle {
+  margin-right: auto;
+}
+
+.drawerList {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.drawerFoot {
+  border-top: 1px solid #26302a;
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.drawerSocials {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: center;
+}
+
+.drawerInstall {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .topbar {
+    display: none;
+  }
+
+  .mobTop {
+    display: block;
+  }
+}
