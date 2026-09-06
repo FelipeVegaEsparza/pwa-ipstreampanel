@@ -18,7 +18,8 @@ FROM nginx:alpine
 ARG CLIENT
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist/${CLIENT} /usr/share/nginx/html
-# Servir como no-root: nginx:alpine trae el usuario "nginx" (UID 101).
-RUN chown -R nginx:nginx /usr/share/nginx/html
-USER nginx
+# Importante: el master de nginx DEBE correr como root en la imagen oficial
+# (necesita /var/run/nginx.pid, /var/log/nginx y /var/cache/nginx). Los workers
+# ya bajan al usuario "nginx" mediante la config principal de la imagen, así que
+# NO usar "USER nginx": deja al contenedor sin responder (502 Bad Gateway).
 EXPOSE 80
