@@ -184,6 +184,28 @@ export function BlueTemplate({ clientData, isLoading }: TemplateProps) {
                 )
               })}
             </ul>
+            <div className={styles.drawerFoot}>
+              {socialLinks.length > 0 && (
+                <div className={styles.drawerSocials}>
+                  {socialLinks.map((link) => (
+                    <a
+                      key={link.key}
+                      className={styles.socialLink}
+                      href={link.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={link.label}
+                      title={link.label}
+                    >
+                      <BrandIcon name={link.key} size={16} />
+                    </a>
+                  ))}
+                </div>
+              )}
+              <div className={styles.drawerInstall}>
+                <InstallPrompt />
+              </div>
+            </div>
           </nav>
         </>
       )}
