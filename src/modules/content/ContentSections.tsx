@@ -29,6 +29,7 @@ type ProgramVariant = 'list' | 'cards'
 // del template). covered y el resto no mapeados conservan sus valores actuales.
 const NEWS_VARIANTS: Record<string, NewsVariant> = {
   covered: 'featured',
+  blue: 'featured',
   moderno: 'overlay',
   tradicional: 'rows',
   playlist: 'rows'

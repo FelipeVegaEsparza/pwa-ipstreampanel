@@ -11,42 +11,10 @@ import {
   getSectionOrder,
   SECTION_LABELS,
   sectionAnchorId,
-  type SectionId
+  sectionHasContent
 } from '@/modules/content/sections'
-import type { FullClientData } from '@/core/types'
 import type { TemplateProps } from '../index'
 import styles from './PlaylistTemplate.module.css'
-
-function sectionHasContent(id: SectionId, clientData: FullClientData | undefined, socialCount: number): boolean {
-  switch (id) {
-    case 'news':
-      return (clientData?.news?.length ?? 0) > 0
-    case 'programs':
-      return (clientData?.programs?.length ?? 0) > 0
-    case 'podcasts':
-      return (clientData?.podcasts?.length ?? 0) > 0
-    case 'videocasts':
-      return (clientData?.videocasts?.length ?? 0) > 0
-    case 'videos':
-      return (clientData?.videos?.length ?? 0) > 0
-    case 'tv':
-      return Boolean(clientData?.basicData?.videoStreamingUrl)
-    case 'promotions':
-      return (clientData?.promotions?.length ?? 0) > 0
-    case 'galleries':
-      return (clientData?.galleries?.length ?? 0) > 0
-    case 'events':
-      return (clientData?.events?.length ?? 0) > 0
-    case 'announcers':
-      return (clientData?.announcers?.length ?? 0) > 0
-    case 'sponsors':
-      return (clientData?.sponsors?.length ?? 0) > 0
-    case 'polls':
-      return (clientData?.polls?.length ?? 0) > 0
-    case 'social':
-      return socialCount > 0
-  }
-}
 
 export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
   const live = useLiveRadio(clientData)
