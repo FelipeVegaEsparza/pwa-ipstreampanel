@@ -42,51 +42,43 @@ export function PlayerBar({ fallbackCovers }: PlayerBarProps = {}) {
           serverElapsed={currentTrack?.elapsed}
         />
         <div className={styles.content}>
-          {hasCoverInput ? (
-            <SmartImage
-              className={styles.cover}
-              src={trackCover}
-              fallbacks={fallbackCovers}
-              alt=""
-            />
-          ) : (
-            <div className={styles.coverPlaceholder} aria-hidden="true">
-              ♪
-            </div>
-          )}
-
-          <div className={styles.info}>
-            <div className={styles.statusRow}>
-              <span
-                className={`${styles.statusDot} ${onAir ? styles.statusDotOn : ''}`}
-                aria-hidden="true"
+          <div className={styles.current}>
+            {hasCoverInput ? (
+              <SmartImage
+                className={styles.cover}
+                src={trackCover}
+                fallbacks={fallbackCovers}
+                alt=""
               />
-              <span className={styles.statusText}>{statusText}</span>
-              {streaming?.listeners ? (
-                <span className={styles.statusMeta}>· {streaming.listeners} oyentes</span>
-              ) : null}
-              {streaming?.bitrate ? (
-                <span className={styles.statusMeta}>· {streaming.bitrate} kbps</span>
-              ) : null}
-            </div>
-            <span className={styles.label}>
-              {currentTrack?.title || 'En Vivo'}
-            </span>
-            <span className={styles.meta}>
-              {currentTrack?.artist ||
-                (streamUrl ? 'Reproduciendo en vivo' : 'Reproductor listo')}
-            </span>
-          </div>
+            ) : (
+              <div className={styles.coverPlaceholder} aria-hidden="true">
+                ♪
+              </div>
+            )}
 
-          {nextTrack && (
-            <div className={styles.next}>
-              <span className={styles.nextLabel}>Sigue ahora</span>
-              <span className={styles.nextTitle}>{nextTrack.title}</span>
-              {nextTrack.artist && (
-                <span className={styles.nextArtist}>{nextTrack.artist}</span>
-              )}
+            <div className={styles.info}>
+              <div className={styles.statusRow}>
+                <span
+                  className={`${styles.statusDot} ${onAir ? styles.statusDotOn : ''}`}
+                  aria-hidden="true"
+                />
+                <span className={styles.statusText}>{statusText}</span>
+                {streaming?.listeners ? (
+                  <span className={styles.statusMeta}>· {streaming.listeners} oyentes</span>
+                ) : null}
+                {streaming?.bitrate ? (
+                  <span className={styles.statusMeta}>· {streaming.bitrate} kbps</span>
+                ) : null}
+              </div>
+              <span className={styles.label}>
+                {currentTrack?.title || 'En Vivo'}
+              </span>
+              <span className={styles.meta}>
+                {currentTrack?.artist ||
+                  (streamUrl ? 'Reproduciendo en vivo' : 'Reproductor listo')}
+              </span>
             </div>
-          )}
+          </div>
 
           <button
             type="button"
@@ -97,6 +89,18 @@ export function PlayerBar({ fallbackCovers }: PlayerBarProps = {}) {
           >
             {isPlaying ? '❚❚' : '▶'}
           </button>
+
+          {nextTrack ? (
+            <div className={styles.next}>
+              <span className={styles.nextLabel}>Sigue ahora</span>
+              <span className={styles.nextTitle}>{nextTrack.title}</span>
+              {nextTrack.artist && (
+                <span className={styles.nextArtist}>{nextTrack.artist}</span>
+              )}
+            </div>
+          ) : (
+            <div aria-hidden="true" />
+          )}
         </div>
       </div>
     </div>

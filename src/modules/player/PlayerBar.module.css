@@ -17,11 +17,20 @@
 
 .content {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: clamp(var(--space-3), 2.4vw, var(--space-5));
   min-height: var(--player-height);
   padding: var(--space-2) 0;
+}
+
+/* Bloque izquierdo: tema en reproducción */
+.current {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  justify-self: start;
 }
 
 .cover,
@@ -49,8 +58,6 @@
   gap: 1px;
   min-width: 0;
   overflow: hidden;
-  justify-self: center;
-  width: 100%;
 }
 
 .statusRow {
@@ -113,50 +120,17 @@
   white-space: nowrap;
 }
 
-.next {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  min-width: 0;
-  max-width: 220px;
-  padding-left: var(--space-4);
-  border-left: 1px solid var(--color-border);
-}
-
-.nextLabel {
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
-
-.nextTitle {
-  font-weight: 600;
-  font-size: 0.86rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.nextArtist {
-  color: var(--color-text-muted);
-  font-size: 0.76rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
+/* Botón de play/pausa centrado */
 .playButton {
-  width: 46px;
-  height: 46px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   border: none;
   background: var(--color-primary);
   color: #fff;
-  font-size: 1rem;
+  font-size: 1.05rem;
   flex-shrink: 0;
-  justify-self: end;
+  justify-self: center;
   transition: background 150ms ease, transform 150ms ease;
 }
 
@@ -170,12 +144,52 @@
   cursor: not-allowed;
 }
 
+/* Bloque derecho: próximo tema */
+.next {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  max-width: 260px;
+  justify-self: end;
+  text-align: right;
+}
+
+.nextLabel {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.nextTitle {
+  font-weight: 600;
+  font-size: 0.88rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nextArtist {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* En pantallas reducidas: tema a la izquierda y play a la derecha */
 @media (max-width: 860px) {
   .content {
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   .next {
+    display: none;
+  }
+
+  .content > :last-child {
     display: none;
   }
 }
