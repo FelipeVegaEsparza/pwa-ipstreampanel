@@ -281,3 +281,55 @@ export async function registerPwaInstall(
   }
   return response.json()
 }
+
+export interface ContactMessageInput {
+  name: string
+  email: string
+  phone: string
+  message: string
+}
+
+export type ContactSubmitResult =
+  | { status: 'sent' }
+  | { status: 'validation-error'; error: string }
+  | { status: 'rate-limited' }
+  | { status: 'not-found' }
+  | { status: 'server-error' }
+  | { status: 'network-error' }
+
+/**
+ * Envía un mensaje de contacto del visitante al panel del cliente. Un solo
+ * intento (retries: 0): no se reintenta para no duplicar consultas en el panel
+ * si el servidor ya procesó el envío pero la respuesta se pierde.
+ */
+export async function sendContactMessage(
+  clientId: string,
+  input: ContactMessageInput
+): Promise<ContactSubmitResult> {
+  let response: Response
+  try {
+    response = await request(getPublicApiBase(clientId) + '/contact-messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(input),
+      retries: 0
+    })
+  } catch {
+    return { status: 'network-error' }
+  }
+
+  if (response.status === 201) return { status: 'sent' }
+  if (response.status === 429) return { status: 'rate-limited' }
+  if (response.status === 404) return { status: 'not-found' }
+  if (response.status === 400) {
+    const body = (await response.json().catch(() => null)) as {
+      error?: unknown
+    } | null
+    const message =
+      typeof body?.error === 'string' && body.error
+        ? body.error
+        : 'Revisa los datos e inténtalo de nuevo.'
+    return { status: 'validation-error', error: message }
+  }
+  return { status: 'server-error' }
+}

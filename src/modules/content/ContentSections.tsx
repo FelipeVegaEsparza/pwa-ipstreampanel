@@ -1,6 +1,7 @@
 import { type ReactNode } from 'react'
 import { useTenant } from '@/core/config/TenantContext'
 import { useFullClientData } from '@/core/hooks/useFullClientData'
+import { ContactSection } from '@/modules/contact/ContactSection'
 import { PollsSection } from '@/modules/polls/PollsSection'
 import { SocialNetworksSection } from '@/modules/social/SocialNetworksSection'
 import { VideosSection } from '@/modules/videos/VideosSection'
@@ -109,6 +110,7 @@ export function ContentSectionStack({ clientData, isLoading }: SectionDataProps)
           {sectionFor(id, { clientData, isLoading }, template)}
         </div>
       ))}
+      {template !== 'minimalista' && <ContactSection />}
     </>
   )
 }

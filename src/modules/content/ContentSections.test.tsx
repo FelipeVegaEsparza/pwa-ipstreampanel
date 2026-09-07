@@ -211,7 +211,8 @@ const DEFAULT_ORDER = [
   'Eventos',
   'Locutores',
   'Auspiciadores',
-  'Síguenos'
+  'Síguenos',
+  'Contáctanos'
 ]
 
 const COVERED_ORDER = [
@@ -227,7 +228,8 @@ const COVERED_ORDER = [
   'Programación',
   'Videos',
   'Auspiciadores',
-  'Síguenos'
+  'Síguenos',
+  'Contáctanos'
 ]
 
 describe('ContentSectionStack', () => {
@@ -262,5 +264,10 @@ describe('ContentSectionStack', () => {
     expect(titles).not.toContain('Eventos')
     expect(titles.indexOf('Podcasts')).toBeLessThan(titles.indexOf('Galerías'))
     expect(titles.indexOf('Galerías')).toBeLessThan(titles.indexOf('Locutores'))
+  })
+
+  it('no muestra la sección de contacto para el template minimalista', () => {
+    const { container } = renderStack('minimalista')
+    expect(sectionTitles(container)).not.toContain('Contáctanos')
   })
 })
