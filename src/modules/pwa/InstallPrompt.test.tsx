@@ -23,6 +23,7 @@ beforeEach(() => {
 afterEach(() => {
   resetInstallPromptForTests()
   vi.restoreAllMocks()
+  vi.unstubAllGlobals()
 })
 
 describe('InstallPrompt', () => {
@@ -81,5 +82,39 @@ describe('InstallPrompt', () => {
     expect(
       screen.queryByRole('button', { name: 'Instalar en iPhone o iPad' })
     ).toBeNull()
+  })
+
+  it('oculta los botones en iOS instalado (navigator.standalone)', () => {
+    Object.defineProperty(window.navigator, 'standalone', {
+      value: true,
+      configurable: true
+    })
+    render(<InstallPrompt />)
+
+    expect(screen.queryByRole('button', { name: 'Instalar en Android' })).toBeNull()
+    delete (window.navigator as Navigator & { standalone?: boolean }).standalone
+  })
+
+  it('oculta los botones en modo standalone', () => {
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn(
+        (query: string) =>
+          ({
+            matches: query.includes('display-mode: standalone'),
+            media: query,
+            onchange: null,
+            addEventListener: vi.fn(),
+            removeEventListener: vi.fn(),
+            addListener: vi.fn(),
+            removeListener: vi.fn(),
+            dispatchEvent: vi.fn()
+          }) as unknown as MediaQueryList
+      )
+    )
+
+    render(<InstallPrompt />)
+
+    expect(screen.queryByRole('button', { name: 'Instalar en Android' })).toBeNull()
   })
 })

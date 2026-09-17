@@ -17,3 +17,7 @@
 ## 4. Ubicación en covered
 
 - [x] 4.1 En `CoveredTemplate`, mover `<InstallPrompt />` del header superior al contenido del hero (junto a los controles). Verificar con `npm run test` y `npm run build`.
+
+## 5. Detección robusta de app instalada
+
+- [x] 5.1 Ampliar la detección de instalación en `InstallPrompt`: `navigator.standalone` (iOS), `display-mode` standalone/fullscreen/minimal-ui y listener de cambio de display-mode, sin marca persistente (detección por sesión). Verificar con tests (iOS y standalone) y `npm run test`.

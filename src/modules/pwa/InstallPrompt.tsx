@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styles from './InstallPrompt.module.css'
 import { InstallHelpModal, type InstallPlatform } from './InstallHelpModal'
 
@@ -25,11 +25,24 @@ if (typeof window !== 'undefined') {
   window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
 }
 
-function isStandalone(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
-    return false
-  }
-  return window.matchMedia('(display-mode: standalone)').matches
+/** Detección de app instalada: modo standalone (incluye iOS) o pantalla completa. */
+function detectStandalone(): boolean {
+  if (typeof window === 'undefined') return false
+
+  // iOS expone `navigator.standalone` en vez de `display-mode: standalone`.
+  const nav = window.navigator as Navigator & { standalone?: boolean }
+  if (nav.standalone === true) return true
+
+  if (typeof window.matchMedia !== 'function') return false
+  return (
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.matchMedia('(display-mode: fullscreen)').matches ||
+    window.matchMedia('(display-mode: minimal-ui)').matches
+  )
+}
+
+function wasInstalled(): boolean {
+  return detectStandalone()
 }
 
 /** Solo para tests: limpia el estado a nivel de módulo. */
@@ -41,26 +54,39 @@ export function InstallPrompt() {
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(
     deferredInstallPrompt
   )
-  const [installed, setInstalled] = useState(isStandalone)
+  const [installed, setInstalled] = useState(wasInstalled)
   const [helpFor, setHelpFor] = useState<InstallPlatform | null>(null)
   const prompting = useRef(false)
+
+  const markInstalled = useCallback(() => {
+    deferredInstallPrompt = null
+    setDeferred(null)
+    setInstalled(true)
+  }, [])
 
   useEffect(() => {
     function onBeforeInstall(event: BeforeInstallPromptEvent) {
       setDeferred(event)
     }
-    function onInstalled() {
-      deferredInstallPrompt = null
-      setDeferred(null)
-      setInstalled(true)
-    }
     subscribers.add(onBeforeInstall)
-    window.addEventListener('appinstalled', onInstalled)
+    window.addEventListener('appinstalled', markInstalled)
+
+    // Si el usuario pasa a modo standalone (abre la app instalada), ocultar.
+    const mql =
+      typeof window.matchMedia === 'function'
+        ? window.matchMedia('(display-mode: standalone)')
+        : null
+    const onDisplayModeChange = () => {
+      if (detectStandalone()) markInstalled()
+    }
+    mql?.addEventListener?.('change', onDisplayModeChange)
+
     return () => {
       subscribers.delete(onBeforeInstall)
-      window.removeEventListener('appinstalled', onInstalled)
+      window.removeEventListener('appinstalled', markInstalled)
+      mql?.removeEventListener?.('change', onDisplayModeChange)
     }
-  }, [])
+  }, [markInstalled])
 
   async function handleAndroidClick(): Promise<void> {
     if (prompting.current) return
@@ -73,9 +99,12 @@ export function InstallPrompt() {
     try {
       await deferred.prompt()
       const choice = await deferred.userChoice
-      deferredInstallPrompt = null
-      setDeferred(null)
-      if (choice?.outcome === 'accepted') setInstalled(true)
+      if (choice?.outcome === 'accepted') {
+        markInstalled()
+      } else {
+        deferredInstallPrompt = null
+        setDeferred(null)
+      }
     } catch {
       deferredInstallPrompt = null
       setDeferred(null)

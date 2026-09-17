@@ -19,6 +19,14 @@ El sistema SHALL mostrar dos botones de instalación con las imágenes de plataf
 - **WHEN** la app ya está instalada (`appinstalled` o modo standalone)
 - **THEN** no se muestran los botones de instalación
 
+#### Scenario: App instalada en iOS
+- **WHEN** la app se abre en iOS como PWA instalada (`navigator.standalone`)
+- **THEN** no se muestran los botones de instalación
+
+#### Scenario: Paso a modo standalone
+- **WHEN** el usuario abre la app instalada y el display pasa a modo standalone
+- **THEN** los botones se ocultan sin recargar la página
+
 ## ADDED Requirements
 
 ### Requirement: Modal de indicaciones de instalación

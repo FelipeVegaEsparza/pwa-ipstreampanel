@@ -50,3 +50,16 @@ puede reemplazarlas poniendo `app-android.png` / `app-apple.png` en
   las instrucciones.
 - El prompt nativo lo controla el navegador; si el usuario lo descarta, no se
   insiste.
+
+## Detección de app instalada
+
+Los botones se ocultan cuando se detecta que la app ya está instalada:
+
+- Evento `appinstalled` (cuando se instala desde la página).
+- iOS: `navigator.standalone`.
+- `display-mode: standalone`, `fullscreen` o `minimal-ui`.
+- Cambio a modo standalone en caliente (abre la app instalada): se ocultan sin
+  recargar.
+
+La detección es **por sesión**: no se guarda una marca permanente. Así, si el
+usuario desinstala la PWA, los botones vuelven a aparecer en la próxima visita.
