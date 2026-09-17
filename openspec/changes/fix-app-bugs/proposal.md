@@ -1,6 +1,6 @@
 ## Why
 
-La aplicación funciona en el camino feliz (typecheck, lint y 112 tests pasan), pero una revisión del código contra `instruccionesapi.md` y las specs del proyecto encontró defectos de comportamiento que no cubren las herramientas: votos duplicados por reintentos de POST, crashes por `localStorage` sin guardar, la página offline que nunca se muestra, detalle que confunde "no encontrado" con error de red, y varios problemas del reproductor (cambio de stream en caliente, progreso tras pausa, HLS). Se corrigen sin alterar el comportamiento válido actual.
+La aplicación funciona en el camino feliz (typecheck, lint y 112 tests pasan), pero una revisión del código contra `docs/instruccionesapi.md` y las specs del proyecto encontró defectos de comportamiento que no cubren las herramientas: votos duplicados por reintentos de POST, crashes por `localStorage` sin guardar, la página offline que nunca se muestra, detalle que confunde "no encontrado" con error de red, y varios problemas del reproductor (cambio de stream en caliente, progreso tras pausa, HLS). Se corrigen sin alterar el comportamiento válido actual.
 
 ## What Changes
 

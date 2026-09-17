@@ -27,9 +27,9 @@ context: |
   CORS está habilitado para todos los orígenes.
 
   La especificación completa de la API se encuentra en:
-  instruccionesapi.md
+  docs/instruccionesapi.md
 
-  OpenCode DEBE leer y considerar instruccionesapi.md antes de diseñar
+  OpenCode DEBE leer y considerar docs/instruccionesapi.md antes de diseñar
   o implementar cualquier funcionalidad que dependa de la API.
 
   Arquitectura
@@ -96,10 +96,10 @@ context: |
   Calidad
 
   No inventar endpoints, campos ni comportamientos que no estén definidos
-  en instruccionesapi.md.
+  en docs/instruccionesapi.md.
 
   Antes de implementar una integración con la API, verificar el contrato
-  documentado en instruccionesapi.md.
+  documentado en docs/instruccionesapi.md.
 
   Las funcionalidades deben diseñarse para degradar correctamente cuando
   una API no tenga datos o devuelva null.
@@ -137,7 +137,7 @@ rules:
 operations:
   apply:
     guidance:
-      - Leer instruccionesapi.md antes de implementar funcionalidades relacionadas con la API.
+      - Leer docs/instruccionesapi.md antes de implementar funcionalidades relacionadas con la API.
       - Respetar estrictamente los contratos documentados de la API.
       - No modificar funcionalidades no relacionadas con el cambio aprobado.
       - Ejecutar validaciones y pruebas disponibles después de implementar.

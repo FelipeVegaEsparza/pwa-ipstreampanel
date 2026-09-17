@@ -64,7 +64,7 @@ El sistema SHALL resolver las rutas relativas de imágenes (`/api/uploads/{clien
 - **THEN** el sistema la devuelve sin cambios
 
 ### Requirement: Endpoints GET del contrato
-El sistema SHALL exponer funciones tipadas para todos los endpoints GET documentados en `instruccionesapi.md`: datos básicos, redes sociales, streaming, estado de streaming, programas, noticias (con paginación y por slug), videos, auspiciadores, galerías, locutores, eventos, promociones, podcasts (paginado y por id), videocasts (paginado y por id) y encuestas.
+El sistema SHALL exponer funciones tipadas para todos los endpoints GET documentados en `docs/instruccionesapi.md`: datos básicos, redes sociales, streaming, estado de streaming, programas, noticias (con paginación y por slug), videos, auspiciadores, galerías, locutores, eventos, promociones, podcasts (paginado y por id), videocasts (paginado y por id) y encuestas.
 
 #### Scenario: Noticias paginadas
 - **WHEN** un módulo solicita noticias con `page` y `limit`

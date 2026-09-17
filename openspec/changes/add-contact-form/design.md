@@ -10,7 +10,7 @@ Ver proposal.md - Why. El sitio es una PWA multi-tenant: la home de cada templat
 - Look consistente con las secciones de contenido del template activo (vía variables `--content-*`).
 
 **Non-Goals:**
-- Cambios en el backend del panel ni en `instruccionesapi.md`.
+- Cambios en el backend del panel ni en `docs/instruccionesapi.md`.
 - Autenticación, campo `subject`, ni campos extra al contrato (se ignoran en el servidor).
 - Encolado/offline de mensajes.
 - Mapeo de errores 400 a un campo específico (el contrato no expone un shape por campo).

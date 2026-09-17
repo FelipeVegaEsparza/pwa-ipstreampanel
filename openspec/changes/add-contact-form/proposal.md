@@ -23,6 +23,6 @@ Los sitios de las radios/TV hoy no ofrecen ninguna vía para que un visitante se
 
 - **Nuevo código**: `src/modules/contact/` (`ContactSection.tsx`, CSS, tests) y helper de API para mensajes de contacto.
 - **Modificado**: `src/modules/content/ContentSections.tsx` (append de la sección al final del stack) y cliente HTTP (`src/core/api`).
-- **API**: nuevo uso del endpoint público `POST /api/public/{clientId}/contact-messages` (contrato provisto por la guía de integración de IPStream Panel; ajeno a `instruccionesapi.md`).
+- **API**: nuevo uso del endpoint público `POST /api/public/{clientId}/contact-messages` (contrato provisto por la guía de integración de IPStream Panel; ajeno a `docs/instruccionesapi.md`).
 - **Multi-tenant**: cada build usa su propio `clientId` (nunca se hardcodea el de otra radio).
 - **No afecta**: el backend del panel, los templates como componentes, ni el reproductor.
