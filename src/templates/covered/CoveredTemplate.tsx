@@ -102,7 +102,6 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
           <header className={styles.header}>
             <SmartImage className={styles.logo} src={basic?.logoUrl} alt={name} />
             <div className={styles.headerRight}>
-              <span className={styles.date}>{dateText}</span>
               {onAir && (
                 <span className={styles.live}>
                   <span className={styles.liveDot} />
@@ -177,10 +176,6 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
                 <ShareButton title={name} />
               </div>
 
-              <div className={styles.installRow}>
-                <InstallPrompt />
-              </div>
-
               <div className={styles.meta}>
                 <span>
                   <b>{streaming?.listeners ?? 0}</b> oyentes
@@ -203,7 +198,9 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
 
       <section className={styles.weatherBar}>
         <div className={styles.container}>
+          <span className={styles.date}>{dateText}</span>
           <Weather className={styles.weatherCard} location={basic?.location} />
+          <InstallPrompt />
         </div>
       </section>
 
