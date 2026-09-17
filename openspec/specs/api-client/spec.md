@@ -13,7 +13,7 @@ El sistema SHALL construir la URL base de la API pública del tenant activo en e
 - **THEN** la solicitud se realiza contra `https://panelipstream.cl/api/public/{clientId}/<recurso>` con el `clientId` del tenant
 
 ### Requirement: Fetch resiliente con reintentos
-El sistema SHALL reintentar las solicitudes que fallen por error de servidor (HTTP 5xx) o de red con backoff exponencial y jitter, y SHALL NO reintentar errores de cliente (HTTP 4xx). Las solicitudes SHALL tener un límite de reintentos y un tiempo máximo de espera.
+El sistema SHALL reintentar las solicitudes GET que fallen por error de servidor (HTTP 5xx) o de red con backoff exponencial y jitter, y SHALL NO reintentar errores de cliente (HTTP 4xx). Las solicitudes de escritura (POST y otros métodos no idempotentes) SHALL NO reintentarse automáticamente, para no duplicar efectos en un servidor que ya procesó la operación pero no pudo confirmarla. Las solicitudes SHALL tener un límite de reintentos y un tiempo máximo de espera.
 
 #### Scenario: Error 5xx transitorio
 - **WHEN** la API responde con HTTP 500 en el primer intento y responde correctamente en un reintento
@@ -22,6 +22,10 @@ El sistema SHALL reintentar las solicitudes que fallen por error de servidor (HT
 #### Scenario: Error 4xx de cliente
 - **WHEN** la API responde con HTTP 404 o 400
 - **THEN** el sistema NO reintenta y propaga el error de forma controlada
+
+#### Scenario: Error 5xx en una escritura
+- **WHEN** una solicitud POST responde con HTTP 5xx o falla por red
+- **THEN** el sistema NO la reintenta y propaga el error al consumidor una sola vez
 
 ### Requirement: Caché en memoria con TTL por recurso
 El sistema SHALL cachear las respuestas GET en memoria con una duración (TTL) por tipo de recurso. Los recursos dinámicos de streaming y chat SHALL usar un TTL muy corto o ninguno, de modo que el estado en vivo nunca quede obsoleto.
