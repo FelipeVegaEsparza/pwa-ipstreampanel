@@ -11,6 +11,13 @@ const DEFAULT_RETRIES = 3
 const BASE_BACKOFF = 1000
 const MAX_JITTER = 0.5
 
+// Solo los métodos idempotentes se reintentan por defecto. Reintentar una
+// escritura puede duplicar el efecto en el servidor si ya la procesó pero la
+// respuesta se perdió (p. ej. votos, que la API no deduplica).
+function isIdempotentMethod(method: string): boolean {
+  return method === 'GET' || method === 'HEAD'
+}
+
 const inFlight = new Map<string, Promise<Response>>()
 
 function requestKey(method: string, url: string, body?: string): string {
@@ -41,7 +48,8 @@ export async function request(
 ): Promise<Response> {
   const method = options.method ?? 'GET'
   const timeout = options.timeout ?? DEFAULT_TIMEOUT
-  const retries = options.retries ?? DEFAULT_RETRIES
+  const retries =
+    options.retries ?? (isIdempotentMethod(method) ? DEFAULT_RETRIES : 0)
   const key = requestKey(method, url, options.body)
 
   const run = async (attempt: number): Promise<Response> => {

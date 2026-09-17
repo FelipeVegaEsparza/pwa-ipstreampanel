@@ -103,6 +103,24 @@ describe('VideosSection', () => {
     )
   })
 
+  it('enruta una URL .m3u8 al reproductor HLS', () => {
+    render(
+      <VideosSection
+        clientData={clientDataWith([
+          videoItem('v6', 'Señal HLS', 'https://cdn.example.com/live/stream.m3u8')
+        ])}
+        isLoading={false}
+      />
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: /Reproducir Señal HLS/ }))
+
+    const video = document.querySelector('video')
+    expect(video).not.toBeNull()
+    expect(video?.getAttribute('data-hls')).toBe('true')
+    expect(screen.queryByText('Contenido no disponible para reproducción')).toBeNull()
+  })
+
   it('muestra aviso y enlace externo si la URL no se puede reproducir', () => {
     render(
       <VideosSection

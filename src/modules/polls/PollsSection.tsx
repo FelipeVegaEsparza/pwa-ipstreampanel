@@ -6,7 +6,7 @@ import styles from './PollsSection.module.css'
 
 export function PollsSection({ clientData, isLoading }: SectionDataProps) {
   const polls = asArray(clientData?.polls).filter(
-    (poll) => poll.active !== false && poll.options.length > 0
+    (poll) => poll.active !== false && (poll.options?.length ?? 0) > 0
   )
 
   return (

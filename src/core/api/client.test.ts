@@ -62,6 +62,21 @@ describe('request', () => {
     expect(fetchMock).toHaveBeenCalledTimes(2)
   })
 
+  it('no reintenta escrituras (POST) ante error 5xx por defecto', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(jsonResponse(500, { error: 'boom' }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const res = await request('https://panelipstream.cl/api/public/x/polls/p/vote', {
+      method: 'POST',
+      body: JSON.stringify({ optionId: 'o1' })
+    })
+
+    expect(res.status).toBe(500)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
   it('deduplica solicitudes en vuelo para la misma url', async () => {
     const pending: Array<(r: Response) => void> = []
     const fetchMock = vi.fn(() => {

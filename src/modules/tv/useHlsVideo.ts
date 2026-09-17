@@ -41,11 +41,9 @@ export function useHlsVideo(
     if (video.canPlayType('application/vnd.apple.mpegurl')) {
       const handlePlaying = () => setStatus('playing')
       const handleError = () => setStatus('error')
-      const handleStalled = () => setStatus('error')
 
       video.addEventListener('playing', handlePlaying)
       video.addEventListener('error', handleError)
-      video.addEventListener('stalled', handleStalled)
 
       video.src = src
       // Reasignar el mismo src no reinicia el elemento nativo: load() fuerza
@@ -55,7 +53,6 @@ export function useHlsVideo(
       return () => {
         video.removeEventListener('playing', handlePlaying)
         video.removeEventListener('error', handleError)
-        video.removeEventListener('stalled', handleStalled)
       }
     }
 
@@ -67,7 +64,10 @@ export function useHlsVideo(
     void import('hls.js')
       .then(({ default: HlsModule }) => {
         if (disposed) return
-        if (!HlsModule.isSupported()) return
+        if (!HlsModule.isSupported()) {
+          setStatus('error')
+          return
+        }
 
         const instance = new HlsModule()
         hls = instance
@@ -80,6 +80,10 @@ export function useHlsVideo(
 
         instance.on(HlsModule.Events.ERROR, (_event, data) => {
           if (disposed) return
+
+          // Los errores no fatales (buffer, fragmentos recuperables) no deben
+          // consumir reintentos ni marcar la señal como caída.
+          if (!data.fatal) return
 
           if (data.type === HlsModule.ErrorTypes.NETWORK_ERROR) {
             if (networkRetries.current < MAX_NETWORK_RETRIES) {

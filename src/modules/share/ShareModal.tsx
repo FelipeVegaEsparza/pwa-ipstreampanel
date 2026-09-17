@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   FaFacebookF,
   FaLink,
@@ -54,6 +54,7 @@ interface ShareModalProps {
 
 export function ShareModal({ open, onClose, title, url }: ShareModalProps) {
   const [copied, setCopied] = useState(false)
+  const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const options = buildShareOptions(title, url)
 
   useEffect(() => {
@@ -63,7 +64,13 @@ export function ShareModal({ open, onClose, title, url }: ShareModalProps) {
       if (event.key === 'Escape') onClose()
     }
     window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      if (copyTimer.current) {
+        clearTimeout(copyTimer.current)
+        copyTimer.current = null
+      }
+    }
   }, [open, onClose])
 
   if (!open) return null
@@ -72,7 +79,8 @@ export function ShareModal({ open, onClose, title, url }: ShareModalProps) {
     try {
       await navigator.clipboard.writeText(url)
       setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      if (copyTimer.current) clearTimeout(copyTimer.current)
+      copyTimer.current = setTimeout(() => setCopied(false), 2000)
     } catch {
       setCopied(false)
     }

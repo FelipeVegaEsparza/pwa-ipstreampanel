@@ -81,6 +81,7 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
   const requestedUrlRef = useRef<string | null>(null)
   const loadedUrlRef = useRef<string | null>(null)
   const corsRef = useRef<boolean | null>(null)
+  const appliedCorsRef = useRef<boolean | null>(null)
   const isPlayingRef = useRef(false)
   const probeSeqRef = useRef(0)
 
@@ -105,6 +106,7 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
     audioElement.crossOrigin = cors ? 'anonymous' : null
     audioElement.src = url
     loadedUrlRef.current = url
+    appliedCorsRef.current = cors
   }, [])
 
   const ensureLoaded = useCallback(
@@ -139,9 +141,15 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
         if (token !== probeSeqRef.current) return
         corsRef.current = capable
         setCorsCapable(capable)
-        // Si ya está sonando esta URL recién solicitada (cambio en caliente),
-        // recargar con el modo CORS correcto para habilitar el medidor VU.
-        if (isPlayingRef.current && loadedUrlRef.current === url) {
+        if (!isPlayingRef.current) return
+        if (loadedUrlRef.current !== url) {
+          // La URL cambió en caliente mientras sonaba: cargar la nueva fuente y
+          // continuar (no basta con re-aplicar CORS sobre la fuente anterior).
+          applySource(url, capable)
+          void audioElement.play().catch(() => setIsPlaying(false))
+        } else if (appliedCorsRef.current !== capable) {
+          // La misma URL, pero el modo CORS aprendido cambió: re-aplicar para
+          // habilitar el medidor VU.
           audioElement.pause()
           applySource(url, capable)
           void audioElement.play().catch(() => setIsPlaying(false))

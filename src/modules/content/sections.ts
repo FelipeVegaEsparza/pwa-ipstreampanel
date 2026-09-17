@@ -75,7 +75,7 @@ export function sectionHasContent(
       // PollsSection solo muestra encuestas activas con opciones.
       return (
         (clientData?.polls?.filter(
-          (poll) => poll.active !== false && poll.options.length > 0
+          (poll) => poll.active !== false && (poll.options?.length ?? 0) > 0
         )?.length ?? 0) > 0
       )
     case 'social':

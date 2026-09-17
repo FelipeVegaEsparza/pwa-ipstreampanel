@@ -23,6 +23,9 @@ import type {
 } from '@/core/types'
 import { CACHE_TTL, getCache, setCache } from './cache'
 import { request } from './client'
+import { ApiError } from './errors'
+
+export { ApiError, isNotFoundError } from './errors'
 
 interface FetchJSONOptions {
   ttl?: number
@@ -51,7 +54,7 @@ async function fetchJSON<T>(
   })
 
   if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`)
+    throw new ApiError(response.status)
   }
 
   const data = (await response.json()) as T
@@ -236,7 +239,7 @@ export async function votePoll(
     }
   )
   if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`)
+    throw new ApiError(response.status)
   }
   return response.json()
 }
@@ -261,7 +264,7 @@ export async function sendChatMessage(
     })
   })
   if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`)
+    throw new ApiError(response.status)
   }
   return response.json()
 }
@@ -277,7 +280,7 @@ export async function registerPwaInstall(
     retries: 1
   })
   if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`)
+    throw new ApiError(response.status)
   }
   return response.json()
 }

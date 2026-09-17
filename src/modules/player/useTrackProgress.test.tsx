@@ -60,6 +60,27 @@ describe('useTrackProgress', () => {
     expect(result?.current).toBe(0)
   })
 
+  it('reanuda sin sumar el tiempo en pausa', () => {
+    const { rerender } = render(
+      <Harness duration={100} trackKey="trk_1" isPlaying />
+    )
+    act(() => {
+      vi.advanceTimersByTime(10000)
+    })
+    expect(result?.current).toBeCloseTo(10)
+
+    rerender(<Harness duration={100} trackKey="trk_1" isPlaying={false} />)
+    act(() => {
+      vi.advanceTimersByTime(30000)
+    })
+
+    rerender(<Harness duration={100} trackKey="trk_1" isPlaying />)
+    act(() => {
+      vi.advanceTimersByTime(1000)
+    })
+    expect(result?.current).toBeCloseTo(11)
+  })
+
   it('devuelve duración null si no existe', () => {
     render(<Harness duration={null} trackKey="trk_1" isPlaying />)
     expect(result?.duration).toBeNull()

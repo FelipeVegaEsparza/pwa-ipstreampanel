@@ -60,6 +60,21 @@ console.log(
   `Building client "${clientName}" (clientId: ${clientConfig.clientId}) -> ${outDir}`
 )
 
+// Verificación de tipos previa: un error de TypeScript debe detener el build
+// de producción (el script `build` normal ya corre `tsc -b && vite build`).
+const typecheck = spawnSync(
+  process.platform === 'win32' ? 'npx.cmd' : 'npx',
+  ['tsc', '-b'],
+  { cwd: root, stdio: 'inherit' }
+)
+
+if (typecheck.error || typecheck.status !== 0) {
+  console.error(
+    `\n✗ La verificación de tipos falló. No se construyó "${clientName}".`
+  )
+  process.exit(typecheck.status ?? 1)
+}
+
 const result = spawnSync(
   process.platform === 'win32' ? 'npx.cmd' : 'npx',
   ['vite', 'build', '--mode', clientName, '--outDir', tempOutDir],

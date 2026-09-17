@@ -15,7 +15,7 @@ export function PodcastsListPage() {
   const clientId = tenant.status === 'ready' ? tenant.clientId : null
   const [page, setPage] = usePageParam()
 
-  const { data, isLoading, isError, refetch } = usePaginatedList(
+  const { data, isLoading, isError, isPlaceholderData, refetch } = usePaginatedList(
     clientId,
     'podcastsList',
     (p, limit) => getPodcasts(clientId!, p, limit),
@@ -27,16 +27,16 @@ export function PodcastsListPage() {
 
   // Si el dataset encogió y la página quedó fuera de rango, volver a la última válida.
   useEffect(() => {
-    if (data && pagination.pages > 0 && page > pagination.pages) {
+    if (!isPlaceholderData && data && pagination.pages > 0 && page > pagination.pages) {
       setPage(pagination.pages)
     }
-  }, [page, data, pagination.pages, setPage])
+  }, [page, data, pagination.pages, isPlaceholderData, setPage])
 
   if (isLoading && items.length === 0) {
     return <Skeleton rows={6} />
   }
 
-  if (isError && items.length === 0) {
+  if (isError) {
     return (
       <ErrorScreen
         title="No se pudieron cargar los podcasts"

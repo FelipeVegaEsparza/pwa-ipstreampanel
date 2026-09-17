@@ -24,6 +24,9 @@ export default defineConfig(({ mode }) => {
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.ts',
       includeAssets: [
         'favicon.svg',
         'icon-192.png',
@@ -52,31 +55,8 @@ export default defineConfig(({ mode }) => {
           }
         ]
       },
-      workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,webp,woff2}'],
-        navigateFallback: 'index.html',
-        runtimeCaching: [
-          {
-            urlPattern: ({ url }) =>
-              url.pathname.includes('/streaming') || url.pathname.includes('/chat'),
-            handler: 'NetworkOnly',
-            method: 'GET',
-            options: { cacheableResponse: { statuses: [0, 200] } }
-          },
-          {
-            urlPattern: ({ url }) =>
-              url.hostname.includes('panelipstream.cl') &&
-              url.pathname.startsWith('/api/public'),
-            handler: 'NetworkFirst',
-            method: 'GET',
-            options: {
-              cacheName: 'ipstream-api-v1',
-              expiration: { maxEntries: 300, maxAgeSeconds: 10 * 60 },
-              networkTimeoutSeconds: 5,
-              cacheableResponse: { statuses: [0, 200] }
-            }
-          }
-        ]
+      injectManifest: {
+        globPatterns: ['**/*.{js,css,html,svg,png,webp,woff2}']
       }
     })
   ],

@@ -19,19 +19,26 @@ export function useTrackProgress(
 ): TrackProgressData {
   const [elapsed, setElapsed] = useState(0)
   const startRef = useRef<number | null>(null)
+  const elapsedRef = useRef(0)
 
   useEffect(() => {
     const base =
       typeof serverElapsed === 'number' && serverElapsed >= 0 ? serverElapsed : 0
     startRef.current = Date.now() - base * 1000
+    elapsedRef.current = base
     setElapsed(base)
   }, [trackKey, serverElapsed])
 
   useEffect(() => {
     if (!isPlaying) return
+    // Re-anclar al reanudar: sin esto, `Date.now() - startRef` incluiría todo
+    // el tiempo que duró la pausa y la barra saltaría hacia adelante.
+    startRef.current = Date.now() - elapsedRef.current * 1000
     const id = setInterval(() => {
       if (startRef.current == null) return
-      setElapsed((Date.now() - startRef.current) / 1000)
+      const next = (Date.now() - startRef.current) / 1000
+      elapsedRef.current = next
+      setElapsed(next)
     }, 1000)
     return () => clearInterval(id)
   }, [isPlaying])

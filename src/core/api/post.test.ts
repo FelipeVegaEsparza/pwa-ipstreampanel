@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { sendChatMessage, votePoll } from './index'
+import { ApiError, isNotFoundError } from './errors'
 
 function jsonResponse(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), {
@@ -47,6 +48,29 @@ describe('votePoll', () => {
     vi.stubGlobal('fetch', fetchMock)
 
     await expect(votePoll('cmclient', 'cmx', 'o1')).rejects.toThrow('HTTP 400')
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('lanza un ApiError tipado con el status HTTP', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(jsonResponse(404, { error: 'no encontrada' }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const error = await votePoll('cmclient', 'cmx', 'o1').catch((e: unknown) => e)
+
+    expect(error).toBeInstanceOf(ApiError)
+    expect((error as ApiError).status).toBe(404)
+    expect(isNotFoundError(error)).toBe(true)
+  })
+
+  it('no reintenta un POST que responde 5xx', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(jsonResponse(500, { error: 'boom' }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    await expect(votePoll('cmclient', 'cmx', 'o1')).rejects.toThrow('HTTP 500')
     expect(fetchMock).toHaveBeenCalledTimes(1)
   })
 })

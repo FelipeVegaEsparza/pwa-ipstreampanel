@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { Poll } from '@/core/types'
 import { votePoll } from '@/core/api'
 import { useTenant } from '@/core/config/TenantContext'
+import { readString, writeString } from '@/core/storage/safeStorage'
 import { Card } from '@/ui'
 import styles from './PollCard.module.css'
 
@@ -10,7 +11,7 @@ function pollKey(pollId: string): string {
 }
 
 function totalVotes(poll: Poll): number {
-  return poll.options.reduce((sum, option) => sum + option.votes, 0)
+  return (poll.options ?? []).reduce((sum, option) => sum + option.votes, 0)
 }
 
 interface PollCardProps {
@@ -20,7 +21,7 @@ interface PollCardProps {
 export function PollCard({ poll }: PollCardProps) {
   const tenant = useTenant()
   const clientId = tenant.status === 'ready' ? tenant.clientId : null
-  const [voted, setVoted] = useState(() => localStorage.getItem(pollKey(poll.id)) === 'true')
+  const [voted, setVoted] = useState(() => readString(pollKey(poll.id)) === 'true')
   const [updated, setUpdated] = useState<Poll | null>(null)
   const [voting, setVoting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -47,13 +48,9 @@ export function PollCard({ poll }: PollCardProps) {
       const updatedPoll = await votePoll(clientId, poll.id, optionId)
       setUpdated(updatedPoll)
       setVoted(true)
-      // La persistencia es solo una ayuda local: un fallo aquí no debe
-      // presentarse como error de voto (el voto ya se registró en el servidor).
-      try {
-        localStorage.setItem(pollKey(poll.id), 'true')
-      } catch {
-        // noop
-      }
+      // La persistencia es solo una ayuda local: writeString nunca lanza, así
+      // que un fallo de storage no se presenta como error de voto.
+      writeString(pollKey(poll.id), 'true')
     } catch {
       setError('No se pudo enviar tu voto. Intenta de nuevo.')
     } finally {
@@ -69,7 +66,7 @@ export function PollCard({ poll }: PollCardProps) {
 
         {voted ? (
           <ul className={styles.results}>
-            {data.options.map((option) => {
+            {(data.options ?? []).map((option) => {
               const pct = total > 0 ? Math.round((option.votes / total) * 100) : 0
               return (
                 <li key={option.id} className={styles.resultRow}>
@@ -88,7 +85,7 @@ export function PollCard({ poll }: PollCardProps) {
           </ul>
         ) : (
           <ul className={styles.options}>
-            {data.options.map((option) => (
+            {(data.options ?? []).map((option) => (
               <li key={option.id}>
                 <button
                   type="button"

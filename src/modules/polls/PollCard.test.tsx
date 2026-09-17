@@ -84,6 +84,34 @@ describe('PollCard', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1)
   })
 
+  it('se renderiza y permite votar aunque localStorage lance', async () => {
+    baked.clientId = 'cmclient'
+    vi.stubGlobal('localStorage', {
+      getItem: () => {
+        throw new Error('storage bloqueado')
+      },
+      setItem: () => {
+        throw new Error('storage bloqueado')
+      }
+    })
+    const updated = {
+      ...POLL,
+      options: [
+        { id: 'o1', text: 'Rock', votes: 11 },
+        { id: 'o2', text: 'Pop', votes: 5 }
+      ]
+    }
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(200, updated))
+    vi.stubGlobal('fetch', fetchMock)
+
+    renderPoll()
+    expect(screen.getByRole('button', { name: 'Rock' })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Rock' }))
+
+    await waitFor(() => expect(screen.getByText('11 · 69%')).toBeInTheDocument())
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
   it('no persiste ni muestra resultados si el voto falla', async () => {
     baked.clientId = 'cmclient'
     const fetchMock = vi

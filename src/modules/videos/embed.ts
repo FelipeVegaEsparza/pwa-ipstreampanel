@@ -1,5 +1,6 @@
 const YOUTUBE_ID_RE = /^[A-Za-z0-9_-]{6,}$/
 const MEDIA_EXTENSION_RE = /\.(mp4|webm|ogg|ogv|mov|m3u8)(?:[?#]|$)/i
+const HLS_EXTENSION_RE = /\.m3u8(?:[?#]|$)/i
 
 function parseUrl(url: string): URL | null {
   try {
@@ -56,4 +57,10 @@ export function videoEmbedUrl(url: string): string | null {
 export function isDirectMediaFile(url: string): boolean {
   if (!url) return false
   return MEDIA_EXTENSION_RE.test(url)
+}
+
+/** True cuando la URL es una lista de reproducción HLS (.m3u8). */
+export function isHlsStream(url: string): boolean {
+  if (!url) return false
+  return HLS_EXTENSION_RE.test(url)
 }

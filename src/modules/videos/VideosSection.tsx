@@ -3,7 +3,8 @@ import { asArray } from '@/core/adapters'
 import type { Video } from '@/core/types'
 import { Card, Grid, Section } from '@/ui'
 import type { SectionDataProps } from '@/modules/content/format'
-import { isDirectMediaFile, videoEmbedUrl } from './embed'
+import { isDirectMediaFile, isHlsStream, videoEmbedUrl } from './embed'
+import { HlsVideo } from './HlsVideo'
 import styles from './VideosSection.module.css'
 
 const YOUTUBE_EMBED_PREFIX = 'https://www.youtube.com/embed/'
@@ -20,6 +21,7 @@ export function VideosSection({ clientData, isLoading }: SectionDataProps) {
 
   const activeUrl = active?.videoUrl ?? null
   const activeEmbed = activeUrl ? videoEmbedUrl(activeUrl) : null
+  const activeIsHls = Boolean(activeUrl && isHlsStream(activeUrl))
   const activeIsFile = Boolean(activeUrl && isDirectMediaFile(activeUrl))
 
   return (
@@ -83,6 +85,8 @@ export function VideosSection({ clientData, isLoading }: SectionDataProps) {
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               />
+            ) : activeIsHls && activeUrl ? (
+              <HlsVideo className={styles.video} src={activeUrl} />
             ) : activeIsFile ? (
               <video className={styles.video} controls playsInline src={activeUrl} />
             ) : (
