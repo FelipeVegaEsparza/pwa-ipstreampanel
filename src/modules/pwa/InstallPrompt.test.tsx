@@ -1,31 +1,85 @@
-import { act, fireEvent, render, screen } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
-import { InstallPrompt } from './InstallPrompt'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { InstallPrompt, resetInstallPromptForTests } from './InstallPrompt'
+
+interface PromptEvent extends Event {
+  prompt: () => Promise<void>
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
+}
+
+function dispatchBeforeInstall(prompt: () => Promise<void>, outcome: 'accepted' | 'dismissed') {
+  const event = new Event('beforeinstallprompt') as PromptEvent
+  event.prompt = prompt
+  event.userChoice = Promise.resolve({ outcome })
+  act(() => {
+    window.dispatchEvent(event)
+  })
+}
+
+beforeEach(() => {
+  resetInstallPromptForTests()
+})
+
+afterEach(() => {
+  resetInstallPromptForTests()
+  vi.restoreAllMocks()
+})
 
 describe('InstallPrompt', () => {
-  it('no muestra el botón sin el evento de instalación', () => {
+  it('muestra los botones de Android y Apple', () => {
     render(<InstallPrompt />)
-    expect(screen.queryByText('Instalar app')).toBeNull()
+    expect(screen.getByRole('button', { name: 'Instalar en Android' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Instalar en iPhone o iPad' })
+    ).toBeInTheDocument()
   })
 
-  it('muestra el botón cuando se dispara beforeinstallprompt', () => {
+  it('el botón Android dispara el prompt cuando está disponible', async () => {
+    const promptMock = vi.fn().mockResolvedValue(undefined)
+    dispatchBeforeInstall(promptMock, 'accepted')
     render(<InstallPrompt />)
-    act(() => {
-      window.dispatchEvent(new Event('beforeinstallprompt'))
-    })
-    expect(screen.getByText('Instalar app')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Instalar en Android' }))
+
+    await waitFor(() => expect(promptMock).toHaveBeenCalledTimes(1))
   })
 
-  it('llama al prompt al hacer clic', () => {
+  it('el botón Android sin prompt abre el modal de indicaciones', () => {
     render(<InstallPrompt />)
-    const event = new Event('beforeinstallprompt')
-    const promptMock = vi.fn()
-    Object.defineProperty(event, 'prompt', { value: promptMock })
+
+    fireEvent.click(screen.getByRole('button', { name: 'Instalar en Android' }))
+
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    expect(screen.getByText('Instalar la aplicación')).toBeInTheDocument()
+  })
+
+  it('el botón Apple abre el modal con las indicaciones de iOS', () => {
+    render(<InstallPrompt />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Instalar en iPhone o iPad' }))
+
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    expect(screen.getByText('Agregar a pantalla de inicio')).toBeInTheDocument()
+  })
+
+  it('el modal se cierra con el botón de cerrar', () => {
+    render(<InstallPrompt />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Instalar en iPhone o iPad' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Cerrar' }))
+
+    expect(screen.queryByRole('dialog')).toBeNull()
+  })
+
+  it('oculta los botones cuando la app ya está instalada', () => {
+    render(<InstallPrompt />)
     act(() => {
-      window.dispatchEvent(event)
+      window.dispatchEvent(new Event('appinstalled'))
     })
 
-    fireEvent.click(screen.getByText('Instalar app'))
-    expect(promptMock).toHaveBeenCalledTimes(1)
+    expect(screen.queryByRole('button', { name: 'Instalar en Android' })).toBeNull()
+    expect(
+      screen.queryByRole('button', { name: 'Instalar en iPhone o iPad' })
+    ).toBeNull()
   })
 })

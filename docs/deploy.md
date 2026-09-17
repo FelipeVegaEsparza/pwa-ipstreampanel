@@ -88,10 +88,18 @@ Notas:
 
 > Detalle en [`docs/splash-carga.md`](./splash-carga.md).
 
-Mientras se cargan los datos del cliente se muestra un splash con su portada
-(`coverUrl`, fallback a logo) y **no se monta el template** hasta conocer el
-`selectedTemplate`, evitando el flash del template por defecto. Sin imagen se
-usa un fondo neutro.
+Mientras se cargan los datos del cliente se muestra un splash con su logo y
+**no se monta el template** hasta conocer el `selectedTemplate`, evitando el
+flash del template por defecto.
+
+## Instalación de la app
+
+> Detalle en [`docs/instalacion-pwa.md`](./instalacion-pwa.md).
+
+Los templates muestran dos botones (`public/app-android.png` y
+`public/app-apple.png`). El de Android dispara el prompt de instalación de la
+PWA; el de Apple abre un modal con las indicaciones para agregar a la pantalla
+de inicio. Se ocultan si la app ya está instalada.
 
 ## Agregar una nueva radio
 
