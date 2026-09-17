@@ -73,6 +73,7 @@ export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
           <div className={styles.coverWrap}>
             <SmartImage
               className={styles.cover}
+              crossfade
               src={live.trackCover}
               fallbacks={live.fallbacks}
               alt=""

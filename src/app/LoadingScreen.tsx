@@ -15,8 +15,8 @@ export function LoadingScreen() {
           className={styles.logo}
           src="/icon-512.png"
           alt=""
-          width={120}
-          height={120}
+          width={160}
+          height={160}
         />
         {clientName && <p className={styles.name}>{clientName}</p>}
         <span className={styles.spinner} aria-hidden="true" />

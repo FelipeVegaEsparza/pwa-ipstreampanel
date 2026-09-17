@@ -1,7 +1,9 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { Route, Routes } from 'react-router-dom'
 import { ErrorScreen } from './ErrorScreen'
 import { LoadingScreen } from './LoadingScreen'
+import { getStreaming } from '@/core/api'
 import { useTenant } from '@/core/config/TenantContext'
 import { useFullClientData } from '@/core/hooks/useFullClientData'
 import { usePwaRegistration } from '@/modules/pwa/usePwaRegistration'
@@ -51,6 +53,7 @@ export function App() {
 function TenantApp({ clientId }: { clientId: string }) {
   const { data, isLoading, isError, refetch } = useFullClientData(clientId)
   const [splashMinElapsed, setSplashMinElapsed] = useState(false)
+  const queryClient = useQueryClient()
 
   usePwaRegistration(clientId)
   useDocumentTitle(data?.basicData?.projectName)
@@ -60,6 +63,15 @@ function TenantApp({ clientId }: { clientId: string }) {
     const timer = setTimeout(() => setSplashMinElapsed(true), SPLASH_MIN_MS)
     return () => clearTimeout(timer)
   }, [])
+
+  // Prefetch del estado de streaming durante el splash: al montar el template
+  // la carátula del tema ya está en caché y no hay salto desde el logo.
+  useEffect(() => {
+    void queryClient.prefetchQuery({
+      queryKey: ['streaming', clientId],
+      queryFn: () => getStreaming(clientId)
+    })
+  }, [clientId, queryClient])
 
   if (isError && !data) {
     return (

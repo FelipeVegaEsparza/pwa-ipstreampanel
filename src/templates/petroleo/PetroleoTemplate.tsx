@@ -120,6 +120,7 @@ export function PetroleoTemplate({ clientData, isLoading }: TemplateProps) {
               <div className={styles.coverFrame}>
                 <SmartImage
                   className={styles.cover}
+                  crossfade
                   src={live.trackCover}
                   fallbacks={live.fallbacks}
                   alt=""

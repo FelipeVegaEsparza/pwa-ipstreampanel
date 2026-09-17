@@ -135,6 +135,7 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
             <div className={styles.coverCard}>
               <SmartImage
                 className={styles.cover}
+                crossfade
                 src={trackCover}
                 fallbacks={[basic?.coverUrl, basic?.logoUrl]}
                 alt=""

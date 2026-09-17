@@ -110,6 +110,7 @@ export function ModernoTemplate({ clientData, isLoading }: TemplateProps) {
             <div className={styles.heroCover}>
               <SmartImage
                 className={styles.cover}
+                crossfade
                 src={live.trackCover}
                 fallbacks={live.fallbacks}
                 alt=""

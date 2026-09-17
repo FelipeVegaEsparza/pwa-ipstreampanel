@@ -63,6 +63,7 @@ export function TradicionalTemplate({ clientData, isLoading }: TemplateProps) {
           <div className={styles.consoleBody}>
             <SmartImage
               className={styles.artwork}
+              crossfade
               src={live.trackCover}
               fallbacks={live.fallbacks}
               alt=""

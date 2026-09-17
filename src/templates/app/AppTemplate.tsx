@@ -42,6 +42,7 @@ export function AppTemplate({ clientData, isLoading }: TemplateProps) {
           <div className={styles.heroCoverWrap}>
             <SmartImage
               className={styles.heroCover}
+              crossfade
               src={live.trackCover}
               fallbacks={live.fallbacks}
               alt=""

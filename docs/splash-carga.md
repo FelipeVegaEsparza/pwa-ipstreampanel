@@ -44,9 +44,17 @@ un fondo neutro. El icono local vive en el propio sitio y carga al instante
 
 ## Qué se muestra
 
-- Logo del cliente (120x120, redondeado) sobre fondo `#1a1a2e`.
+- Logo del cliente (160x160, redondeado) sobre fondo `#1a1a2e`.
 - Nombre del cliente (`VITE_CLIENT_NAME`, del `client.json`).
 - Spinner animado.
+
+## Preparación del reproductor
+
+Mientras se muestra el splash, la app prefetchea el estado de streaming
+(`/streaming`) del tenant. Así, al montar el template, la carátula del tema
+actual ya está disponible y el hero no muestra primero el logo de la radio para
+luego saltar a la carátula. Si el streaming tarda más que el splash, el artwork
+cambia con un fundido cruzado (crossfade), no con un corte seco.
 
 ## Comportamiento del template
 

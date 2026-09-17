@@ -215,6 +215,11 @@ describe('App shell', () => {
     expect(await screen.findByRole('status')).toBeInTheDocument()
     expect(screen.queryByText('Sintoniza nuestra señal')).toBeNull()
 
+    // El streaming se prefetchea durante el splash (antes de montar el template).
+    expect(
+      fetchMock.mock.calls.some(([input]) => String(input).endsWith('/streaming'))
+    ).toBe(true)
+
     await waitFor(() => expect(resolveData).not.toBeNull())
     resolveData!(jsonResponse(200, { ...fullClientData(), selectedTemplate: 'covered' }))
 

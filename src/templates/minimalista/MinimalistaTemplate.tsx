@@ -97,6 +97,7 @@ export function MinimalistaTemplate({ clientData, isLoading }: TemplateProps) {
               <div className={styles.artworkWrap}>
                 <SmartImage
                   className={styles.artwork}
+                  crossfade
                   src={trackCover}
                   fallbacks={[basic?.coverUrl, basic?.logoUrl]}
                   alt=""
