@@ -84,6 +84,15 @@ Notas:
   mismo `index.html`, así que se muestra la identidad de la radio. El detalle
   por noticia requeriría SSR o prerender.
 
+## Splash de carga
+
+> Detalle en [`docs/splash-carga.md`](./splash-carga.md).
+
+Mientras se cargan los datos del cliente se muestra un splash con su portada
+(`coverUrl`, fallback a logo) y **no se monta el template** hasta conocer el
+`selectedTemplate`, evitando el flash del template por defecto. Sin imagen se
+usa un fondo neutro.
+
 ## Agregar una nueva radio
 
 1. Crear la configuración y validar el build en un solo paso:

@@ -4,6 +4,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig, loadEnv } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import { injectOgMeta } from './src/core/seo/ogMeta.ts'
+import { injectSplash } from './src/core/seo/splash.ts'
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -48,6 +49,15 @@ export default defineConfig(({ mode }) => {
           image: og.image,
           url: og.url,
           siteName: og.siteName
+        })
+      }
+    },
+    {
+      name: 'ipstream-splash',
+      transformIndexHtml(html: string) {
+        return injectSplash(html, {
+          image: process.env.VITE_SPLASH_IMAGE,
+          name: process.env.VITE_CLIENT_NAME || env.VITE_CLIENT_NAME || clientName
         })
       }
     },

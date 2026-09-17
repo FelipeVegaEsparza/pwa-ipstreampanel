@@ -153,7 +153,8 @@ try {
         VITE_CLIENT_ID: clientConfig.clientId,
         VITE_CLIENT_NAME: clientConfig.name || clientName,
         VITE_PUBLIC_DIR: mergedPublicDir,
-        VITE_OG_JSON: JSON.stringify(ogMeta)
+        VITE_OG_JSON: JSON.stringify(ogMeta),
+        VITE_SPLASH_IMAGE: ogMeta.image ?? ''
       }
     }
   )

@@ -1,8 +1,9 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter } from 'react-router-dom'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { TenantProvider } from '@/core/config/TenantContext'
+import { clearAllCache } from '@/core/api/cache'
 import { PlayerProvider } from '@/modules/player/PlayerContext'
 import { App } from './App'
 
@@ -131,6 +132,7 @@ describe('App shell', () => {
     vi.unstubAllGlobals()
     window.history.pushState({}, '', '/')
     localStorage.clear()
+    clearAllCache()
   })
 
   it('resuelve el tenant, renderiza el template y registra la PWA', async () => {
@@ -140,8 +142,8 @@ describe('App shell', () => {
 
     renderApp()
 
+    expect(await screen.findByText('Sintoniza nuestra señal')).toBeInTheDocument()
     expect((await screen.findAllByText('Radio Fusion Austral')).length).toBeGreaterThan(0)
-    expect(screen.getByText('Sintoniza nuestra señal')).toBeInTheDocument()
 
     const registerCalls = fetchMock.mock.calls.filter(([input]) =>
       String(input).includes('/pwa/register')
@@ -157,12 +159,62 @@ describe('App shell', () => {
 
     renderApp()
 
-    expect((await screen.findAllByText('Radio Fusion Austral')).length).toBeGreaterThan(0)
+    expect(await screen.findByText('Sintoniza nuestra señal')).toBeInTheDocument()
 
     const registerCalls = fetchMock.mock.calls.filter(([input]) =>
       String(input).includes('/pwa/register')
     )
     expect(registerCalls.length).toBe(0)
+  })
+
+  it('muestra el splash mientras cargan los datos y no el template por defecto', async () => {
+    baked.clientId = TEST_CLIENT_ID
+    let resolveData: ((response: Response) => void) | null = null
+    const fetchMock = vi.fn((input: RequestInfo | URL) => {
+      const url = String(input)
+      if (url === API_BASE) {
+        return new Promise<Response>((resolve) => {
+          resolveData = resolve
+        })
+      }
+      if (url.endsWith('/streaming')) {
+        return Promise.resolve(
+          jsonResponse(200, {
+            clientId: TEST_CLIENT_ID,
+            clientName: 'Radio Fusion Austral',
+            mount: 'radio_abc',
+            streamUrl: 'https://stream.example/radio',
+            bitrate: 128,
+            status: 'autodj',
+            isLive: false,
+            listeners: 12,
+            listenerPeak: 20,
+            jingleConfig: null,
+            currentTrack: null,
+            nextTrack: null,
+            position: null,
+            lastUpdate: '2025-01-01T00:00:00.000Z'
+          })
+        )
+      }
+      if (url.includes('/pwa/register')) {
+        return Promise.resolve(
+          jsonResponse(200, { registered: true, total: 1, firstTime: true })
+        )
+      }
+      return Promise.resolve(jsonResponse(404, { error: 'not found' }))
+    })
+    vi.stubGlobal('fetch', fetchMock)
+
+    renderApp()
+
+    expect(await screen.findByRole('status')).toBeInTheDocument()
+    expect(screen.queryByText('Sintoniza nuestra señal')).toBeNull()
+
+    await waitFor(() => expect(resolveData).not.toBeNull())
+    resolveData!(jsonResponse(200, { ...fullClientData(), selectedTemplate: 'covered' }))
+
+    expect((await screen.findAllByText('Radio Fusion Austral')).length).toBeGreaterThan(0)
   })
 
   it('muestra la pantalla de error cuando no hay clientId configurado', async () => {

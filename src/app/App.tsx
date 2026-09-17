@@ -60,6 +60,12 @@ function TenantApp({ clientId }: { clientId: string }) {
     )
   }
 
+  // Mientras no sepamos el `selectedTemplate`, mostramos el splash en vez del
+  // template por defecto (evita el flash de "minimalista" y luego el elegido).
+  if (isLoading && !data) {
+    return <LoadingScreen />
+  }
+
   return (
     <Suspense fallback={<LoadingScreen />}>
       <Routes>
