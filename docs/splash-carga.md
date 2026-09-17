@@ -25,6 +25,13 @@ Sin esto, al abrir la app se veía:
 
 Ambas capas comparten el mismo look, así que la transición es imperceptible.
 
+## Tiempo mínimo
+
+El splash se muestra al menos **1200 ms** (`SPLASH_MIN_MS` en `src/app/App.tsx`)
+aunque los datos lleguen antes, para que se alcance a apreciar. Solo aplica a la
+primera carga del tenant: en refetches con datos ya presentes no vuelve a
+aparecer.
+
 ## Imagen usada
 
 Se usa un **asset local**: `/icon-512.png`, que es el icono del cliente en

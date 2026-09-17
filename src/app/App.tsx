@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { ErrorScreen } from './ErrorScreen'
 import { LoadingScreen } from './LoadingScreen'
@@ -30,6 +30,10 @@ const VideocastDetailPage = lazy(() =>
   import('@/modules/content/VideocastDetailPage').then((m) => ({ default: m.VideocastDetailPage }))
 )
 
+// Tiempo mínimo que el splash permanece visible aunque los datos lleguen antes,
+// para que se alcance a apreciar.
+const SPLASH_MIN_MS = 1200
+
 export function App() {
   const tenant = useTenant()
 
@@ -46,9 +50,16 @@ export function App() {
 
 function TenantApp({ clientId }: { clientId: string }) {
   const { data, isLoading, isError, refetch } = useFullClientData(clientId)
+  const [splashMinElapsed, setSplashMinElapsed] = useState(false)
 
   usePwaRegistration(clientId)
   useDocumentTitle(data?.basicData?.projectName)
+
+  // El splash se muestra al menos SPLASH_MIN_MS desde el montaje del tenant.
+  useEffect(() => {
+    const timer = setTimeout(() => setSplashMinElapsed(true), SPLASH_MIN_MS)
+    return () => clearTimeout(timer)
+  }, [])
 
   if (isError && !data) {
     return (
@@ -62,7 +73,8 @@ function TenantApp({ clientId }: { clientId: string }) {
 
   // Mientras no sepamos el `selectedTemplate`, mostramos el splash en vez del
   // template por defecto (evita el flash de "minimalista" y luego el elegido).
-  if (isLoading && !data) {
+  // Además se respeta un tiempo mínimo para que el splash se aprecie.
+  if (!splashMinElapsed || (isLoading && !data)) {
     return <LoadingScreen />
   }
 

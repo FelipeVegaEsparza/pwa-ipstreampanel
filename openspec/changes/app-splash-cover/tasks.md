@@ -25,3 +25,8 @@
 - [x] 5.1 Cambiar `src/core/seo/splash.ts` para renderizar el logo local (`/icon-512.png`) en vez de una imagen de fondo remota, y actualizar `splash.test.ts`. Verificar con `npm run test`.
 - [x] 5.2 Quitar `VITE_SPLASH_IMAGE` de `scripts/build-client.mjs` y usar `/icon-512.png` en el plugin de Vite y en `LoadingScreen`. Verificar con `npm run build`.
 - [x] 5.3 Ajustar el CSS en `index.html` y `LoadingScreen.module.css` (logo centrado + nombre + spinner) y actualizar `docs/splash-carga.md`. Verificar visualmente y con `npm run build:client -- radio-prueba`.
+
+## 6. Tiempo mínimo visible
+
+- [x] 6.1 En `src/app/App.tsx`, mantener el splash visible `SPLASH_MIN_MS` (1200 ms) aunque los datos lleguen antes, sin volver a mostrarlo en refetches. Verificar con tests que usan timers.
+- [x] 6.2 Actualizar `docs/splash-carga.md` con el tiempo mínimo y ejecutar `npm run typecheck && npm run lint && npm run test && npm run build`.

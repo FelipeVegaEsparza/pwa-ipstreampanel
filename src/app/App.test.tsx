@@ -142,7 +142,9 @@ describe('App shell', () => {
 
     renderApp()
 
-    expect(await screen.findByText('Sintoniza nuestra señal')).toBeInTheDocument()
+    expect(
+      await screen.findByText('Sintoniza nuestra señal', {}, { timeout: 3000 })
+    ).toBeInTheDocument()
     expect((await screen.findAllByText('Radio Fusion Austral')).length).toBeGreaterThan(0)
 
     const registerCalls = fetchMock.mock.calls.filter(([input]) =>
@@ -159,7 +161,9 @@ describe('App shell', () => {
 
     renderApp()
 
-    expect(await screen.findByText('Sintoniza nuestra señal')).toBeInTheDocument()
+    expect(
+      await screen.findByText('Sintoniza nuestra señal', {}, { timeout: 3000 })
+    ).toBeInTheDocument()
 
     const registerCalls = fetchMock.mock.calls.filter(([input]) =>
       String(input).includes('/pwa/register')
@@ -214,6 +218,12 @@ describe('App shell', () => {
     await waitFor(() => expect(resolveData).not.toBeNull())
     resolveData!(jsonResponse(200, { ...fullClientData(), selectedTemplate: 'covered' }))
 
+    // Aunque los datos llegaron, el splash sigue visible por el tiempo mínimo.
+    expect(screen.getByRole('status')).toBeInTheDocument()
+
+    await waitFor(() => expect(screen.queryByRole('status')).toBeNull(), {
+      timeout: 3000
+    })
     expect((await screen.findAllByText('Radio Fusion Austral')).length).toBeGreaterThan(0)
   })
 

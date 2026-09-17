@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Splash de carga con el logo del cliente
-El sistema SHALL mostrar una pantalla de carga (splash) con el logo local del cliente (`/icon-512.png`, provisto por los iconos del cliente o por los compartidos) y el nombre de la radio. El splash SHALL mostrarse tanto en el HTML inicial (antes de ejecutar JavaScript) como mientras se obtienen los datos del cliente, y SHALL usar un asset local para aparecer de inmediato sin depender de una descarga remota.
+El sistema SHALL mostrar una pantalla de carga (splash) con el logo local del cliente (`/icon-512.png`, provisto por los iconos del cliente o por los compartidos) y el nombre de la radio. El splash SHALL mostrarse tanto en el HTML inicial (antes de ejecutar JavaScript) como mientras se obtienen los datos del cliente, y SHALL usar un asset local para aparecer de inmediato sin depender de una descarga remota. El splash SHALL permanecer visible un tiempo mínimo para poder apreciarse, aunque los datos lleguen antes.
 
 #### Scenario: Splash en el HTML inicial
 - **WHEN** un navegador solicita la URL de un cliente y el HTML se sirve antes de ejecutar JavaScript
@@ -14,6 +14,10 @@ El sistema SHALL mostrar una pantalla de carga (splash) con el logo local del cl
 #### Scenario: Asset local
 - **WHEN** se muestra el splash
 - **THEN** la imagen usada es un archivo servido por el propio sitio (`/icon-512.png`), no una URL remota
+
+#### Scenario: Tiempo mínimo visible
+- **WHEN** los datos del cliente llegan antes del tiempo mínimo configurado
+- **THEN** el splash permanece visible hasta cumplir ese tiempo antes de mostrar el template
 
 ### Requirement: Montar el template solo cuando se conoce
 El sistema SHALL NOT renderizar un template antes de conocer el `selectedTemplate` del cliente; mientras no haya datos SHALL mostrar el splash, y al llegar los datos SHALL montar directamente el template seleccionado sin pasar por el template por defecto.

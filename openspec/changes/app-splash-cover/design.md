@@ -40,7 +40,11 @@ El splash usa `/icon-512.png`, un asset local que siempre existe (icono propio d
 
 ### D5. Estilos
 
-El splash estático define su CSS inline en `index.html` (no hay CSS module disponible antes de JS). `LoadingScreen.module.css` replica el mismo look para que la transición sea imperceptible. Ambos usan un overlay oscuro sobre la portada para legibilidad del nombre y el spinner.
+El splash estático define su CSS inline en `index.html` (no hay CSS module disponible antes de JS). `LoadingScreen.module.css` replica el mismo look para que la transición sea imperceptible. Ambos muestran el logo del cliente centrado sobre el fondo de marca, con el nombre y el spinner.
+
+### D6. Tiempo mínimo visible
+
+`TenantApp` mantiene el splash hasta que se cumplan **ambas** condiciones: datos disponibles y un tiempo mínimo desde el montaje (`SPLASH_MIN_MS`, 1200 ms). Alternativa descartada: retraso artificial fijo tras cargar - penaliza a quien ya esperó. El mínimo solo aplica a la primera carga del tenant, no a refetches (con datos ya presentes `isLoading` es false y el gate no vuelve a mostrar el splash).
 
 ## Risks / Trade-offs
 
