@@ -77,7 +77,7 @@ console.log(`✓ Creado ${clientPath.replace(root + '/', '')}`)
 // Punto de partida de marca: copia los iconos compartidos a
 // clients/<nombre>/icons/ para personalizarlos (favicon e iconos de instalación).
 const sharedIcons = [
-  'favicon.svg',
+  'favicon.png',
   'icon-192.png',
   'icon-512.png',
   'icon-maskable-512.png',

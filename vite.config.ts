@@ -31,7 +31,7 @@ export default defineConfig(({ mode }) => {
       srcDir: 'src',
       filename: 'sw.ts',
       includeAssets: [
-        'favicon.svg',
+        'favicon.png',
         'icon-192.png',
         'icon-512.png',
         'icon-maskable-512.png',

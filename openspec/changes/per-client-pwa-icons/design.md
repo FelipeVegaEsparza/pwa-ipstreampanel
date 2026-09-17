@@ -3,7 +3,7 @@
 Ver `proposal.md` - Why. Estado actual relevante:
 
 - `scripts/build-client.mjs` ejecuta `vite build --mode <clientName>` con `VITE_CLIENT_ID`/`VITE_CLIENT_NAME`; `vite.config.ts` no define `publicDir`, por lo que Vite usa `public/` para todos.
-- Los iconos compartidos viven en `public/` (`favicon.svg`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`) junto a `offline.html`.
+- Los iconos compartidos viven en `public/` (`favicon.png`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`) junto a `offline.html`.
 - VitePWA genera el manifest con esos nombres fijos (`manifest.icons`, `includeAssets`).
 - `scripts/new-client.mjs` crea `clients/<nombre>/client.json` y dispara el build de validación.
 
@@ -41,11 +41,15 @@ Al crear un cliente, se copian los iconos compartidos a `clients/<nombre>/icons/
 
 ### D5. Verificación por build
 
-La personalización se verifica construyendo un cliente con un `favicon.svg` propio y comprobando que el archivo presente en `dist/<cliente>/` es el del cliente, y que un asset compartido (`offline.html`) sigue copiándose.
+La personalización se verifica construyendo un cliente con un `favicon.png` propio y comprobando que el archivo presente en `dist/<cliente>/` es el del cliente, y que un asset compartido (`offline.html`) sigue copiándose.
+
+### D6. Favicon PNG canónico
+
+`index.html` referencia un único `/favicon.png` con `type="image/png"` y `public/favicon.png` es el default compartido. Alternativa considerada: mantener `favicon.svg` y agregar `favicon.png` - los navegadores priorizan el SVG cuando está presente, así que el PNG del cliente quedaría ignorado; además el overlay no puede borrar el SVG heredado. Hacer PNG el canónico garantiza que el archivo del cliente sea el que se sirve. `scripts/make-icons.mjs` genera `public/favicon.png` (48x48) para el default.
 
 ## Risks / Trade-offs
 
 - [El `publicDir` temporal debe limpiarse incluso si el build falla] → Se gestiona con `try/finally` en `build-client.mjs`.
-- [Un cliente puede olvidar todos los PNG y solo cambiar el SVG] → Es válido (herencia parcial); `includeAssets` sigue encontrando los PNG heredados.
+- [Un cliente puede definir solo algunos iconos] → Es válido (herencia parcial); lo no definido se hereda de `public/`.
 - [En Docker el temporal se crea bajo `node_modules/.tmp`] → `node_modules` existe tras `npm ci`; el directorio se limpia al final.
 - [Nombres de icono distintos romperían el manifest] → Documentado en `docs/deploy.md` y en la spec.

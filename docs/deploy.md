@@ -30,7 +30,7 @@ registrado usa `minimalista` por defecto (sin romper).
 Cada radio puede tener su propio favicon e iconos de instalación de la PWA.
 Colócalos en `clients/<nombre>/icons/` con estos nombres exactos:
 
-- `favicon.svg`
+- `favicon.png`
 - `icon-192.png` (192x192)
 - `icon-512.png` (512x512)
 - `icon-maskable-512.png` (512x512, con el logo dentro del 80% central)
@@ -41,6 +41,8 @@ Reglas:
 - El build fusiona `public/` con `clients/<nombre>/icons/`: los archivos del
   cliente sobrescriben a los compartidos y lo que no definas se hereda (p. ej.
   `offline.html`). Puedes personalizar solo el favicon o solo algunos tamaños.
+- `favicon.png` es el favicon de la pestaña (recomendado 32x32 o 48x48; el
+  navegador lo escala). No se usa SVG: el favicon es siempre PNG.
 - Los nombres deben ser exactos: el manifest de la PWA referencia esos archivos.
 - `npm run new-client` copia los iconos compartidos a `clients/<nombre>/icons/`
   como punto de partida; reemplázalos por los de la radio.

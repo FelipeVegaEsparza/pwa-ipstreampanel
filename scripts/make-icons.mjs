@@ -113,6 +113,7 @@ function renderIcon(size, triangleScale) {
 }
 
 const targets = [
+  ['favicon.png', 48, 1],
   ['icon-192.png', 192, 1],
   ['icon-512.png', 512, 1],
   ['icon-maskable-512.png', 512, 0.62], // contenido dentro del área segura

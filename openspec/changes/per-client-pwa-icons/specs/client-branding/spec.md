@@ -5,7 +5,7 @@ Permite que cada build de cliente sirva su propio favicon e iconos de instalaci�
 ## ADDED Requirements
 
 ### Requirement: Iconos de marca por cliente
-El sistema de build SHALL permitir definir assets de marca por cliente en `clients/<clientName>/icons/`: `favicon.svg`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png` y `apple-touch-icon.png`. El build de ese cliente SHALL servir esos archivos como favicon e iconos del manifest, de modo que la pestaña y la instalación de la PWA usen la marca de la radio.
+El sistema de build SHALL permitir definir assets de marca por cliente en `clients/<clientName>/icons/`: `favicon.png`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png` y `apple-touch-icon.png`. El build de ese cliente SHALL servir esos archivos como favicon e iconos del manifest, de modo que la pestaña y la instalación de la PWA usen la marca de la radio.
 
 #### Scenario: Cliente con iconos propios
 - **WHEN** se construye un cliente que tiene archivos en `clients/<clientName>/icons/`
@@ -15,12 +15,16 @@ El sistema de build SHALL permitir definir assets de marca por cliente en `clien
 - **WHEN** se construye un cliente que no tiene carpeta `clients/<clientName>/icons/`
 - **THEN** el build resultante usa los iconos compartidos de `public/` sin fallar
 
+#### Scenario: Favicon PNG
+- **WHEN** el cliente define `favicon.png`
+- **THEN** el build sirve ese archivo como `/favicon.png` y `index.html` lo referencia con `type="image/png"`
+
 ### Requirement: Herencia parcial de assets
 Cuando un cliente defina solo algunos archivos de marca, el build SHALL heredar de `public/` los archivos que el cliente no defina, incluyendo los assets no relacionados con marca (p. ej. `offline.html`).
 
 #### Scenario: Cliente con favicon propio y resto heredado
-- **WHEN** `clients/<clientName>/icons/` contiene solo `favicon.svg`
-- **THEN** el build usa ese `favicon.svg` y los demás iconos y assets de `public/`
+- **WHEN** `clients/<clientName>/icons/` contiene solo `favicon.png`
+- **THEN** el build usa ese `favicon.png` y los demás iconos y assets de `public/`
 
 #### Scenario: Asset compartido no duplicado
 - **WHEN** se construye cualquier cliente
