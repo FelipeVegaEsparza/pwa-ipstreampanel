@@ -6,8 +6,6 @@
   align-items: center;
   justify-content: center;
   background-color: #1a1a2e;
-  background-size: cover;
-  background-position: center;
 }
 
 .overlay {
@@ -16,8 +14,13 @@
   align-items: center;
   gap: 16px;
   padding: 24px 32px;
-  background: rgba(0, 0, 0, 0.35);
-  border-radius: 16px;
+}
+
+.logo {
+  width: 120px;
+  height: 120px;
+  border-radius: 24px;
+  object-fit: contain;
 }
 
 .name {

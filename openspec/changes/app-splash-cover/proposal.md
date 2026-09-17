@@ -4,7 +4,7 @@ Al abrir la URL de un cliente se ve un flash: primero el template por defecto (`
 
 ## What Changes
 
-- **Splash con la portada del cliente**: el HTML inicial (antes de JS) muestra un splash con la portada (`coverUrl`, fallback a `logoUrl`) como fondo, inyectado en build time.
+- **Splash con el logo del cliente**: el HTML inicial (antes de JS) muestra un splash con el logo local (`/icon-512.png`) y el nombre, inyectado en build time. Se usa un asset local (no la portada remota, que no alcanzaba a cargar).
 - **Loader en React**: `LoadingScreen` reutiliza la portada inyectada y un spinner.
 - **Gate del template**: `TenantApp` renderiza el splash mientras no haya datos del cliente, y monta el template seleccionado recién cuando `selectedTemplate` está disponible, evitando el flash del template por defecto.
 - **Helper de splash**: `src/core/seo/splash.ts` con `renderSplash`/`injectSplash` (+ tests) y un plugin de Vite que reemplaza el marcador `<!-- app-splash -->`.

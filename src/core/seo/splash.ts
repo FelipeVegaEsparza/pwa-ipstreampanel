@@ -6,6 +6,9 @@ export interface SplashInput {
 }
 
 const MARKER = '<!-- app-splash -->'
+// Asset local del cliente (icono propio o compartido), servido por el sitio.
+// Carga al instante, a diferencia de una URL remota.
+const DEFAULT_LOGO = '/icon-512.png'
 
 /**
  * Marcado del splash de carga. Se usa tanto en el HTML inicial (inyectado en
@@ -13,18 +16,16 @@ const MARKER = '<!-- app-splash -->'
  * de React. El CSS vive en `index.html` / `LoadingScreen.module.css`.
  */
 export function renderSplash(input: SplashInput): string {
-  const image = input.image?.trim() || null
+  const image = input.image?.trim() || DEFAULT_LOGO
   const name = input.name?.trim() || null
-  const style = image
-    ? ` style="background-image:url('${escapeHtml(image)}')"`
-    : ''
   const nameHtml = name
     ? `<p class="app-splash__name">${escapeHtml(name)}</p>`
     : ''
 
   return [
-    `<div class="app-splash"${style}>`,
+    '<div class="app-splash">',
     '  <div class="app-splash__overlay">',
+    `    <img class="app-splash__logo" src="${escapeHtml(image)}" alt="" width="120" height="120" />`,
     `    ${nameHtml}`,
     '    <span class="app-splash__spinner" aria-hidden="true"></span>',
     '  </div>',

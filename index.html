@@ -25,8 +25,6 @@
         align-items: center;
         justify-content: center;
         background-color: #1a1a2e;
-        background-size: cover;
-        background-position: center;
       }
       .app-splash__overlay {
         display: flex;
@@ -34,8 +32,12 @@
         align-items: center;
         gap: 16px;
         padding: 24px 32px;
-        background: rgba(0, 0, 0, 0.35);
-        border-radius: 16px;
+      }
+      .app-splash__logo {
+        width: 120px;
+        height: 120px;
+        border-radius: 24px;
+        object-fit: contain;
       }
       .app-splash__name {
         margin: 0;

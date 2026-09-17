@@ -19,3 +19,9 @@
 - [x] 4.1 Documentar el splash en `docs/` (qué imagen usa, gate del template y límites del splash del SO).
 - [x] 4.2 Ejecutar `npm run typecheck && npm run lint && npm run test && npm run build` y confirmar que todo pasa.
 - [x] 4.3 Verificar por inspección que `dist/radio-prueba/index.html` contiene el splash con la portada y que un cliente sin imagen compila con splash neutro.
+
+## 5. Splash con logo local
+
+- [x] 5.1 Cambiar `src/core/seo/splash.ts` para renderizar el logo local (`/icon-512.png`) en vez de una imagen de fondo remota, y actualizar `splash.test.ts`. Verificar con `npm run test`.
+- [x] 5.2 Quitar `VITE_SPLASH_IMAGE` de `scripts/build-client.mjs` y usar `/icon-512.png` en el plugin de Vite y en `LoadingScreen`. Verificar con `npm run build`.
+- [x] 5.3 Ajustar el CSS en `index.html` y `LoadingScreen.module.css` (logo centrado + nombre + spinner) y actualizar `docs/splash-carga.md`. Verificar visualmente y con `npm run build:client -- radio-prueba`.

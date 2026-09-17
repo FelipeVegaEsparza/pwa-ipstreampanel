@@ -1,4 +1,4 @@
-# Splash de carga con la portada del cliente
+# Splash de carga con el logo del cliente
 
 Cómo se evita el flash al abrir la URL de una radio y qué muestra el splash.
 
@@ -10,15 +10,12 @@ Sin esto, al abrir la app se veía:
 2. El template por defecto (`minimalista`) y luego el template seleccionado en
    el panel, porque `selectedTemplate` todavía no había llegado.
 
-El splash usa la portada del cliente y retiene el render del template hasta
-conocer cuál es.
-
 ## Cómo opera (dos capas)
 
 ```
 1) Splash estático (index.html, antes de JS)
    - plugin ipstream-splash inyecta `<!-- app-splash -->`
-   - fondo = portada del cliente, overlay con nombre + spinner
+   - logo local + nombre + spinner
    - React lo reemplaza al montar
 
 2) Loader en React (mientras carga la API)
@@ -30,18 +27,19 @@ Ambas capas comparten el mismo look, así que la transición es imperceptible.
 
 ## Imagen usada
 
-- Portada: `basicData.coverUrl`.
-- Si no hay portada: logo (`basicData.logoUrl`).
-- Si no hay ninguna: fondo neutro (`#1a1a2e`) con spinner.
+Se usa un **asset local**: `/icon-512.png`, que es el icono del cliente en
+`clients/<nombre>/icons/` o, si no lo define, el compartido de `public/`.
 
-La resolución la hace `build-client.mjs` (la misma que Open Graph) y la expone
-como `VITE_SPLASH_IMAGE`. El splash estático la recibe por el plugin de Vite.
+¿Por qué local y no la portada del API? La portada (`coverUrl`) es una URL
+remota que no alcanzaba a cargar antes de que desapareciera el splash, dejando
+un fondo neutro. El icono local vive en el propio sitio y carga al instante
+(además queda precacheado por el service worker).
 
 ## Qué se muestra
 
+- Logo del cliente (120x120, redondeado) sobre fondo `#1a1a2e`.
 - Nombre del cliente (`VITE_CLIENT_NAME`, del `client.json`).
 - Spinner animado.
-- La portada de fondo, con un overlay oscuro para legibilidad.
 
 ## Comportamiento del template
 
@@ -54,14 +52,12 @@ pantalla de error (`ErrorScreen`), no el splash.
 - El splash del **sistema operativo** al abrir la PWA instalada (Android/iOS) es
   aparte: no lo controla el HTML. Android usa el manifest (íconos/colores) e iOS
   el `apple-touch-icon`.
-- La portada es una URL externa: si tarda, el splash aparece igual con fondo
-  neutro y la imagen se pinta cuando carga.
 
 ## Archivos involucrados
 
 - `src/core/seo/splash.ts` — `renderSplash`/`injectSplash` (+ tests `splash.test.ts`).
 - `vite.config.ts` — plugin `ipstream-splash`.
 - `index.html` — marcador `<!-- app-splash -->` y CSS inline.
-- `scripts/build-client.mjs` — expone `VITE_SPLASH_IMAGE`.
 - `src/app/LoadingScreen.tsx` — loader en React.
 - `src/app/App.tsx` — gate del template mientras no hay datos.
+- `clients/<nombre>/icons/icon-512.png` — logo mostrado (o el compartido).

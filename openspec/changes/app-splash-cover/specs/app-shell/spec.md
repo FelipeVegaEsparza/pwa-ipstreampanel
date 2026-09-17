@@ -1,19 +1,19 @@
 ## ADDED Requirements
 
-### Requirement: Splash de carga con la portada del cliente
-El sistema SHALL mostrar una pantalla de carga (splash) con la portada del cliente como imagen de fondo, usando `coverUrl` y, si no existe, `logoUrl`. El splash SHALL mostrarse tanto en el HTML inicial (antes de ejecutar JavaScript) como mientras se obtienen los datos del cliente. Si el cliente no tiene portada ni logo, el splash SHALL mostrarse con un fondo neutro sin romperse.
+### Requirement: Splash de carga con el logo del cliente
+El sistema SHALL mostrar una pantalla de carga (splash) con el logo local del cliente (`/icon-512.png`, provisto por los iconos del cliente o por los compartidos) y el nombre de la radio. El splash SHALL mostrarse tanto en el HTML inicial (antes de ejecutar JavaScript) como mientras se obtienen los datos del cliente, y SHALL usar un asset local para aparecer de inmediato sin depender de una descarga remota.
 
 #### Scenario: Splash en el HTML inicial
 - **WHEN** un navegador solicita la URL de un cliente y el HTML se sirve antes de ejecutar JavaScript
-- **THEN** el HTML contiene el splash con la portada del cliente como fondo
+- **THEN** el HTML contiene el splash con el logo local del cliente
 
 #### Scenario: Splash mientras cargan los datos
 - **WHEN** la aplicación está montada y todavía no llegaron los datos del cliente
 - **THEN** se muestra el splash en lugar del contenido
 
-#### Scenario: Cliente sin imagen
-- **WHEN** el cliente no tiene `coverUrl` ni `logoUrl`
-- **THEN** el splash se muestra con un fondo neutro y no lanza errores
+#### Scenario: Asset local
+- **WHEN** se muestra el splash
+- **THEN** la imagen usada es un archivo servido por el propio sitio (`/icon-512.png`), no una URL remota
 
 ### Requirement: Montar el template solo cuando se conoce
 El sistema SHALL NOT renderizar un template antes de conocer el `selectedTemplate` del cliente; mientras no haya datos SHALL mostrar el splash, y al llegar los datos SHALL montar directamente el template seleccionado sin pasar por el template por defecto.

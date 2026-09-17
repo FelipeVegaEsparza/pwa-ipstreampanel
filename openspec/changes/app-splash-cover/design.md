@@ -26,9 +26,9 @@ Ver `proposal.md` - Why. Estado actual relevante:
 
 (a) **Estático en `index.html`**: un bloque dentro de `#root` que React reemplaza al montar; cubre el hueco antes de que corra JS. (b) **Loader en React**: `LoadingScreen` con la misma imagen, mientras se cargan los datos. Alternativa: solo el loader React - deja el flash blanco inicial.
 
-### D2. Imagen del splash reutilizando la lógica existente
+### D2. Imagen del splash: asset local
 
-`build-client.mjs` ya resuelve la imagen (cover→logo) para Open Graph; se expone además como `VITE_SPLASH_IMAGE` (env `VITE_*`, disponible en el cliente). El splash estático lo inyecta un plugin de Vite (`ipstream-splash`) con el mismo valor, vía `injectSplash`. Alternativa: exponer todo `VITE_OG_JSON` al cliente - filtra descripción y datos innecesarios.
+El splash usa `/icon-512.png`, un asset local que siempre existe (icono propio del cliente o el compartido de `public/`, gracias al merge del build). Carga al instante, a diferencia de la portada del API (URL remota) que no alcanzaba a aparecer. El helper `renderSplash` acepta una imagen y por defecto usa `/icon-512.png`; un cliente podría reemplazar ese icono con su logo. Alternativa descartada: la portada remota (`coverUrl`) como fondo - lenta y con flash de fondo neutro.
 
 ### D3. Gate del template en `TenantApp`
 
