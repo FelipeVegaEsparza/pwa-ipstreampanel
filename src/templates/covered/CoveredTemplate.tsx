@@ -199,8 +199,10 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
       <section className={styles.weatherBar}>
         <div className={styles.container}>
           <span className={styles.date}>{dateText}</span>
-          <Weather className={styles.weatherCard} location={basic?.location} />
-          <InstallPrompt />
+          <div className={styles.weatherActions}>
+            <Weather className={styles.weatherCard} location={basic?.location} />
+            <InstallPrompt />
+          </div>
         </div>
       </section>
 
