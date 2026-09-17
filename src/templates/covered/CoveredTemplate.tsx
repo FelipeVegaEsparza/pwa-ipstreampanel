@@ -103,7 +103,6 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
             <SmartImage className={styles.logo} src={basic?.logoUrl} alt={name} />
             <div className={styles.headerRight}>
               <span className={styles.date}>{dateText}</span>
-              <Weather location={basic?.location} />
               {onAir && (
                 <span className={styles.live}>
                   <span className={styles.liveDot} />
@@ -199,6 +198,12 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
               />
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className={styles.weatherBar}>
+        <div className={styles.container}>
+          <Weather className={styles.weatherCard} location={basic?.location} />
         </div>
       </section>
 

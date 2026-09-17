@@ -301,6 +301,23 @@
   padding: var(--space-6) 0;
 }
 
+/* Clima lateral, luego del hero */
+.weatherBar {
+  background: #0a0a0f;
+  color: #fff;
+  padding: var(--space-3) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.weatherBar .container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.weatherCard {
+  flex-shrink: 0;
+}
+
 /* Identidad de la radio */
 .about {
   padding: var(--space-6) 0;
