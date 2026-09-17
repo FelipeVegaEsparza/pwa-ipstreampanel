@@ -60,8 +60,59 @@ const publicDir = resolve(root, 'public')
 const clientIconsDir = resolve(root, 'clients', clientName, 'icons')
 const mergedPublicDir = resolve(root, 'node_modules', '.tmp', `public-${clientName}`)
 
+const API_BASE = 'https://panelipstream.cl'
+const BASIC_DATA_TIMEOUT_MS = 5000
+
+/** Convierte una ruta relativa de la API en URL absoluta; deja intactas las absolutas. */
+function toAbsoluteUrl(path) {
+  if (!path) return undefined
+  if (/^[a-z][a-z0-9+.-]*:/i.test(path)) return path
+  return `${API_BASE}${path}`
+}
+
+/**
+ * Metadatos Open Graph/Twitter del cliente. Si la API no responde, degrada al
+ * nombre del client.json y omite los campos que no pueda resolver.
+ */
+async function fetchOgMeta(config, name) {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), BASIC_DATA_TIMEOUT_MS)
+  let basicData = null
+  try {
+    const res = await fetch(
+      `${API_BASE}/api/public/${config.clientId}/basic-data`,
+      { signal: controller.signal }
+    )
+    if (res.ok) basicData = await res.json()
+  } catch {
+    basicData = null
+  } finally {
+    clearTimeout(timer)
+  }
+
+  const title = basicData?.projectName || config.name || name
+  const siteUrl = config.siteUrl || basicData?.websiteUrl || undefined
+  const image =
+    toAbsoluteUrl(basicData?.coverUrl) ||
+    toAbsoluteUrl(basicData?.logoUrl) ||
+    (siteUrl ? `${siteUrl.replace(/\/$/, '')}/icon-512.png` : undefined)
+
+  return {
+    title,
+    description: basicData?.projectDescription || undefined,
+    image,
+    url: siteUrl,
+    siteName: title
+  }
+}
+
+const ogMeta = await fetchOgMeta(clientConfig, clientName)
+
 console.log(
   `Building client "${clientName}" (clientId: ${clientConfig.clientId}) -> ${outDir}`
+)
+console.log(
+  `Metadatos: title="${ogMeta.title}" image="${ogMeta.image ?? '(sin imagen)'}" url="${ogMeta.url ?? '(sin url)'}"`
 )
 
 // Verificación de tipos previa: un error de TypeScript debe detener el build
@@ -101,7 +152,8 @@ try {
         ...process.env,
         VITE_CLIENT_ID: clientConfig.clientId,
         VITE_CLIENT_NAME: clientConfig.name || clientName,
-        VITE_PUBLIC_DIR: mergedPublicDir
+        VITE_PUBLIC_DIR: mergedPublicDir,
+        VITE_OG_JSON: JSON.stringify(ogMeta)
       }
     }
   )

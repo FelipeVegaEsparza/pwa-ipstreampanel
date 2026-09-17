@@ -49,6 +49,39 @@ Reglas:
 - Si la radio no tiene carpeta `icons/`, se usan los iconos compartidos de
   `public/` sin fallar.
 
+## Metadatos al compartir (Open Graph / Twitter)
+
+> Detalle completo y operativa en [`docs/compartir-enlaces.md`](./compartir-enlaces.md).
+
+Al compartir el enlace de una radio en WhatsApp, Facebook o X, el preview usa
+los metadatos inyectados en el HTML del build (los crawlers no ejecutan
+JavaScript). `npm run build:client` consulta la API pública del cliente
+(`/basic-data`) y arma automáticamente:
+
+- `og:title` / `twitter:title`: `projectName` (o el `name` del `client.json`).
+- `og:description` / `twitter:description`: `projectDescription`.
+- `og:image` / `twitter:image`: la portada (`coverUrl`); si no hay, el logo
+  (`logoUrl`); si tampoco, `{siteUrl}/icon-512.png`.
+- `og:url`: el `siteUrl` del `client.json` o, si no, el `websiteUrl` del API.
+
+Campos opcionales de `clients/<nombre>/client.json`:
+
+```json
+{
+  "clientId": "cmXXXX",
+  "name": "Radio Ejemplo",
+  "siteUrl": "https://radioejemplo.cl"
+}
+```
+
+Notas:
+
+- Si la API no responde durante el build, el build continúa con el `name` del
+  `client.json` y omite los campos que no pueda resolver.
+- Los previews por noticia/artículo no cambian: todas las rutas comparten el
+  mismo `index.html`, así que se muestra la identidad de la radio. El detalle
+  por noticia requeriría SSR o prerender.
+
 ## Agregar una nueva radio
 
 1. Crear la configuración y validar el build en un solo paso:

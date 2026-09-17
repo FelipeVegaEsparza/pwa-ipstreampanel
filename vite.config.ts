@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig, loadEnv } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
+import { injectOgMeta } from './src/core/seo/ogMeta.ts'
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -12,6 +13,18 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const clientName =
     process.env.VITE_CLIENT_NAME || env.VITE_CLIENT_NAME || 'IPStream PWA'
+
+  // Metadatos Open Graph/Twitter. build-client.mjs los arma con los datos de la
+  // API pública y los pasa serializados en VITE_OG_JSON. En dev solo hay nombre.
+  function readOgMeta(): Record<string, string | undefined> {
+    const raw = process.env.VITE_OG_JSON
+    if (!raw) return {}
+    try {
+      return JSON.parse(raw) as Record<string, string | undefined>
+    } catch {
+      return {}
+    }
+  }
 
   return {
   base: '/',
@@ -25,6 +38,19 @@ export default defineConfig(({ mode }) => {
   },
   plugins: [
     react(),
+    {
+      name: 'ipstream-og-meta',
+      transformIndexHtml(html: string) {
+        const og = readOgMeta()
+        return injectOgMeta(html, {
+          title: og.title || clientName,
+          description: og.description,
+          image: og.image,
+          url: og.url,
+          siteName: og.siteName
+        })
+      }
+    },
     VitePWA({
       registerType: 'autoUpdate',
       strategies: 'injectManifest',
