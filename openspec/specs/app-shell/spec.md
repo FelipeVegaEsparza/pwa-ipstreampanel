@@ -62,3 +62,33 @@ El sistema SHALL registrar la instalación de la aplicación mediante `POST /api
 #### Scenario: Persistencia no disponible
 - **WHEN** el almacenamiento local no está disponible al generar el `deviceId`
 - **THEN** el sistema mantiene un identificador estable durante la sesión y no genera uno nuevo en cada llamada
+
+### Requirement: Splash de carga con el logo del cliente
+El sistema SHALL mostrar una pantalla de carga (splash) con el logo local del cliente (`/icon-512.png`, provisto por los iconos del cliente o por los compartidos) y el nombre de la radio. El splash SHALL mostrarse tanto en el HTML inicial (antes de ejecutar JavaScript) como mientras se obtienen los datos del cliente, y SHALL usar un asset local para aparecer de inmediato sin depender de una descarga remota. El splash SHALL permanecer visible un tiempo mínimo para poder apreciarse, aunque los datos lleguen antes.
+
+#### Scenario: Splash en el HTML inicial
+- **WHEN** un navegador solicita la URL de un cliente y el HTML se sirve antes de ejecutar JavaScript
+- **THEN** el HTML contiene el splash con el logo local del cliente
+
+#### Scenario: Splash mientras cargan los datos
+- **WHEN** la aplicación está montada y todavía no llegaron los datos del cliente
+- **THEN** se muestra el splash en lugar del contenido
+
+#### Scenario: Asset local
+- **WHEN** se muestra el splash
+- **THEN** la imagen usada es un archivo servido por el propio sitio (`/icon-512.png`), no una URL remota
+
+#### Scenario: Tiempo mínimo visible
+- **WHEN** los datos del cliente llegan antes del tiempo mínimo configurado
+- **THEN** el splash permanece visible hasta cumplir ese tiempo antes de mostrar el template
+
+### Requirement: Montar el template solo cuando se conoce
+El sistema SHALL NOT renderizar un template antes de conocer el `selectedTemplate` del cliente; mientras no haya datos SHALL mostrar el splash, y al llegar los datos SHALL montar directamente el template seleccionado sin pasar por el template por defecto.
+
+#### Scenario: Sin flash del template por defecto
+- **WHEN** el cliente tiene seleccionado un template distinto del por defecto y sus datos aún no llegaron
+- **THEN** no se renderiza el template por defecto y al llegar los datos se muestra el template seleccionado
+
+#### Scenario: Error de carga
+- **WHEN** la carga de datos falla y no hay datos previos
+- **THEN** se muestra la pantalla de error correspondiente en lugar del splash
