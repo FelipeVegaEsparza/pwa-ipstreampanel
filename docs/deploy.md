@@ -27,6 +27,8 @@ registrado usa `minimalista` por defecto (sin romper).
 
 ## Iconos y favicon por cliente
 
+> Detalle completo y operativa en [`docs/iconos-por-cliente.md`](./iconos-por-cliente.md).
+
 Cada radio puede tener su propio favicon e iconos de instalación de la PWA.
 Colócalos en `clients/<nombre>/icons/` con estos nombres exactos:
 
