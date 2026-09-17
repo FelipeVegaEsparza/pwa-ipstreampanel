@@ -17,3 +17,7 @@
 
 - [x] 4.1 Actualizar `docs/splash-carga.md` (tamaño del logo y que el streaming se prepara durante el splash).
 - [x] 4.2 Ejecutar `npm run typecheck && npm run lint && npm run test && npm run build` y confirmar que todo pasa.
+
+## 5. Logo del splash más grande
+
+- [x] 5.1 Duplicar el logo del splash a 320px (con tope responsive `80vw`) en `index.html`, `src/app/LoadingScreen.tsx`/`.module.css` y `src/core/seo/splash.ts`, y actualizar `docs/splash-carga.md`. Verificar con `npm run build:client -- radio-prueba`.

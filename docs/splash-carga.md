@@ -44,7 +44,8 @@ un fondo neutro. El icono local vive en el propio sitio y carga al instante
 
 ## Qué se muestra
 
-- Logo del cliente (160x160, redondeado) sobre fondo `#1a1a2e`.
+- Logo del cliente (320x320, redondeado; se limita a 80vw en pantallas
+  pequeñas) sobre fondo `#1a1a2e`.
 - Nombre del cliente (`VITE_CLIENT_NAME`, del `client.json`).
 - Spinner animado.
 

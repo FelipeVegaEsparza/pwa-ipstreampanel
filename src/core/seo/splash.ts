@@ -25,7 +25,7 @@ export function renderSplash(input: SplashInput): string {
   return [
     '<div class="app-splash">',
     '  <div class="app-splash__overlay">',
-    `    <img class="app-splash__logo" src="${escapeHtml(image)}" alt="" width="160" height="160" />`,
+    `    <img class="app-splash__logo" src="${escapeHtml(image)}" alt="" width="320" height="320" />`,
     `    ${nameHtml}`,
     '    <span class="app-splash__spinner" aria-hidden="true"></span>',
     '  </div>',
