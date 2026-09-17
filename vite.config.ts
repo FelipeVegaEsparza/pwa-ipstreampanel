@@ -15,6 +15,9 @@ export default defineConfig(({ mode }) => {
 
   return {
   base: '/',
+  // Permite que build-client.mjs pase un publicDir fusionado (public/ + los
+  // iconos propios del cliente). En dev y en el build normal se usa public/.
+  publicDir: process.env.VITE_PUBLIC_DIR || 'public',
   build: {
     // hls.js vive en su propio chunk bajo demanda (~574 kB min); el resto de la
     // app queda muy por debajo del límite por defecto.

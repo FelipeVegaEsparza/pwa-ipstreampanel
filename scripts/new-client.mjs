@@ -8,7 +8,14 @@
  * para confirmar que queda listo para desplegar.
  */
 import { spawnSync } from 'node:child_process'
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
+import {
+  cpSync,
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  writeFileSync
+} from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -66,6 +73,23 @@ const clientConfig = {
 mkdirSync(clientDir, { recursive: true })
 writeFileSync(clientPath, `${JSON.stringify(clientConfig, null, 2)}\n`)
 console.log(`✓ Creado ${clientPath.replace(root + '/', '')}`)
+
+// Punto de partida de marca: copia los iconos compartidos a
+// clients/<nombre>/icons/ para personalizarlos (favicon e iconos de instalación).
+const sharedIcons = [
+  'favicon.svg',
+  'icon-192.png',
+  'icon-512.png',
+  'icon-maskable-512.png',
+  'apple-touch-icon.png'
+]
+const iconsDir = resolve(clientDir, 'icons')
+mkdirSync(iconsDir, { recursive: true })
+for (const file of sharedIcons) {
+  const src = resolve(root, 'public', file)
+  if (existsSync(src)) cpSync(src, resolve(iconsDir, file))
+}
+console.log(`✓ Iconos base copiados a ${iconsDir.replace(root + '/', '')}/ (personalízalos)`)
 
 console.log(`Building client "${name}" para validar...`)
 const result = spawnSync(

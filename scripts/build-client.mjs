@@ -13,7 +13,7 @@
  * a medias ni pisar un dist/<cliente> válido con un build fallido.
  */
 import { spawnSync } from 'node:child_process'
-import { readFileSync, rmSync, renameSync } from 'node:fs'
+import { cpSync, existsSync, readFileSync, rmSync, renameSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -56,6 +56,10 @@ const distDir = resolve(root, 'dist')
 const tempOutDir = resolve(distDir, `.build-${clientName}`)
 const outDir = resolve(distDir, clientName)
 
+const publicDir = resolve(root, 'public')
+const clientIconsDir = resolve(root, 'clients', clientName, 'icons')
+const mergedPublicDir = resolve(root, 'node_modules', '.tmp', `public-${clientName}`)
+
 console.log(
   `Building client "${clientName}" (clientId: ${clientConfig.clientId}) -> ${outDir}`
 )
@@ -75,19 +79,35 @@ if (typecheck.error || typecheck.status !== 0) {
   process.exit(typecheck.status ?? 1)
 }
 
-const result = spawnSync(
-  process.platform === 'win32' ? 'npx.cmd' : 'npx',
-  ['vite', 'build', '--mode', clientName, '--outDir', tempOutDir],
-  {
-    cwd: root,
-    stdio: 'inherit',
-    env: {
-      ...process.env,
-      VITE_CLIENT_ID: clientConfig.clientId,
-      VITE_CLIENT_NAME: clientConfig.name || clientName
+// publicDir fusionado: copia de public/ + overlay de clients/<nombre>/icons/.
+// Los archivos del cliente sobrescriben a los compartidos; lo que el cliente no
+// defina (p. ej. offline.html) se hereda. El temporal vive fuera de dist/ para
+// no generar artefactos ni avisos de Vite.
+rmSync(mergedPublicDir, { recursive: true, force: true })
+cpSync(publicDir, mergedPublicDir, { recursive: true })
+if (existsSync(clientIconsDir)) {
+  cpSync(clientIconsDir, mergedPublicDir, { recursive: true })
+}
+
+let result
+try {
+  result = spawnSync(
+    process.platform === 'win32' ? 'npx.cmd' : 'npx',
+    ['vite', 'build', '--mode', clientName, '--outDir', tempOutDir],
+    {
+      cwd: root,
+      stdio: 'inherit',
+      env: {
+        ...process.env,
+        VITE_CLIENT_ID: clientConfig.clientId,
+        VITE_CLIENT_NAME: clientConfig.name || clientName,
+        VITE_PUBLIC_DIR: mergedPublicDir
+      }
     }
-  }
-)
+  )
+} finally {
+  rmSync(mergedPublicDir, { recursive: true, force: true })
+}
 
 if (result.error || result.status !== 0) {
   // Build fallido: limpiar el directorio temporal y salir con el status del build.

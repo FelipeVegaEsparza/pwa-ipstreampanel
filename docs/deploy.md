@@ -25,6 +25,28 @@ Templates disponibles en esta app: `minimalista`, `moderna`, `blue`, `moderno`,
 `tradicional`, `app`, `petroleo`, `playlist`, `covered`. Cualquier id no
 registrado usa `minimalista` por defecto (sin romper).
 
+## Iconos y favicon por cliente
+
+Cada radio puede tener su propio favicon e iconos de instalación de la PWA.
+Colócalos en `clients/<nombre>/icons/` con estos nombres exactos:
+
+- `favicon.svg`
+- `icon-192.png` (192x192)
+- `icon-512.png` (512x512)
+- `icon-maskable-512.png` (512x512, con el logo dentro del 80% central)
+- `apple-touch-icon.png` (180x180)
+
+Reglas:
+
+- El build fusiona `public/` con `clients/<nombre>/icons/`: los archivos del
+  cliente sobrescriben a los compartidos y lo que no definas se hereda (p. ej.
+  `offline.html`). Puedes personalizar solo el favicon o solo algunos tamaños.
+- Los nombres deben ser exactos: el manifest de la PWA referencia esos archivos.
+- `npm run new-client` copia los iconos compartidos a `clients/<nombre>/icons/`
+  como punto de partida; reemplázalos por los de la radio.
+- Si la radio no tiene carpeta `icons/`, se usan los iconos compartidos de
+  `public/` sin fallar.
+
 ## Agregar una nueva radio
 
 1. Crear la configuración y validar el build en un solo paso:
