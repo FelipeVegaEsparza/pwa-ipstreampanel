@@ -9,6 +9,7 @@ import type { FullClientData } from '@/core/types'
 export type SectionId =
   | 'polls'
   | 'tv'
+  | 'weather'
   | 'promotions'
   | 'news'
   | 'programs'
@@ -24,6 +25,7 @@ export type SectionId =
 export const SECTION_LABELS: Record<SectionId, string> = {
   polls: 'Encuestas',
   tv: 'TV en vivo',
+  weather: 'Clima',
   promotions: 'Promociones',
   news: 'Noticias',
   programs: 'Programación',
@@ -61,6 +63,13 @@ export function sectionHasContent(
       return (clientData?.videos?.filter((video) => Boolean(video.videoUrl))?.length ?? 0) > 0
     case 'tv':
       return Boolean(clientData?.basicData?.videoStreamingUrl)
+    case 'weather': {
+      const location = clientData?.basicData?.location
+      return (
+        typeof location?.latitude === 'number' &&
+        typeof location?.longitude === 'number'
+      )
+    }
     case 'promotions':
       return (clientData?.promotions?.length ?? 0) > 0
     case 'galleries':
@@ -95,6 +104,7 @@ const EDITORIAL_ORDER: SectionId[] = [
 export const DEFAULT_ORDER: SectionId[] = [
   'polls',
   'tv',
+  'weather',
   'promotions',
   'news',
   'programs',
@@ -118,6 +128,7 @@ const MODERNO_ORDER: SectionId[] = [
   'promotions',
   'polls',
   'tv',
+  'weather',
   'galleries',
   'events',
   'announcers',
@@ -136,6 +147,7 @@ const PETROLEO_ORDER: SectionId[] = [
   'promotions',
   'polls',
   'tv',
+  'weather',
   'galleries',
   'announcers',
   'sponsors',
@@ -150,6 +162,7 @@ const PLAYLIST_ORDER: SectionId[] = [
   'videocasts',
   'videos',
   'tv',
+  'weather',
   'promotions',
   'galleries',
   'events',
@@ -165,6 +178,7 @@ const BLUE_ORDER: SectionId[] = [
   'news',
   'polls',
   'tv',
+  'weather',
   'promotions',
   'programs',
   'galleries',

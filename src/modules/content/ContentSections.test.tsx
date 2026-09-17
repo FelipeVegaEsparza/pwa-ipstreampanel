@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { TenantProvider } from '@/core/config/TenantContext'
 import type { FullClientData } from '@/core/types'
 import { ContentSectionStack } from './ContentSections'
@@ -270,4 +270,52 @@ describe('ContentSectionStack', () => {
     const { container } = renderStack('minimalista')
     expect(sectionTitles(container)).not.toContain('Contáctanos')
   })
+
+  it('muestra la sección Clima cuando hay ubicación', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            daily: {
+              time: ['2026-01-01', '2026-01-02'],
+              weather_code: [0, 3],
+              temperature_2m_max: [20, 18],
+              temperature_2m_min: [10, 9]
+            }
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } }
+        )
+      )
+    )
+
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } }
+    })
+    const data = fullData('moderna')
+    if (data.basicData) {
+      data.basicData.location = {
+        city: 'Santiago',
+        country: 'CL',
+        latitude: -33.45,
+        longitude: -70.66
+      }
+    }
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <TenantProvider>
+          <MemoryRouter>
+            <ContentSectionStack clientData={data} isLoading={false} />
+          </MemoryRouter>
+        </TenantProvider>
+      </QueryClientProvider>
+    )
+
+    expect(await screen.findByText('Clima')).toBeInTheDocument()
+  })
+})
+
+afterEach(() => {
+  vi.unstubAllGlobals()
 })

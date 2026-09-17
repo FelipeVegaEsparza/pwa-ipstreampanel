@@ -2,6 +2,7 @@ import { type ReactNode } from 'react'
 import { useTenant } from '@/core/config/TenantContext'
 import { useFullClientData } from '@/core/hooks/useFullClientData'
 import { ContactSection } from '@/modules/contact/ContactSection'
+import { WeatherForecastSection } from '@/modules/weather/WeatherForecastSection'
 import { PollsSection } from '@/modules/polls/PollsSection'
 import { SocialNetworksSection } from '@/modules/social/SocialNetworksSection'
 import { VideosSection } from '@/modules/videos/VideosSection'
@@ -63,6 +64,8 @@ function sectionFor(
       return <PollsSection clientData={clientData} isLoading={isLoading} />
     case 'tv':
       return <TvSection clientData={clientData} isLoading={isLoading} />
+    case 'weather':
+      return <WeatherForecastSection clientData={clientData} isLoading={isLoading} />
     case 'promotions':
       return <PromotionsSection clientData={clientData} isLoading={isLoading} />
     case 'news':

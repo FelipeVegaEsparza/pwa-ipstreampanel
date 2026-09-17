@@ -1,0 +1,47 @@
+# Clima y pronóstico por radio
+
+Cómo se muestra el clima de la ciudad configurada de cada radio.
+
+## Fuente de datos
+
+Se usa [Open-Meteo](https://open-meteo.com) (público, sin API key) con las
+coordenadas de `basicData.location` (la ciudad que se configura en el panel).
+
+- **Clima actual**: `current_weather=true` → temperatura y condición.
+- **Pronóstico**: `daily=weather_code,temperature_2m_max,temperature_2m_min`
+  con `timezone=auto&forecast_days=7` → 7 días.
+
+Unidades: °C por defecto, °F cuando `location.country` es `US`.
+
+No hay geocoding: la ciudad y las coordenadas vienen en la API del panel.
+
+## Dónde se muestra
+
+- **Clima actual** (`Weather`): en los templates que lo incluyen (por ejemplo,
+  la franja lateral de `covered`).
+- **Pronóstico** (`WeatherForecast`): como sección **"Clima"** dentro del stack
+  de contenido, por lo que aparece en todos los templates en la posición
+  definida por el orden de secciones de cada uno.
+
+## Sección "Clima"
+
+- Se agrega al catálogo de secciones (`sections.ts`) con el id `weather`.
+- `sectionHasContent` la considera visible solo si `basicData.location` tiene
+  `latitude` y `longitude`.
+- Mientras carga muestra un skeleton; si el proveedor falla, la sección no se
+  muestra (degradación elegante).
+- La tira de días tiene scroll horizontal en móvil; el primer día se rotula
+  "Hoy".
+
+## Condiciones (códigos WMO)
+
+Los códigos del proveedor se traducen con `weatherLabel` y se representan con
+iconos (`weatherIcon`) en `src/modules/weather/label.ts`.
+
+## Archivos involucrados
+
+- `src/modules/weather/useWeather.ts` — clima actual y `useWeatherForecast`.
+- `src/modules/weather/Weather.tsx` — clima actual.
+- `src/modules/weather/WeatherForecast.tsx` — tira de pronóstico.
+- `src/modules/weather/WeatherForecastSection.tsx` — sección para el stack.
+- `src/modules/content/sections.ts` / `ContentSections.tsx` — integración.

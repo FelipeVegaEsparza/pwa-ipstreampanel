@@ -9,6 +9,7 @@ import { SmartImage } from '@/ui'
 import {
   FaBullhorn,
   FaCalendarDays,
+  FaCloudSun,
   FaHandshake,
   FaHeart,
   FaImages,
@@ -34,6 +35,7 @@ import styles from './BlueTemplate.module.css'
 const SECTION_ICONS: Record<SectionId, ComponentType<{ size?: number }>> = {
   polls: FaSquarePollVertical,
   tv: FaTv,
+  weather: FaCloudSun,
   promotions: FaTags,
   news: FaNewspaper,
   programs: FaMicrophoneLines,
