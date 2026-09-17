@@ -9,18 +9,11 @@
   padding: 0;
   background: transparent;
   cursor: pointer;
-  border-radius: var(--radius-md, 10px);
-  transition: transform 150ms ease, opacity 150ms ease;
-}
-
-.button:hover {
-  transform: translateY(-1px);
-  opacity: 0.85;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .image {
   display: block;
   height: 44px;
   width: auto;
-  border-radius: var(--radius-md, 10px);
 }

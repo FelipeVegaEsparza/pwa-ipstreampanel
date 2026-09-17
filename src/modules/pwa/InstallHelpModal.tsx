@@ -1,32 +1,95 @@
-import { useEffect } from 'react'
+import { useEffect, type ReactNode } from 'react'
+import { FaArrowUpFromBracket, FaEllipsisVertical, FaSquarePlus } from 'react-icons/fa6'
+import { IoAddCircleOutline, IoCompassOutline } from 'react-icons/io5'
 import styles from './InstallHelpModal.module.css'
 
 export type InstallPlatform = 'apple' | 'android'
 
+interface HelpStep {
+  icon: ReactNode
+  text: ReactNode
+}
+
 interface HelpContent {
   title: string
+  subtitle: string
   image: string
-  steps: string[]
+  steps: HelpStep[]
+  cta: string
 }
 
 const CONTENT: Record<InstallPlatform, HelpContent> = {
   apple: {
     title: 'Agregar a pantalla de inicio',
+    subtitle: 'Sigue estos pasos desde Safari',
     image: '/app-apple.png',
     steps: [
-      'Abre esta página en Safari.',
-      'Toca el botón Compartir (el cuadro con la flecha hacia arriba).',
-      'Elige "Añadir a pantalla de inicio" y confirma.'
-    ]
+      {
+        icon: <IoCompassOutline />,
+        text: (
+          <>
+            Abre esta web en <strong>Safari</strong>
+          </>
+        )
+      },
+      {
+        icon: <FaArrowUpFromBracket />,
+        text: (
+          <>
+            Toca el botón <strong>Compartir</strong>
+          </>
+        )
+      },
+      {
+        icon: <FaSquarePlus />,
+        text: (
+          <>
+            Elige <strong>Añadir a pantalla de inicio</strong>
+          </>
+        )
+      },
+      {
+        icon: <IoAddCircleOutline />,
+        text: (
+          <>
+            Toca <strong>Agregar</strong> para confirmar
+          </>
+        )
+      }
+    ],
+    cta: 'Entendido'
   },
   android: {
     title: 'Instalar la aplicación',
+    subtitle: 'Desde Chrome o tu navegador habitual',
     image: '/app-android.png',
     steps: [
-      'Abre el menú del navegador (⋮).',
-      'Elige "Instalar aplicación" o "Añadir a pantalla de inicio".',
-      'Confirma para crear el acceso directo.'
-    ]
+      {
+        icon: <FaEllipsisVertical />,
+        text: (
+          <>
+            Abre el <strong>menú del navegador</strong> (⋮)
+          </>
+        )
+      },
+      {
+        icon: <IoAddCircleOutline />,
+        text: (
+          <>
+            Elige <strong>Instalar aplicación</strong>
+          </>
+        )
+      },
+      {
+        icon: <FaSquarePlus />,
+        text: (
+          <>
+            O <strong>Añadir a pantalla de inicio</strong> y confirma
+          </>
+        )
+      }
+    ],
+    cta: 'Entendido'
   }
 }
 
@@ -63,13 +126,29 @@ export function InstallHelpModal({ platform, onClose }: InstallHelpModalProps) {
         >
           ×
         </button>
-        <img className={styles.icon} src={content.image} alt="" />
-        <h3 className={styles.title}>{content.title}</h3>
+
+        <div className={styles.header}>
+          <img className={styles.brandIcon} src={content.image} alt="" />
+          <div className={styles.headings}>
+            <h3 className={styles.title}>{content.title}</h3>
+            <p className={styles.subtitle}>{content.subtitle}</p>
+          </div>
+        </div>
+
         <ol className={styles.steps}>
-          {content.steps.map((step) => (
-            <li key={step}>{step}</li>
+          {content.steps.map((step, index) => (
+            <li key={index} className={styles.step}>
+              <span className={styles.stepIcon} aria-hidden="true">
+                {step.icon}
+              </span>
+              <span className={styles.stepText}>{step.text}</span>
+            </li>
           ))}
         </ol>
+
+        <button type="button" className={styles.cta} onClick={onClose}>
+          {content.cta}
+        </button>
       </div>
     </div>
   )
