@@ -17,3 +17,7 @@
 
 - [x] 4.1 Documentar el pronóstico en `docs/` (fuente, unidades, degradación).
 - [x] 4.2 Ejecutar `npm run typecheck && npm run lint && npm run test && npm run build` y confirmar que todo pasa.
+
+## 5. Ubicación en covered
+
+- [x] 5.1 En `getSectionOrder`, para `covered` ubicar la sección `weather` antes de las noticias (primera del orden). Verificar con `npm run test`.

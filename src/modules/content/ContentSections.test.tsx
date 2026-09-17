@@ -314,6 +314,53 @@ describe('ContentSectionStack', () => {
 
     expect(await screen.findByText('Clima')).toBeInTheDocument()
   })
+
+  it('en covered, la sección Clima va antes de Noticias', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            daily: {
+              time: ['2026-01-01'],
+              weather_code: [0],
+              temperature_2m_max: [20],
+              temperature_2m_min: [10]
+            }
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } }
+        )
+      )
+    )
+
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } }
+    })
+    const data = fullData('covered')
+    if (data.basicData) {
+      data.basicData.location = {
+        city: 'Santiago',
+        country: 'CL',
+        latitude: -33.45,
+        longitude: -70.66
+      }
+    }
+
+    const { container } = render(
+      <QueryClientProvider client={queryClient}>
+        <TenantProvider>
+          <MemoryRouter>
+            <ContentSectionStack clientData={data} isLoading={false} />
+          </MemoryRouter>
+        </TenantProvider>
+      </QueryClientProvider>
+    )
+
+    await screen.findByText('Clima')
+    const titles = sectionTitles(container)
+    expect(titles[0]).toBe('Clima')
+    expect(titles[1]).toBe('Noticias')
+  })
 })
 
 afterEach(() => {
