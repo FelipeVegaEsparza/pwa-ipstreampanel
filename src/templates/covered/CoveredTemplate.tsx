@@ -127,7 +127,6 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
                   ))}
                 </div>
               )}
-              <InstallPrompt />
             </div>
           </header>
 
@@ -177,6 +176,10 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
                   {isPlaying ? '❚❚ Detener' : '▶ Reproducir ahora'}
                 </button>
                 <ShareButton title={name} />
+              </div>
+
+              <div className={styles.installRow}>
+                <InstallPrompt />
               </div>
 
               <div className={styles.meta}>

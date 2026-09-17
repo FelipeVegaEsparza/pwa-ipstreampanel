@@ -13,3 +13,7 @@
 - [x] 3.1 Documentar el nuevo botón de instalación en `docs/` (Android/Apple y modal).
 - [x] 3.2 Ejecutar `npm run typecheck && npm run lint && npm run test && npm run build` y confirmar que todo pasa.
 - [x] 3.3 Verificar por inspección que `dist/<cliente>/` incluye `app-android.png` y `app-apple.png`.
+
+## 4. Ubicación en covered
+
+- [x] 4.1 En `CoveredTemplate`, mover `<InstallPrompt />` del header superior al contenido del hero (junto a los controles). Verificar con `npm run test` y `npm run build`.

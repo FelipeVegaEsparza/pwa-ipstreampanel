@@ -259,6 +259,10 @@
   margin-top: var(--space-4);
 }
 
+.installRow {
+  margin-top: var(--space-2);
+}
+
 .play {
   border: none;
   border-radius: 999px;
