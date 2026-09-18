@@ -11,6 +11,68 @@
   gap: var(--space-4);
 }
 
+.copy {
+  margin: 0;
+  color: var(--content-muted, #5f6672);
+  line-height: 1.5;
+}
+
+.whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  align-self: flex-start;
+  padding: var(--space-2) var(--space-4);
+  border-radius: 999px;
+  background: #25d366;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: opacity 150ms ease;
+}
+
+.whatsapp:hover {
+  opacity: 0.9;
+}
+
+.apps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.appsLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--content-muted, #5f6672);
+}
+
+.website {
+  align-self: flex-start;
+  color: var(--content-accent, #7c3aed);
+  font-weight: 600;
+}
+
+.website:hover {
+  opacity: 0.8;
+}
+
+/* El botón de compartir es claro-sobre-oscuro por defecto; aquí va sobre
+   fondo claro, así que se sobreescribe con mayor especificidad. */
+.aside .shareLink {
+  align-self: flex-start;
+  border: 1px solid var(--content-card-border, #e6e8ec);
+  background: var(--content-card-bg, #ffffff);
+  color: var(--content-text, #17171c);
+}
+
+.aside .shareLink:hover {
+  background: rgba(0, 0, 0, 0.04);
+  opacity: 1;
+}
+
 @media (max-width: 760px) {
   .grid {
     grid-template-columns: 1fr;

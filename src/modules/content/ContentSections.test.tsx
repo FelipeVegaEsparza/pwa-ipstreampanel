@@ -254,6 +254,40 @@ describe('ContentSectionStack', () => {
     expect(
       grid!.querySelector('a[aria-label="Facebook"]')?.getAttribute('style')
     ).toContain('background')
+    expect(screen.queryByText('Escríbenos por WhatsApp')).toBeNull()
+    expect(screen.queryByText(/Visita nuestro sitio/)).toBeNull()
+  })
+
+  it('muestra WhatsApp, sitio web y compartir cuando están configurados', () => {
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } }
+    })
+    const data = fullData('covered')
+    if (data.basicData) data.basicData.websiteUrl = 'https://radio.cl'
+    if (data.socialNetworks) data.socialNetworks.whatsapp = 'https://wa.me/56912345678'
+
+    const { container } = render(
+      <QueryClientProvider client={queryClient}>
+        <TenantProvider>
+          <MemoryRouter>
+            <ContentSectionStack clientData={data} isLoading={false} />
+          </MemoryRouter>
+        </TenantProvider>
+      </QueryClientProvider>
+    )
+
+    const grid = container.querySelector(`.${contactSocialStyles.grid}`)
+    expect(grid).not.toBeNull()
+    expect(
+      grid!.querySelector('a[href="https://wa.me/56912345678"]')
+    ).not.toBeNull()
+    expect(grid!.querySelector('a[href="https://radio.cl"]')).not.toBeNull()
+    expect(
+      grid!.querySelector('button[aria-label="Compartir"]')
+    ).not.toBeNull()
+    expect(
+      screen.getByText('Síguenos y llévate la radio contigo.')
+    ).toBeInTheDocument()
   })
 
   it('no usa la sección combinada en otros templates', () => {
