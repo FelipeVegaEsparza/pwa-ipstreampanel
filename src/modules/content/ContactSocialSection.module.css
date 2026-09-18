@@ -2,12 +2,20 @@
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: var(--space-6);
-  align-items: start;
+  align-items: stretch;
+}
+
+/* Cada columna apila su título y contenido ocupando la altura de la fila. */
+.grid > section {
+  display: flex;
+  flex-direction: column;
 }
 
 .aside {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: var(--space-4);
 }
 
@@ -59,18 +67,21 @@
   opacity: 0.8;
 }
 
-/* El botón de compartir es claro-sobre-oscuro por defecto; aquí va sobre
-   fondo claro, así que se sobreescribe con mayor especificidad. */
+/* El botón de compartir es claro-sobre-oscuro por defecto; aquí se muestra
+   como botón de acento, a ancho completo de la columna. */
 .aside .shareLink {
-  align-self: flex-start;
-  border: 1px solid var(--content-card-border, #e6e8ec);
-  background: var(--content-card-bg, #ffffff);
-  color: var(--content-text, #17171c);
+  align-self: stretch;
+  width: 100%;
+  border: none;
+  background: var(--content-accent, #7c3aed);
+  color: #ffffff;
+  padding: var(--space-3) var(--space-4);
+  font-size: 0.9rem;
 }
 
 .aside .shareLink:hover {
-  background: rgba(0, 0, 0, 0.04);
-  opacity: 1;
+  background: var(--content-accent, #7c3aed);
+  opacity: 0.9;
 }
 
 @media (max-width: 760px) {

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { FaShareNodes } from 'react-icons/fa6'
 import { ShareModal } from './ShareModal'
 import styles from './ShareButton.module.css'
 
@@ -21,6 +22,7 @@ export function ShareButton({ title, url, className }: ShareButtonProps) {
         aria-label="Compartir"
         aria-haspopup="dialog"
       >
+        <FaShareNodes size={14} aria-hidden="true" />
         Compartir
       </button>
 
