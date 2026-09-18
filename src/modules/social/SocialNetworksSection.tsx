@@ -1,13 +1,15 @@
 import { Section } from '@/ui'
 import type { SectionDataProps } from '@/modules/content/format'
-import { BrandIcon, getSocialLinks } from './brand'
+import { BrandIcon, getSocialLinks, SOCIAL_COLORS } from './brand'
 import styles from './SocialNetworksSection.module.css'
 
 interface SocialLinksProps {
   links: ReturnType<typeof getSocialLinks>
+  /** Usa el color de marca de cada red (para fondos claros). */
+  brand?: boolean
 }
 
-export function SocialLinks({ links }: SocialLinksProps) {
+export function SocialLinks({ links, brand = false }: SocialLinksProps) {
   return (
     <div className={styles.links}>
       {links.map((link) => (
@@ -19,6 +21,15 @@ export function SocialLinks({ links }: SocialLinksProps) {
           rel="noreferrer"
           aria-label={link.label}
           title={link.label}
+          style={
+            brand
+              ? {
+                  background: SOCIAL_COLORS[link.key],
+                  borderColor: SOCIAL_COLORS[link.key],
+                  color: '#ffffff'
+                }
+              : undefined
+          }
         >
           <BrandIcon name={link.key} size={20} />
         </a>

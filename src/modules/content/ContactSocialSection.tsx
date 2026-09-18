@@ -16,8 +16,8 @@ export function ContactSocialSection({ clientData }: SectionDataProps) {
       </Section>
       <Section title="Síguenos" visible flush>
         <div className={styles.aside}>
-          <SocialLinks links={links} />
-          <InstallPrompt />
+          <SocialLinks links={links} brand />
+          <InstallPrompt variant="dark" />
         </div>
       </Section>
     </div>

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import type { FullClientData, SocialNetworks } from '@/core/types'
-import { SocialNetworksSection } from './SocialNetworksSection'
+import { SocialLinks, SocialNetworksSection } from './SocialNetworksSection'
 
 function clientDataWith(socialNetworks: SocialNetworks | null): FullClientData {
   return { socialNetworks } as unknown as FullClientData
@@ -41,5 +41,18 @@ describe('SocialNetworksSection', () => {
     )
     expect(screen.getByRole('link', { name: 'Instagram' })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: 'YouTube' })).toBeNull()
+  })
+
+  it('usa el color de marca cuando brand está activo', () => {
+    render(
+      <SocialLinks
+        brand
+        links={[{ key: 'facebook', label: 'Facebook', url: 'https://facebook.com/radio' }]}
+      />
+    )
+
+    expect(
+      screen.getByRole('link', { name: 'Facebook' }).getAttribute('style')
+    ).toContain('background')
   })
 })

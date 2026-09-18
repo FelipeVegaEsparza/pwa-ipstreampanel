@@ -1,6 +1,7 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { InstallPrompt, resetInstallPromptForTests } from './InstallPrompt'
+import styles from './InstallPrompt.module.css'
 
 interface PromptEvent extends Event {
   prompt: () => Promise<void>
@@ -33,6 +34,11 @@ describe('InstallPrompt', () => {
     expect(
       screen.getByRole('button', { name: 'Instalar en iPhone o iPad' })
     ).toBeInTheDocument()
+  })
+
+  it('aplica el tono oscuro a los iconos con variant dark', () => {
+    const { container } = render(<InstallPrompt variant="dark" />)
+    expect(container.querySelector(`.${styles.dark}`)).not.toBeNull()
   })
 
   it('el botón Android dispara el prompt cuando está disponible', async () => {

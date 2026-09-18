@@ -251,6 +251,9 @@ describe('ContentSectionStack', () => {
     expect(grid!.querySelector('form')).not.toBeNull()
     expect(grid!.querySelector('img[src="/app-android.png"]')).not.toBeNull()
     expect(grid!.querySelector('img[src="/app-apple.png"]')).not.toBeNull()
+    expect(
+      grid!.querySelector('a[aria-label="Facebook"]')?.getAttribute('style')
+    ).toContain('background')
   })
 
   it('no usa la sección combinada en otros templates', () => {

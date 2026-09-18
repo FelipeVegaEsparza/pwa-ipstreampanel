@@ -50,7 +50,12 @@ export function resetInstallPromptForTests(): void {
   deferredInstallPrompt = null
 }
 
-export function InstallPrompt() {
+interface InstallPromptProps {
+  /** `dark` pinta los iconos negros para fondos claros. */
+  variant?: 'default' | 'dark'
+}
+
+export function InstallPrompt({ variant = 'default' }: InstallPromptProps) {
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(
     deferredInstallPrompt
   )
@@ -118,7 +123,7 @@ export function InstallPrompt() {
 
   return (
     <>
-      <div className={styles.row}>
+      <div className={`${styles.row} ${variant === 'dark' ? styles.dark : ''}`}>
         <button
           type="button"
           className={styles.button}

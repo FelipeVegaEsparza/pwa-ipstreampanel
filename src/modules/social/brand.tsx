@@ -19,6 +19,16 @@ export const SOCIAL_DEFS: Array<{ key: SocialKey; label: string }> = [
   { key: 'x', label: 'X' }
 ]
 
+/** Color de marca de cada red, para mostrarla sobre fondos claros. */
+export const SOCIAL_COLORS: Record<SocialKey, string> = {
+  facebook: '#1877f2',
+  youtube: '#ff0000',
+  instagram: '#e1306c',
+  tiktok: '#010101',
+  whatsapp: '#25d366',
+  x: '#000000'
+}
+
 const ICONS: Record<SocialKey, React.ComponentType<{ size?: number }>> = {
   facebook: FaFacebookF,
   youtube: FaYoutube,

@@ -17,3 +17,7 @@
   height: 44px;
   width: auto;
 }
+
+.dark .image {
+  filter: brightness(0);
+}
