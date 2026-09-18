@@ -7,14 +7,12 @@
 }
 
 .avatarWrap {
-  display: flex;
-  justify-content: center;
-  padding-top: var(--space-4);
+  width: 100%;
 }
 
 .avatar {
-  width: 96px;
-  height: 96px;
+  width: 100%;
+  height: auto;
   aspect-ratio: 1;
   border-radius: 50%;
   object-fit: cover;
