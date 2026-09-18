@@ -6,13 +6,17 @@ interface SectionProps {
   title?: string
   visible: boolean
   loading?: boolean
+  /** Quita el margen vertical de la sección (para composición dentro de grids). */
+  flush?: boolean
   children: ReactNode
 }
 
-export function Section({ title, visible, loading, children }: SectionProps) {
+export function Section({ title, visible, loading, flush = false, children }: SectionProps) {
+  const sectionClass = flush ? `${styles.section} ${styles.sectionFlush}` : styles.section
+
   if (loading) {
     return (
-      <section className={styles.section}>
+      <section className={sectionClass}>
         {title && <h2 className={styles.title}>{title}</h2>}
         <Skeleton />
       </section>
@@ -22,7 +26,7 @@ export function Section({ title, visible, loading, children }: SectionProps) {
   if (!visible) return null
 
   return (
-    <section className={styles.section}>
+    <section className={sectionClass}>
       {title && <h2 className={styles.title}>{title}</h2>}
       {children}
     </section>

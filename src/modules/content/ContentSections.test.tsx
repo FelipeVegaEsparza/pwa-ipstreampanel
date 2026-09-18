@@ -6,6 +6,7 @@ import { TenantProvider } from '@/core/config/TenantContext'
 import type { FullClientData } from '@/core/types'
 import { ContentSectionStack } from './ContentSections'
 import contentStyles from './content.module.css'
+import contactSocialStyles from './ContactSocialSection.module.css'
 
 function fullData(selectedTemplate: string): FullClientData {
   const base = {
@@ -229,14 +230,32 @@ const COVERED_ORDER = [
   'Programación',
   'Videos',
   'Auspiciadores',
-  'Síguenos',
-  'Contáctanos'
+  'Contáctanos',
+  'Síguenos'
 ]
 
 describe('ContentSectionStack', () => {
   it('antepone el orden editorial en la home de covered', () => {
     const { container } = renderStack('covered')
     expect(sectionTitles(container)).toEqual(COVERED_ORDER)
+  })
+
+  it('combina contacto y síguenos en una sección de dos columnas en covered', () => {
+    const { container } = renderStack('covered')
+    const grid = container.querySelector(`.${contactSocialStyles.grid}`)
+
+    expect(grid).not.toBeNull()
+    expect(
+      Array.from(grid!.querySelectorAll('h2')).map((heading) => heading.textContent)
+    ).toEqual(['Contáctanos', 'Síguenos'])
+    expect(grid!.querySelector('form')).not.toBeNull()
+    expect(grid!.querySelector('img[src="/app-android.png"]')).not.toBeNull()
+    expect(grid!.querySelector('img[src="/app-apple.png"]')).not.toBeNull()
+  })
+
+  it('no usa la sección combinada en otros templates', () => {
+    const { container } = renderStack('moderna')
+    expect(container.querySelector(`.${contactSocialStyles.grid}`)).toBeNull()
   })
 
   it('conserva el orden actual para un template distinto de covered', () => {

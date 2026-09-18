@@ -195,9 +195,11 @@ const BLUE_ORDER: SectionId[] = [
 
 export function getSectionOrder(template: string | null | undefined): SectionId[] {
   if (template === 'covered') {
-    // El clima abre la portada de covered, antes de las noticias.
+    // El clima abre la portada de covered, antes de las noticias. Contacto y
+    // Síguenos se combinan en una sola sección al final (ver ContentSections).
     const rest = DEFAULT_ORDER.filter(
-      (id) => !EDITORIAL_ORDER.includes(id) && id !== 'weather'
+      (id) =>
+        !EDITORIAL_ORDER.includes(id) && id !== 'weather' && id !== 'social'
     )
     return ['weather', ...EDITORIAL_ORDER, ...rest]
   }

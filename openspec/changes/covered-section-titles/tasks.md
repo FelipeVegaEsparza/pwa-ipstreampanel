@@ -6,7 +6,7 @@
 ## 2. Acento de marca en `covered`
 
 - [x] 2.1 Definir en `.page` de `src/templates/covered/CoveredTemplate.module.css` las variables de título (`--section-title-color/size/weight/spacing`), barra (`--section-bar-*`) y regla (`--section-rule-*`) según design.md - D2. Verificar visualmente que el título muestra barra a la izquierda y regla bajo el texto.
-- [ ] 2.2 Revisar el resultado en viewport móvil y de escritorio (barra alineada con la línea de texto, regla sin indentación). Verificar visualmente.
+- [x] 2.2 Revisar el resultado en viewport móvil y de escritorio (barra alineada con la línea de texto, regla sin indentación). Verificar visualmente.
 
 ## 3. Verificación final
 

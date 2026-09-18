@@ -2,6 +2,10 @@
   margin: var(--section-gap, var(--space-6)) 0;
 }
 
+.sectionFlush {
+  margin: 0;
+}
+
 .title {
   position: relative;
   font-family: var(--section-title-font, inherit);

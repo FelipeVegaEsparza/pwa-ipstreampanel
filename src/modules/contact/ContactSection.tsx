@@ -26,7 +26,7 @@ function errorTextFor(result: ContactSubmitResult): string {
   }
 }
 
-export function ContactSection() {
+export function ContactForm() {
   const tenant = useTenant()
   const [sending, setSending] = useState(false)
   const [status, setStatus] = useState<Status>(null)
@@ -64,7 +64,7 @@ export function ContactSection() {
   }
 
   return (
-    <Section title="Contáctanos" visible>
+    <>
       <p className={styles.intro}>
         Envíanos tu mensaje y te responderemos a la brevedad.
       </p>
@@ -137,6 +137,14 @@ export function ContactSection() {
           </p>
         )}
       </form>
+    </>
+  )
+}
+
+export function ContactSection() {
+  return (
+    <Section title="Contáctanos" visible>
+      <ContactForm />
     </Section>
   )
 }
