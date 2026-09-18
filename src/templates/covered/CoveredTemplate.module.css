@@ -9,6 +9,21 @@
   --content-muted: #5f6672;
   --content-accent: #7c3aed;
   --content-skeleton-bg: rgba(0, 0, 0, 0.07);
+
+  /* Títulos de sección con acento de marca (solo este template). */
+  --section-title-color: #17171c;
+  --section-title-size: 0.85rem;
+  --section-title-weight: 800;
+  --section-title-spacing: 0.16em;
+
+  --section-bar-w: 4px;
+  --section-bar-gap: 10px;
+  --section-bar-radius: 2px;
+  --section-bar-c: linear-gradient(180deg, #7c3aed, #a855f7);
+
+  --section-rule-w: 48px;
+  --section-rule-h: 3px;
+  --section-rule-c: linear-gradient(90deg, #7c3aed, #a855f7);
 }
 
 .container {
