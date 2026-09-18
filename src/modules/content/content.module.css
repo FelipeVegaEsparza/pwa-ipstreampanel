@@ -6,6 +6,22 @@
   background: var(--content-skeleton-bg, rgba(128, 128, 128, 0.18));
 }
 
+.avatarWrap {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--space-4);
+}
+
+.avatar {
+  width: 96px;
+  height: 96px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  background: var(--content-skeleton-bg, rgba(128, 128, 128, 0.18));
+}
+
 .body {
   padding: var(--space-4);
   display: flex;

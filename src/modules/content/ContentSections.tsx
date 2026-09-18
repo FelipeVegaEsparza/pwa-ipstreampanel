@@ -43,6 +43,16 @@ const PROGRAM_VARIANTS: Record<string, ProgramVariant> = {
   playlist: 'cards'
 }
 
+const ANNOUNCER_VARIANTS: Record<string, 'avatar'> = {
+  covered: 'avatar'
+}
+
+function announcerVariantFor(
+  template: string | null | undefined
+): 'avatar' | undefined {
+  return template ? ANNOUNCER_VARIANTS[template] : undefined
+}
+
 function newsVariantFor(template: string | null | undefined): NewsVariant {
   return (template && NEWS_VARIANTS[template]) || 'grid'
 }
@@ -95,7 +105,13 @@ function sectionFor(
     case 'events':
       return <EventsSection clientData={clientData} isLoading={isLoading} />
     case 'announcers':
-      return <AnnouncersSection clientData={clientData} isLoading={isLoading} />
+      return (
+        <AnnouncersSection
+          clientData={clientData}
+          isLoading={isLoading}
+          variant={announcerVariantFor(template)}
+        />
+      )
     case 'sponsors':
       return <SponsorsSection clientData={clientData} isLoading={isLoading} />
     case 'social':

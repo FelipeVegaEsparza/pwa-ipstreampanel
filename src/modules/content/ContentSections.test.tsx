@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { TenantProvider } from '@/core/config/TenantContext'
 import type { FullClientData } from '@/core/types'
 import { ContentSectionStack } from './ContentSections'
+import contentStyles from './content.module.css'
 
 function fullData(selectedTemplate: string): FullClientData {
   const base = {
@@ -416,6 +417,57 @@ describe('ContentSectionStack', () => {
     const titles = sectionTitles(container)
     expect(titles[0]).toBe('Proyección del clima en Santiago')
     expect(titles[1]).toBe('Noticias')
+  })
+
+  it('muestra la imagen de locutores en círculo en covered', () => {
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } }
+    })
+    const data = fullData('covered')
+    data.announcers = data.announcers.map((announcer) => ({
+      ...announcer,
+      imageUrl: 'https://cdn.example/announcer.png'
+    }))
+
+    const { container } = render(
+      <QueryClientProvider client={queryClient}>
+        <TenantProvider>
+          <MemoryRouter>
+            <ContentSectionStack clientData={data} isLoading={false} />
+          </MemoryRouter>
+        </TenantProvider>
+      </QueryClientProvider>
+    )
+
+    const image = container.querySelector('img[alt="Locutor 1"]')
+    expect(image).not.toBeNull()
+    expect(image!.className).toContain(contentStyles.avatar)
+  })
+
+  it('mantiene la imagen de locutores rectangular en otros templates', () => {
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } }
+    })
+    const data = fullData('moderna')
+    data.announcers = data.announcers.map((announcer) => ({
+      ...announcer,
+      imageUrl: 'https://cdn.example/announcer.png'
+    }))
+
+    const { container } = render(
+      <QueryClientProvider client={queryClient}>
+        <TenantProvider>
+          <MemoryRouter>
+            <ContentSectionStack clientData={data} isLoading={false} />
+          </MemoryRouter>
+        </TenantProvider>
+      </QueryClientProvider>
+    )
+
+    const image = container.querySelector('img[alt="Locutor 1"]')
+    expect(image).not.toBeNull()
+    expect(image!.className).toContain(contentStyles.media)
+    expect(image!.className).not.toContain(contentStyles.avatar)
   })
 })
 
