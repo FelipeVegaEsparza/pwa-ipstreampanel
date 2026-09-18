@@ -19,15 +19,17 @@ No hay geocoding: la ciudad y las coordenadas vienen en la API del panel.
 
 - **Clima actual** (`Weather`): en los templates que lo incluyen (por ejemplo,
   la franja lateral de `covered`).
-- **Pronóstico** (`WeatherForecast`): como sección **"Clima"** dentro del stack
-  de contenido, por lo que aparece en todos los templates en la posición
-  definida por el orden de secciones de cada uno.
+- **Pronóstico** (`WeatherForecast`): como sección **"Proyección del clima en
+  {ciudad}"** dentro del stack de contenido, por lo que aparece en todos los
+  templates en la posición definida por el orden de secciones de cada uno.
 
-## Sección "Clima"
+## Sección "Proyección del clima en {ciudad}"
 
 - Se agrega al catálogo de secciones (`sections.ts`) con el id `weather`.
+- El título usa la ciudad configurada en `basicData.location.city`.
 - `sectionHasContent` la considera visible solo si `basicData.location` tiene
-  `latitude` y `longitude`.
+  ciudad (no vacía), `latitude` y `longitude`. Sin ciudad no se muestra, aunque
+  haya coordenadas.
 - Mientras carga muestra un skeleton; si el proveedor falla, la sección no se
   muestra (degradación elegante).
 - La tira de días tiene scroll horizontal en móvil; el primer día se rotula

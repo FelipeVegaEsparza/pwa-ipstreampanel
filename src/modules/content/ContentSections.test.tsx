@@ -271,7 +271,7 @@ describe('ContentSectionStack', () => {
     expect(sectionTitles(container)).not.toContain('Contáctanos')
   })
 
-  it('muestra la sección Clima cuando hay ubicación', async () => {
+  it('muestra la sección de pronóstico con la ciudad cuando hay ubicación', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue(
@@ -312,10 +312,66 @@ describe('ContentSectionStack', () => {
       </QueryClientProvider>
     )
 
-    expect(await screen.findByText('Clima')).toBeInTheDocument()
+    expect(
+      await screen.findByText('Proyección del clima en Santiago')
+    ).toBeInTheDocument()
   })
 
-  it('en covered, la sección Clima va antes de Noticias', async () => {
+  it('no muestra la sección de pronóstico si hay coordenadas pero no ciudad', () => {
+    vi.stubGlobal('fetch', vi.fn().mockReturnValue(new Promise(() => {})))
+
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } }
+    })
+    const data = fullData('moderna')
+    if (data.basicData) {
+      data.basicData.location = {
+        city: null,
+        country: 'CL',
+        latitude: -33.45,
+        longitude: -70.66
+      }
+    }
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <TenantProvider>
+          <MemoryRouter>
+            <ContentSectionStack clientData={data} isLoading={false} />
+          </MemoryRouter>
+        </TenantProvider>
+      </QueryClientProvider>
+    )
+
+    expect(screen.queryByText(/Proyección del clima/)).not.toBeInTheDocument()
+  })
+
+  it('no muestra la sección de pronóstico si no hay coordenadas', () => {
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } }
+    })
+    const data = fullData('moderna')
+    if (data.basicData) {
+      data.basicData.location = {
+        city: 'Santiago',
+        country: 'CL'
+      }
+    }
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <TenantProvider>
+          <MemoryRouter>
+            <ContentSectionStack clientData={data} isLoading={false} />
+          </MemoryRouter>
+        </TenantProvider>
+      </QueryClientProvider>
+    )
+
+    expect(screen.queryByText(/Proyección del clima/)).not.toBeInTheDocument()
+  })
+
+  it('en covered, la sección de pronóstico va antes de Noticias', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue(
@@ -356,9 +412,9 @@ describe('ContentSectionStack', () => {
       </QueryClientProvider>
     )
 
-    await screen.findByText('Clima')
+    await screen.findByText('Proyección del clima en Santiago')
     const titles = sectionTitles(container)
-    expect(titles[0]).toBe('Clima')
+    expect(titles[0]).toBe('Proyección del clima en Santiago')
     expect(titles[1]).toBe('Noticias')
   })
 })

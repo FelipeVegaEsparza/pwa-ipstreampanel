@@ -65,7 +65,9 @@ export function sectionHasContent(
       return Boolean(clientData?.basicData?.videoStreamingUrl)
     case 'weather': {
       const location = clientData?.basicData?.location
+      const city = location?.city?.trim() ?? ''
       return (
+        city.length > 0 &&
         typeof location?.latitude === 'number' &&
         typeof location?.longitude === 'number'
       )
