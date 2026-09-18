@@ -1,92 +1,20 @@
-import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { asArray, normalizePagination } from '@/core/adapters'
-import { getPodcasts } from '@/core/api'
-import { useTenant } from '@/core/config/TenantContext'
-import { usePaginatedList } from '@/core/hooks/usePaginatedList'
+import { useNavigate } from 'react-router-dom'
 import { usePageParam } from '@/core/hooks/usePageParam'
-import { ErrorScreen } from '@/app/ErrorScreen'
-import { Card, EmptyState, Grid, Pagination, Skeleton, SmartImage } from '@/ui'
-import { episodeMeta } from './format'
+import { PodcastsList } from './PodcastsList'
 import styles from './content.module.css'
 
 export function PodcastsListPage() {
-  const tenant = useTenant()
-  const clientId = tenant.status === 'ready' ? tenant.clientId : null
+  const navigate = useNavigate()
   const [page, setPage] = usePageParam()
-
-  const { data, isLoading, isError, isPlaceholderData, refetch } = usePaginatedList(
-    clientId,
-    'podcastsList',
-    (p, limit) => getPodcasts(clientId!, p, limit),
-    page
-  )
-
-  const items = asArray(data?.data)
-  const pagination = normalizePagination(data?.pagination)
-
-  // Si el dataset encogió y la página quedó fuera de rango, volver a la última válida.
-  useEffect(() => {
-    if (!isPlaceholderData && data && pagination.pages > 0 && page > pagination.pages) {
-      setPage(pagination.pages)
-    }
-  }, [page, data, pagination.pages, isPlaceholderData, setPage])
-
-  if (isLoading && items.length === 0) {
-    return <Skeleton rows={6} />
-  }
-
-  if (isError) {
-    return (
-      <ErrorScreen
-        title="No se pudieron cargar los podcasts"
-        message="Hubo un problema de conexión. Revisa tu conexión e inténtalo de nuevo."
-        onRetry={() => void refetch()}
-      />
-    )
-  }
 
   return (
     <div>
       <h1 className={styles.sectionTitle}>Podcasts</h1>
-      {items.length === 0 ? (
-        <EmptyState message="No hay podcasts disponibles." />
-      ) : (
-        <>
-          <Grid>
-            {items.map((podcast) => (
-              <Card key={podcast.id}>
-                <Link to={`/podcasts/${podcast.id}`} className={styles.link}>
-                  <SmartImage className={styles.media} src={podcast.imageUrl} alt={podcast.title} />
-                  <div className={styles.body}>
-                    <h3 className={styles.itemTitle}>{podcast.title}</h3>
-                    {podcast.description && (
-                      <p className={`${styles.muted} ${styles.clamp}`}>
-                        {podcast.description}
-                      </p>
-                    )}
-                    <p className={styles.muted}>
-                      {episodeMeta(
-                        podcast.season,
-                        podcast.episodeNumber,
-                        podcast.duration
-                      )}
-                    </p>
-                  </div>
-                </Link>
-              </Card>
-            ))}
-          </Grid>
-          {pagination.total > 0 && (
-            <Pagination
-              page={page}
-              totalPages={pagination.pages}
-              hasMore={pagination.hasMore}
-              onPageChange={setPage}
-            />
-          )}
-        </>
-      )}
+      <PodcastsList
+        page={page}
+        onPageChange={setPage}
+        onSelect={(item) => navigate(`/podcasts/${item.id}`)}
+      />
     </div>
   )
 }

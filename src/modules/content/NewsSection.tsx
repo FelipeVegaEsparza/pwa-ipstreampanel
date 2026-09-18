@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { asArray } from '@/core/adapters'
 import { getNewsBySlug } from '@/core/api'
 import { useTenant } from '@/core/config/TenantContext'
 import type { News } from '@/core/types'
-import { Card, Grid, Section, Skeleton, SmartImage } from '@/ui'
+import { Card, ContentModal, Grid, Section, Skeleton, SmartImage } from '@/ui'
 import { ShareModal } from '@/modules/share/ShareModal'
 import type { SectionDataProps } from './format'
 import { formatDate } from './format'
+import { NewsList } from './NewsList'
 import styles from './content.module.css'
 import newsStyles from './NewsSection.module.css'
 
@@ -23,6 +23,8 @@ export function NewsSection({
 }: NewsSectionProps) {
   const news = asArray(clientData?.news)
   const [active, setActive] = useState<News | null>(null)
+  const [listOpen, setListOpen] = useState(false)
+  const [listPage, setListPage] = useState(1)
   const [featured, ...rest] = news
 
   const close = useCallback(() => setActive(null), [])
@@ -173,11 +175,30 @@ export function NewsSection({
               ? renderOverlay()
               : renderGrid()}
         <p>
-          <Link to="/noticias" className={styles.seeAll}>
+          <button
+            type="button"
+            className={styles.seeAll}
+            onClick={() => setListOpen(true)}
+          >
             Ver todas →
-          </Link>
+          </button>
         </p>
       </Section>
+
+      <ContentModal
+        open={listOpen}
+        title="Noticias"
+        onClose={() => setListOpen(false)}
+      >
+        <NewsList
+          page={listPage}
+          onPageChange={setListPage}
+          onSelect={(item) => {
+            setListOpen(false)
+            setActive(item)
+          }}
+        />
+      </ContentModal>
 
       {active && <NewsModal item={active} onClose={close} />}
     </>
@@ -256,9 +277,6 @@ function NewsModal({ item, onClose }: NewsModalProps) {
             >
               Compartir
             </button>
-            <Link to={`/noticias/${news.slug}`} className={styles.seeAll}>
-              Ver noticia completa →
-            </Link>
           </div>
         </div>
       </div>

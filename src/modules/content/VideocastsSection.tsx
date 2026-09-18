@@ -1,133 +1,153 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { asArray } from '@/core/adapters'
 import { buildImageUrl } from '@/core/api'
 import type { Videocast } from '@/core/types'
-import { Card, Grid, Section, SmartImage } from '@/ui'
-import type { SectionDataProps } from './format'
+import { Card, ContentModal, Grid, Section, SmartImage } from '@/ui'
+import { ShareModal } from '@/modules/share/ShareModal'
 import { isDirectMediaFile, videoEmbedUrl } from '@/modules/videos/embed'
+import type { SectionDataProps } from './format'
+import { episodeMeta } from './format'
+import { VideocastsList } from './VideocastsList'
 import styles from './content.module.css'
-import vidStyles from '@/modules/videos/VideosSection.module.css'
 
-function VideocastCardContent({ videocast }: { videocast: Videocast }) {
+function VideocastModal({ item, onClose }: { item: Videocast; onClose: () => void }) {
+  const [shareOpen, setShareOpen] = useState(false)
+  const videoUrl = buildImageUrl(item.videoUrl)
+  const embedUrl = videoUrl ? videoEmbedUrl(videoUrl) : null
+  const isDirectFile = Boolean(videoUrl && isDirectMediaFile(videoUrl))
+  const shareUrl = `${window.location.origin}/videocasts/${item.id}`
+
   return (
-    <>
-      <SmartImage className={styles.media} src={videocast.imageUrl} alt={videocast.title} />
-      <div className={styles.body}>
-        <h3 className={styles.itemTitle}>{videocast.title}</h3>
-        {videocast.description && (
-          <p className={`${styles.muted} ${styles.clamp}`}>{videocast.description}</p>
-        )}
-      </div>
-    </>
+    <ContentModal open title={item.title} onClose={onClose}>
+      <p className={styles.muted}>
+        {episodeMeta(item.season, item.episodeNumber, item.duration)}
+      </p>
+      {embedUrl ? (
+        <div className={styles.video} style={{ position: 'relative' }}>
+          <iframe
+            src={embedUrl}
+            title={item.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              border: 'none',
+              borderRadius: 'var(--radius-md)'
+            }}
+          />
+        </div>
+      ) : isDirectFile && videoUrl ? (
+        <video className={styles.video} controls playsInline src={videoUrl} />
+      ) : videoUrl ? (
+        <div
+          className={styles.video}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 'var(--space-3)',
+            textAlign: 'center',
+            color: '#fff',
+            padding: 'var(--space-4)'
+          }}
+        >
+          <p style={{ margin: 0 }}>Contenido no disponible para reproducción</p>
+          <a
+            href={videoUrl}
+            target="_blank"
+            rel="noreferrer"
+            style={{ color: 'inherit', textDecoration: 'underline' }}
+          >
+            Abrir en YouTube/Vimeo
+          </a>
+        </div>
+      ) : (
+        <SmartImage className={styles.media} src={item.imageUrl} alt={item.title} />
+      )}
+      {item.description && <p className={styles.sectionBody}>{item.description}</p>}
+      <button
+        type="button"
+        className={styles.seeAll}
+        onClick={() => setShareOpen(true)}
+      >
+        Compartir
+      </button>
+      <ShareModal
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        title={item.title}
+        url={shareUrl}
+      />
+    </ContentModal>
   )
-}
-
-function hasPlayableVideo(videocast: Videocast): boolean {
-  const url = buildImageUrl(videocast.videoUrl)
-  if (!url) return false
-  return Boolean(videoEmbedUrl(url) || isDirectMediaFile(url))
 }
 
 export function VideocastsSection({ clientData, isLoading }: SectionDataProps) {
   const videocasts = asArray(clientData?.videocasts)
   const [active, setActive] = useState<Videocast | null>(null)
-
-  const overlayItem = active && hasPlayableVideo(active) ? active : null
-  const overlayUrl = overlayItem ? buildImageUrl(overlayItem.videoUrl) : null
-  const overlayEmbed = overlayUrl ? videoEmbedUrl(overlayUrl) : null
+  const [listOpen, setListOpen] = useState(false)
+  const [listPage, setListPage] = useState(1)
 
   return (
     <>
       <Section title="Videocasts" visible={videocasts.length > 0} loading={isLoading}>
         <Grid>
-          {videocasts.map((videocast) => {
-            const playable = hasPlayableVideo(videocast)
-            return (
-              <Card key={videocast.id}>
-                {playable ? (
-                  <button
-                    type="button"
-                    className={styles.cardButton}
-                    onClick={() => setActive(videocast)}
-                    aria-label={`Ver ${videocast.title}`}
-                  >
-                    <VideocastCardContent videocast={videocast} />
-                  </button>
-                ) : (
-                  <Link to={`/videocasts/${videocast.id}`} className={styles.link}>
-                    <VideocastCardContent videocast={videocast} />
-                  </Link>
-                )}
-              </Card>
-            )
-          })}
+          {videocasts.map((videocast) => (
+            <Card key={videocast.id}>
+              <button
+                type="button"
+                className={styles.cardButton}
+                onClick={() => setActive(videocast)}
+                aria-label={`Abrir videocast ${videocast.title}`}
+              >
+                <SmartImage
+                  className={styles.media}
+                  src={videocast.imageUrl}
+                  alt={videocast.title}
+                />
+                <div className={styles.body}>
+                  <h3 className={styles.itemTitle}>{videocast.title}</h3>
+                  {videocast.description && (
+                    <p className={`${styles.muted} ${styles.clamp}`}>
+                      {videocast.description}
+                    </p>
+                  )}
+                </div>
+              </button>
+            </Card>
+          ))}
         </Grid>
         <p>
-          <Link to="/videocasts" className={styles.seeAll}>
+          <button
+            type="button"
+            className={styles.seeAll}
+            onClick={() => setListOpen(true)}
+          >
             Ver todos →
-          </Link>
+          </button>
         </p>
       </Section>
 
-      {overlayItem && overlayUrl && (
-        <div
-          className={vidStyles.overlay}
-          role="dialog"
-          aria-modal="true"
-          onClick={() => setActive(null)}
-        >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 'var(--space-3)',
-              width: '100%',
-              maxWidth: 860
-            }}
-          >
-            <div className={vidStyles.overlayCard} onClick={(event) => event.stopPropagation()}>
-              <button
-                type="button"
-                className={vidStyles.close}
-                onClick={() => setActive(null)}
-                aria-label="Cerrar"
-              >
-                ×
-              </button>
-              {overlayEmbed ? (
-                <iframe
-                  className={vidStyles.iframe}
-                  src={overlayEmbed}
-                  title={overlayItem.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              ) : (
-                <video
-                  className={vidStyles.video}
-                  controls
-                  playsInline
-                  autoPlay
-                  src={overlayUrl}
-                />
-              )}
-            </div>
-            <Link
-              to={`/videocasts/${overlayItem.id}`}
-              style={{
-                color: '#fff',
-                fontSize: '0.9rem',
-                fontWeight: 600,
-                textDecoration: 'underline'
-              }}
-            >
-              Ver ficha
-            </Link>
-          </div>
-        </div>
-      )}
+      <ContentModal
+        open={listOpen}
+        title="Videocasts"
+        onClose={() => setListOpen(false)}
+      >
+        <VideocastsList
+          page={listPage}
+          onPageChange={setListPage}
+          onSelect={(item) => {
+            setListOpen(false)
+            setActive(item)
+          }}
+        />
+      </ContentModal>
+
+      {active && <VideocastModal item={active} onClose={() => setActive(null)} />}
     </>
   )
 }

@@ -1,4 +1,5 @@
 export { Card } from './Card'
+export { ContentModal } from './ContentModal'
 export { DigitalClock } from './DigitalClock'
 export { EmptyState } from './EmptyState'
 export { Grid } from './Grid'

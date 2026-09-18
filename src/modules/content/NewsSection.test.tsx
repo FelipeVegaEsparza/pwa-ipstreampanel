@@ -112,8 +112,17 @@ describe('NewsSection modal', () => {
       within(dialog).getByText('Contenido completo de la noticia')
     ).toBeInTheDocument()
     expect(
-      within(dialog).getByRole('link', { name: 'Ver noticia completa →' })
-    ).toHaveAttribute('href', '/noticias/noticia-modal')
+      within(dialog).queryByRole('link', { name: 'Ver noticia completa →' })
+    ).toBeNull()
+  })
+
+  it('abre el listado en un modal con "Ver todas"', () => {
+    renderNews('grid', [newsItem('n1', 'Noticia uno')])
+
+    fireEvent.click(screen.getByRole('button', { name: 'Ver todas →' }))
+
+    const dialog = screen.getByRole('dialog')
+    expect(within(dialog).getByText('Noticias')).toBeInTheDocument()
   })
 
   it('carga y muestra el texto completo desde el API por slug', async () => {

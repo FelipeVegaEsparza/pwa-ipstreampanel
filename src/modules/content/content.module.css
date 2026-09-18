@@ -193,8 +193,13 @@
 .seeAll {
   display: inline-block;
   margin-top: var(--space-4);
+  font: inherit;
   font-weight: 600;
   color: var(--content-accent, #1c1b1a);
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
 }
 
 .seeAll:hover {
