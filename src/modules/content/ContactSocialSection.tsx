@@ -7,11 +7,20 @@ import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
 import type { SectionDataProps } from './format'
 import styles from './ContactSocialSection.module.css'
 
-export function ContactSocialSection({ clientData }: SectionDataProps) {
+interface ContactSocialSectionProps extends SectionDataProps {
+  /** Esquema del fondo donde se renderiza: claro u oscuro. */
+  scheme?: 'light' | 'dark'
+}
+
+export function ContactSocialSection({
+  clientData,
+  scheme = 'light'
+}: ContactSocialSectionProps) {
   const links = getSocialLinks(clientData?.socialNetworks)
   const whatsapp = clientData?.socialNetworks?.whatsapp ?? null
   const website = clientData?.basicData?.websiteUrl ?? null
   const name = clientData?.basicData?.projectName
+  const onLight = scheme === 'light'
 
   return (
     <div className={styles.grid}>
@@ -38,7 +47,7 @@ export function ContactSocialSection({ clientData }: SectionDataProps) {
 
           <div className={styles.apps}>
             <span className={styles.appsLabel}>Instala la app</span>
-            <InstallPrompt variant="dark" />
+            <InstallPrompt variant={onLight ? 'dark' : 'default'} />
           </div>
 
           {website && (
@@ -52,7 +61,10 @@ export function ContactSocialSection({ clientData }: SectionDataProps) {
             </a>
           )}
 
-          <ShareButton title={name} className={styles.shareLink} />
+          <ShareButton
+            title={name}
+            className={onLight ? styles.shareLink : undefined}
+          />
         </div>
       </Section>
     </div>

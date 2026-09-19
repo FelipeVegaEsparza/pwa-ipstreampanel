@@ -295,6 +295,17 @@ describe('ContentSectionStack', () => {
     expect(container.querySelector(`.${contactSocialStyles.grid}`)).toBeNull()
   })
 
+  it('combina contacto y síguenos en blue con los botones de instalar', () => {
+    const { container } = renderStack('blue')
+    const grid = container.querySelector(`.${contactSocialStyles.grid}`)
+
+    expect(grid).not.toBeNull()
+    expect(
+      Array.from(grid!.querySelectorAll('h2')).map((heading) => heading.textContent)
+    ).toEqual(['Contáctanos', 'Síguenos'])
+    expect(grid!.querySelector('img[src="/app-android.png"]')).not.toBeNull()
+  })
+
   it('conserva el orden actual para un template distinto de covered', () => {
     const { container } = renderStack('moderna')
     expect(sectionTitles(container)).toEqual(DEFAULT_ORDER)

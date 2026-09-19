@@ -59,4 +59,15 @@ describe('templates nuevos', () => {
       unmount()
     }
   })
+
+  it('blue no muestra los botones de instalar en el menú', () => {
+    baked.clientId = 'cmtest'
+    renderTemplate('blue')
+    expect(
+      screen.queryByRole('button', { name: 'Instalar en Android' })
+    ).toBeNull()
+    expect(
+      screen.queryByRole('button', { name: 'Instalar en iPhone o iPad' })
+    ).toBeNull()
+  })
 })

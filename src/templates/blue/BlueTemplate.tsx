@@ -2,7 +2,6 @@ import { useEffect, useState, type ComponentType } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { useLiveRadio } from '@/modules/player/useLiveRadio'
 import { PlayerBar } from '@/modules/player/PlayerBar'
-import { InstallPrompt } from '@/modules/pwa/InstallPrompt'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
 import { Weather } from '@/modules/weather/Weather'
 import { SmartImage } from '@/ui'
@@ -127,10 +126,9 @@ export function BlueTemplate({ clientData, isLoading }: TemplateProps) {
                 >
                   <BrandIcon name={link.key} size={15} />
                 </a>
-              ))}
+              )              )}
             </div>
           )}
-          <InstallPrompt />
         </div>
       </header>
 
@@ -204,9 +202,6 @@ export function BlueTemplate({ clientData, isLoading }: TemplateProps) {
                   ))}
                 </div>
               )}
-              <div className={styles.drawerInstall}>
-                <InstallPrompt />
-              </div>
             </div>
           </nav>
         </>

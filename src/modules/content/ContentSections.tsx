@@ -48,6 +48,13 @@ const ANNOUNCER_VARIANTS: Record<string, 'avatar'> = {
   covered: 'avatar'
 }
 
+// Templates que combinan Contacto + Síguenos en una sola sección, con el
+// esquema de fondo en el que se renderiza (claro u oscuro).
+const CONTACT_SOCIAL_SCHEMES: Record<string, 'light' | 'dark'> = {
+  covered: 'light',
+  blue: 'dark'
+}
+
 function announcerVariantFor(
   template: string | null | undefined
 ): 'avatar' | undefined {
@@ -115,8 +122,19 @@ function sectionFor(
       )
     case 'sponsors':
       return <SponsorsSection clientData={clientData} isLoading={isLoading} />
-    case 'social':
+    case 'social': {
+      const scheme = template ? CONTACT_SOCIAL_SCHEMES[template] : undefined
+      if (scheme) {
+        return (
+          <ContactSocialSection
+            clientData={clientData}
+            isLoading={isLoading}
+            scheme={scheme}
+          />
+        )
+      }
       return <SocialNetworksSection clientData={clientData} isLoading={isLoading} />
+    }
   }
 }
 
@@ -131,11 +149,7 @@ export function ContentSectionStack({ clientData, isLoading }: SectionDataProps)
         </div>
       ))}
       {template !== 'minimalista' &&
-        (template === 'covered' ? (
-          <ContactSocialSection clientData={clientData} isLoading={isLoading} />
-        ) : (
-          <ContactSection />
-        ))}
+        !(template && CONTACT_SOCIAL_SCHEMES[template]) && <ContactSection />}
     </>
   )
 }
