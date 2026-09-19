@@ -178,9 +178,9 @@ const PLAYLIST_ORDER: SectionId[] = [
 // conserva el orden habitual.
 const BLUE_ORDER: SectionId[] = [
   'news',
+  'weather',
   'polls',
   'tv',
-  'weather',
   'promotions',
   'programs',
   'galleries',
