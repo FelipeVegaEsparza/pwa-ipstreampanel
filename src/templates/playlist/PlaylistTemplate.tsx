@@ -5,7 +5,6 @@ import { NextTrack } from '@/modules/player/NextTrack'
 import { TrackProgress } from '@/modules/player/TrackProgress'
 import { InstallPrompt } from '@/modules/pwa/InstallPrompt'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
-import { Weather } from '@/modules/weather/Weather'
 import { SmartImage } from '@/ui'
 import {
   getSectionOrder,
@@ -143,16 +142,13 @@ export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
               ))}
             </div>
           )}
+
+          <div className={styles.deckInstall}>
+            <InstallPrompt />
+          </div>
         </aside>
 
         <div className={styles.column}>
-          <header className={styles.topbar}>
-            <div className={styles.topActions}>
-              <Weather location={live.basic?.location} />
-              <InstallPrompt />
-            </div>
-          </header>
-
           <main className={styles.feed}>
             <Outlet />
           </main>

@@ -55,6 +55,10 @@ const CONTACT_SOCIAL_SCHEMES: Record<string, 'light' | 'dark'> = {
   blue: 'dark'
 }
 
+// Templates que muestran el clima actual dentro de la sección de pronóstico
+// (no lo tienen en su header).
+const CURRENT_WEATHER_TEMPLATES = new Set(['blue', 'playlist'])
+
 function announcerVariantFor(
   template: string | null | undefined
 ): 'avatar' | undefined {
@@ -87,7 +91,7 @@ function sectionFor(
         <WeatherForecastSection
           clientData={clientData}
           isLoading={isLoading}
-          showCurrent={template === 'blue'}
+          showCurrent={Boolean(template && CURRENT_WEATHER_TEMPLATES.has(template))}
         />
       )
     case 'promotions':
