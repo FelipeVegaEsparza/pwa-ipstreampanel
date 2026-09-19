@@ -385,6 +385,56 @@ describe('ContentSectionStack', () => {
     ).toBeInTheDocument()
   })
 
+  it('en blue, la sección de clima incluye la tarjeta del clima actual', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockImplementation(() =>
+        Promise.resolve(
+          new Response(
+            JSON.stringify({
+              current_weather: { temperature: 21.4, weathercode: 0 },
+              daily: {
+                time: ['2026-01-01'],
+                weather_code: [0],
+                temperature_2m_max: [24],
+                temperature_2m_min: [12]
+              }
+            }),
+            { status: 200, headers: { 'Content-Type': 'application/json' } }
+          )
+        )
+      )
+    )
+
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } }
+    })
+    const data = fullData('blue')
+    if (data.basicData) {
+      data.basicData.location = {
+        city: 'Valparaíso',
+        country: 'CL',
+        latitude: -33.05,
+        longitude: -71.6
+      }
+    }
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <TenantProvider>
+          <MemoryRouter>
+            <ContentSectionStack clientData={data} isLoading={false} />
+          </MemoryRouter>
+        </TenantProvider>
+      </QueryClientProvider>
+    )
+
+    expect(
+      await screen.findByText('Proyección del clima en Valparaíso')
+    ).toBeInTheDocument()
+    expect(await screen.findByText('21°C')).toBeInTheDocument()
+  })
+
   it('no muestra la sección de pronóstico si hay coordenadas pero no ciudad', () => {
     vi.stubGlobal('fetch', vi.fn().mockReturnValue(new Promise(() => {})))
 

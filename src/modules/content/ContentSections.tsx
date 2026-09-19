@@ -83,7 +83,13 @@ function sectionFor(
     case 'tv':
       return <TvSection clientData={clientData} isLoading={isLoading} />
     case 'weather':
-      return <WeatherForecastSection clientData={clientData} isLoading={isLoading} />
+      return (
+        <WeatherForecastSection
+          clientData={clientData}
+          isLoading={isLoading}
+          showCurrent={template === 'blue'}
+        />
+      )
     case 'promotions':
       return <PromotionsSection clientData={clientData} isLoading={isLoading} />
     case 'news':

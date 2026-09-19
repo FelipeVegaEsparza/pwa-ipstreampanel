@@ -3,7 +3,6 @@ import { Outlet, useLocation } from 'react-router-dom'
 import { useLiveRadio } from '@/modules/player/useLiveRadio'
 import { PlayerBar } from '@/modules/player/PlayerBar'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
-import { Weather } from '@/modules/weather/Weather'
 import { SmartImage } from '@/ui'
 import {
   FaBullhorn,
@@ -111,7 +110,6 @@ export function BlueTemplate({ clientData, isLoading }: TemplateProps) {
               ☰
             </button>
           )}
-          <Weather location={live.basic?.location} />
           {socialLinks.length > 0 && (
             <div className={styles.socials}>
               {socialLinks.map((link) => (
