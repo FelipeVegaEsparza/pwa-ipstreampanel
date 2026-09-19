@@ -91,7 +91,17 @@
 }
 
 .galleryCard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  font: inherit;
   cursor: pointer;
+  flex: 1;
 }
 
 .galleryCover {
