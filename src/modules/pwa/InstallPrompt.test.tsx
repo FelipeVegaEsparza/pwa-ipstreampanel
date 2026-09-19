@@ -41,6 +41,11 @@ describe('InstallPrompt', () => {
     expect(container.querySelector(`.${styles.dark}`)).not.toBeNull()
   })
 
+  it('aplica el tamaño compacto con size compact', () => {
+    const { container } = render(<InstallPrompt size="compact" />)
+    expect(container.querySelector(`.${styles.compact}`)).not.toBeNull()
+  })
+
   it('el botón Android dispara el prompt cuando está disponible', async () => {
     const promptMock = vi.fn().mockResolvedValue(undefined)
     dispatchBeforeInstall(promptMock, 'accepted')

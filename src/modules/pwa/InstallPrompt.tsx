@@ -53,9 +53,14 @@ export function resetInstallPromptForTests(): void {
 interface InstallPromptProps {
   /** `dark` pinta los iconos negros para fondos claros. */
   variant?: 'default' | 'dark'
+  /** `compact` reduce los iconos y permite que la fila haga wrap (menús laterales). */
+  size?: 'default' | 'compact'
 }
 
-export function InstallPrompt({ variant = 'default' }: InstallPromptProps) {
+export function InstallPrompt({
+  variant = 'default',
+  size = 'default'
+}: InstallPromptProps) {
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(
     deferredInstallPrompt
   )
@@ -123,7 +128,11 @@ export function InstallPrompt({ variant = 'default' }: InstallPromptProps) {
 
   return (
     <>
-      <div className={`${styles.row} ${variant === 'dark' ? styles.dark : ''}`}>
+      <div
+        className={`${styles.row} ${variant === 'dark' ? styles.dark : ''} ${
+          size === 'compact' ? styles.compact : ''
+        }`}
+      >
         <button
           type="button"
           className={styles.button}

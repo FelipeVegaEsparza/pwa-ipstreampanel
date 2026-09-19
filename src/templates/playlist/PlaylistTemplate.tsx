@@ -144,7 +144,7 @@ export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
           )}
 
           <div className={styles.deckInstall}>
-            <InstallPrompt />
+            <InstallPrompt size="compact" />
           </div>
         </aside>
 
@@ -222,7 +222,7 @@ export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
                 </div>
               )}
               <div className={styles.drawerInstall}>
-                <InstallPrompt />
+                <InstallPrompt size="compact" />
               </div>
             </div>
           </nav>

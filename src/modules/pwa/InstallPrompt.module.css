@@ -21,3 +21,19 @@
 .dark .image {
   filter: brightness(0);
 }
+
+/* Compacto para menús laterales: iconos más chicos y sin comprimirse si no
+   caben en una línea. */
+.compact {
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
+}
+
+.compact .button {
+  flex-shrink: 0;
+}
+
+.compact .image {
+  height: 32px;
+}
