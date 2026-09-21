@@ -430,7 +430,7 @@
   }
 
   .heroMedia {
-    max-width: 120px;
+    max-width: 200px;
     order: -1;
     margin: 0 auto;
     width: 100%;
@@ -439,17 +439,11 @@
 
 @media (max-width: 640px) {
   .headerInner {
-    flex-wrap: wrap;
-    height: auto;
-    min-height: 70px;
     justify-content: center;
-    row-gap: var(--space-3);
-    padding-top: var(--space-3);
-    padding-bottom: var(--space-3);
   }
 
-  .actions img {
-    height: 34px;
+  .actions {
+    display: none;
   }
 }
 
