@@ -437,6 +437,22 @@
   }
 }
 
+@media (max-width: 640px) {
+  .headerInner {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 70px;
+    justify-content: center;
+    row-gap: var(--space-3);
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-3);
+  }
+
+  .actions img {
+    height: 34px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tickerTrack {
     animation: none;

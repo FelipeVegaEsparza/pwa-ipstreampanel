@@ -285,3 +285,16 @@
 .galleryCard:hover .galleryCover {
   transform: scale(1.045);
 }
+
+/* En pantallas pequeñas, la descripción del programa pasa a su propia línea
+   para no quedar aplastada entre la hora y el nombre. */
+@media (max-width: 640px) {
+  .programRow {
+    flex-wrap: wrap;
+    row-gap: var(--space-2);
+  }
+
+  .programDesc {
+    flex-basis: 100%;
+  }
+}
