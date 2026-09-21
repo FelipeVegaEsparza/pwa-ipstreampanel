@@ -159,7 +159,9 @@ export function ContentSectionStack({ clientData, isLoading }: SectionDataProps)
         </div>
       ))}
       {template !== 'minimalista' &&
-        !(template && CONTACT_SOCIAL_SCHEMES[template]) && <ContactSection />}
+        !(template && CONTACT_SOCIAL_SCHEMES[template]) && (
+          <ContactSection clientData={clientData} withBrand={template === 'petroleo'} />
+        )}
     </>
   )
 }

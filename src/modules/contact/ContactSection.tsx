@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { sendContactMessage, type ContactSubmitResult } from '@/core/api'
 import { useTenant } from '@/core/config/TenantContext'
-import { Section } from '@/ui'
+import { SocialLinks } from '@/modules/social/SocialNetworksSection'
+import { getSocialLinks } from '@/modules/social/brand'
+import { Section, SmartImage } from '@/ui'
+import type { SectionDataProps } from '@/modules/content/format'
 import styles from './ContactSection.module.css'
 
 const SUCCESS_TEXT = '¡Gracias! Tu mensaje fue enviado.'
@@ -141,10 +144,37 @@ export function ContactForm() {
   )
 }
 
-export function ContactSection() {
+interface ContactSectionProps extends Partial<SectionDataProps> {
+  /** Muestra una columna con logo, descripción y redes sociales de la radio. */
+  withBrand?: boolean
+}
+
+export function ContactSection({ clientData, withBrand = false }: ContactSectionProps) {
+  if (!withBrand) {
+    return (
+      <Section title="Contáctanos" visible>
+        <ContactForm />
+      </Section>
+    )
+  }
+
+  const links = getSocialLinks(clientData?.socialNetworks)
+  const logo = clientData?.basicData?.logoUrl
+  const name = clientData?.basicData?.projectName
+  const description = clientData?.basicData?.projectDescription
+
   return (
     <Section title="Contáctanos" visible>
-      <ContactForm />
+      <div className={styles.layout}>
+        <aside className={styles.brandCol}>
+          <SmartImage className={styles.brandLogo} src={logo} alt={name ?? ''} />
+          {description && <p className={styles.brandDesc}>{description}</p>}
+          {links.length > 0 && <SocialLinks links={links} />}
+        </aside>
+        <div className={styles.formCol}>
+          <ContactForm />
+        </div>
+      </div>
     </Section>
   )
 }
