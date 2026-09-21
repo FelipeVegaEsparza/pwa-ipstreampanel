@@ -1,7 +1,7 @@
 .bar {
   position: fixed;
-  left: 0;
-  right: 0;
+  left: var(--bar-inset-x, 0);
+  right: var(--bar-inset-x, 0);
   bottom: var(--player-inset, 0);
   z-index: 40;
   max-width: var(--page-max-width, none);
