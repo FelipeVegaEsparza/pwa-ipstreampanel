@@ -228,14 +228,10 @@
   grid-template-columns: minmax(0, 1fr) minmax(180px, 280px);
   gap: clamp(var(--space-4), 4vw, var(--space-6));
   align-items: center;
-  padding: clamp(var(--space-5), 4vw, var(--space-6));
-  border: 1px solid var(--nx-border);
-  border-top: 5px solid var(--nx-primary);
-  border-radius: 14px;
-  background:
-    radial-gradient(700px 300px at 100% 0%, rgba(124, 162, 0, 0.08), transparent 60%),
-    var(--nx-surface);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
 }
 
 .heroInfo {
