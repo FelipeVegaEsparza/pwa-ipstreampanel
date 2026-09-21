@@ -7,6 +7,7 @@ import { ModernoTemplate } from './moderno/ModernoTemplate'
 import { TradicionalTemplate } from './tradicional/TradicionalTemplate'
 import { AppTemplate } from './app/AppTemplate'
 import { PetroleoTemplate } from './petroleo/PetroleoTemplate'
+import { PetroleoBlueTemplate } from './petroleoblue/PetroleoBlueTemplate'
 import { PlaylistTemplate } from './playlist/PlaylistTemplate'
 import { CoveredTemplate } from './covered/CoveredTemplate'
 
@@ -25,6 +26,7 @@ const templates: Record<string, ComponentType<TemplateProps>> = {
   tradicional: TradicionalTemplate,
   app: AppTemplate,
   petroleo: PetroleoTemplate,
+  petroleoblue: PetroleoBlueTemplate,
   playlist: PlaylistTemplate,
   covered: CoveredTemplate
 }

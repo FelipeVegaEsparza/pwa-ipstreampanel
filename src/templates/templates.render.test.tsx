@@ -24,6 +24,7 @@ const NEW_TEMPLATES: Array<{ id: string; label?: string }> = [
   { id: 'tradicional', label: 'Tradicional' },
   { id: 'app', label: 'App' },
   { id: 'petroleo' },
+  { id: 'petroleoblue' },
   { id: 'playlist', label: 'Playlist' }
 ]
 

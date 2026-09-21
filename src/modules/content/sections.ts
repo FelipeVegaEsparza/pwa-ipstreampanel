@@ -204,7 +204,7 @@ export function getSectionOrder(template: string | null | undefined): SectionId[
   }
   if (template === 'blue') return BLUE_ORDER
   if (template === 'moderno') return MODERNO_ORDER
-  if (template === 'petroleo') return PETROLEO_ORDER
+  if (template === 'petroleo' || template === 'petroleoblue') return PETROLEO_ORDER
   if (template === 'playlist') return PLAYLIST_ORDER
   return DEFAULT_ORDER
 }

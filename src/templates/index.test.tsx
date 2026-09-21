@@ -7,6 +7,7 @@ import { ModernoTemplate } from './moderno/ModernoTemplate'
 import { TradicionalTemplate } from './tradicional/TradicionalTemplate'
 import { AppTemplate } from './app/AppTemplate'
 import { PetroleoTemplate } from './petroleo/PetroleoTemplate'
+import { PetroleoBlueTemplate } from './petroleoblue/PetroleoBlueTemplate'
 import { PlaylistTemplate } from './playlist/PlaylistTemplate'
 import { CoveredTemplate } from './covered/CoveredTemplate'
 
@@ -19,6 +20,7 @@ describe('getTemplate', () => {
     expect(getTemplate('tradicional')).toBe(TradicionalTemplate)
     expect(getTemplate('app')).toBe(AppTemplate)
     expect(getTemplate('petroleo')).toBe(PetroleoTemplate)
+    expect(getTemplate('petroleoblue')).toBe(PetroleoBlueTemplate)
     expect(getTemplate('playlist')).toBe(PlaylistTemplate)
     expect(getTemplate('covered')).toBe(CoveredTemplate)
   })

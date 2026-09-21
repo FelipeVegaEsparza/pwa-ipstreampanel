@@ -1,12 +1,12 @@
 # templates Specification
 
 ## Purpose
-Registro ampliado de templates del sistema `templates`, agregando `blue`, `moderno`, `tradicional`, `app`, `petroleo`, `playlist` y `covered` como diseños seleccionables desde el panel (`selectedTemplate`), con fallback al default.
+Registro ampliado de templates del sistema `templates`, agregando `blue`, `moderno`, `tradicional`, `app`, `petroleo`, `petroleoblue`, `playlist` y `covered` como diseños seleccionables desde el panel (`selectedTemplate`), con fallback al default.
 
 ## Requirements
 
 ### Requirement: Templates adicionales seleccionables
-El sistema SHALL renderizar los templates `blue`, `moderno`, `tradicional`, `app`, `petroleo`, `playlist` y `covered` cuando `selectedTemplate` coincida con su id, manteniendo el fallback al default (`minimalista`) para ids desconocidos o `null`.
+El sistema SHALL renderizar los templates `blue`, `moderno`, `tradicional`, `app`, `petroleo`, `petroleoblue`, `playlist` y `covered` cuando `selectedTemplate` coincida con su id, manteniendo el fallback al default (`minimalista`) para ids desconocidos o `null`.
 
 #### Scenario: Template registrado
 - **WHEN** el panel entrega `selectedTemplate: "petroleo"` y ese template está registrado

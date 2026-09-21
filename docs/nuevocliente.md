@@ -89,7 +89,7 @@ El **diseño se elige desde el panel**, no aquí. En el panel de IPStream, en el
 cliente, configura el campo `selectedTemplate` con uno de:
 
 ```
-minimalista | moderna | blue | moderno | tradicional | app | petroleo | playlist | covered
+minimalista | moderna | blue | moderno | tradicional | app | petroleo | petroleoblue | playlist | covered
 ```
 
 Al recargar el sitio cambia el diseño **sin redesplegar**. Si el id no existe,

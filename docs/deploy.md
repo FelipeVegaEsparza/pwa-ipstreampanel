@@ -22,7 +22,7 @@ correspondiente. Al cambiar el template en el panel y recargar la app, el diseñ
 cambia **sin redesplegar**.
 
 Templates disponibles en esta app: `minimalista`, `moderna`, `blue`, `moderno`,
-`tradicional`, `app`, `petroleo`, `playlist`, `covered`. Cualquier id no
+`tradicional`, `app`, `petroleo`, `petroleoblue`, `playlist`, `covered`. Cualquier id no
 registrado usa `minimalista` por defecto (sin romper).
 
 ## Iconos y favicon por cliente

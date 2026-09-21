@@ -12,7 +12,16 @@ import { SmartImage } from '@/ui'
 import type { TemplateProps } from '../index'
 import styles from './PetroleoTemplate.module.css'
 
-export function PetroleoTemplate({ clientData, isLoading }: TemplateProps) {
+interface PetroleoTemplateProps extends TemplateProps {
+  /** `blue` usa la paleta azul; por defecto, verde oliva. */
+  variant?: 'green' | 'blue'
+}
+
+export function PetroleoTemplate({
+  clientData,
+  isLoading,
+  variant = 'green'
+}: PetroleoTemplateProps) {
   const live = useLiveRadio(clientData)
   const socialLinks = getSocialLinks(clientData?.socialNetworks)
   const displayName = isLoading ? 'Cargando…' : live.name
@@ -34,7 +43,7 @@ export function PetroleoTemplate({ clientData, isLoading }: TemplateProps) {
     live.status === 'live' ? 'EN VIVO' : live.status === 'autodj' ? 'AUTODJ' : 'FUERA DEL AIRE'
 
   return (
-    <div className={styles.page}>
+    <div className={`${styles.page} ${variant === 'blue' ? styles.blue : ''}`}>
       <div className={styles.headerWrap}>
         <div className={styles.topStrip}>
           <div className={styles.topStripInner}>
