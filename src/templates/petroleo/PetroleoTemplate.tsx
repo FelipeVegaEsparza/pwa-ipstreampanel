@@ -78,37 +78,7 @@ export function PetroleoTemplate({ clientData, isLoading }: TemplateProps) {
               <span className={styles.badge}>Petróleo</span>
             </a>
 
-            <nav className={styles.nav} aria-label="Secciones">
-              <a className={styles.navLink} href="#inicio">
-                Inicio
-              </a>
-              <a className={styles.navLink} href="#vivo">
-                En vivo
-              </a>
-              <a className={styles.navLink} href="#contenido">
-                Programación
-              </a>
-            </nav>
-
             <div className={styles.actions}>
-              <div className={styles.showBanner}>
-                <div className={styles.showInfo}>
-                  <span className={styles.showTitle}>{currentTitle}</span>
-                  <span className={styles.showTime}>{showStatus}</span>
-                </div>
-                <div className={`${styles.showPic} ${onAir ? styles.showPicOn : ''}`}>
-                  <SmartImage
-                    src={live.trackCover}
-                    fallbacks={live.fallbacks}
-                    alt=""
-                  />
-                </div>
-              </div>
-
-              <span className={`${styles.liveChip} ${onAir ? styles.liveChipOn : ''}`}>
-                <span className={styles.liveDot} />
-                EN VIVO
-              </span>
               <InstallPrompt />
             </div>
           </div>
