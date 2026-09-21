@@ -154,44 +154,6 @@ export function PetroleoTemplate({ clientData, isLoading }: TemplateProps) {
         </div>
       </main>
 
-      <footer className={styles.footer}>
-        <div className={styles.footerGrid}>
-          <div className={styles.footerCol}>
-            <span className={styles.footerBrand}>{displayName}</span>
-            <p className={styles.footerDesc}>{claim}</p>
-          </div>
-          <div className={styles.footerCol}>
-            <span className={styles.footerHeading}>Escúchanos</span>
-            {city ? <span className={styles.footerLine}>{city}</span> : null}
-            <span className={styles.footerLine}>También por internet, todo Chile</span>
-          </div>
-          <div className={styles.footerCol}>
-            <span className={styles.footerHeading}>Síguenos</span>
-            {socialLinks.length > 0 ? (
-              <div className={styles.footerSocials}>
-                {socialLinks.map((link) => (
-                  <a
-                    key={link.key}
-                    className={styles.socialLink}
-                    href={link.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={link.label}
-                    title={link.label}
-                  >
-                    <BrandIcon name={link.key} size={15} />
-                  </a>
-                ))}
-              </div>
-            ) : (
-              <span className={styles.footerLine}>Redes sociales próximamente</span>
-            )}
-          </div>
-        </div>
-        <div className={styles.footerBottom}>
-          © {displayName} · Todos los derechos reservados · IPStream Panel
-        </div>
-      </footer>
       <PlayerBar fallbackCovers={[live.basic?.coverUrl, live.basic?.logoUrl]} />
     </div>
   )
