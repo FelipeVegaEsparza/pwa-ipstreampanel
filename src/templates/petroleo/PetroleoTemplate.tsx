@@ -6,6 +6,7 @@ import { PlayerBar } from '@/modules/player/PlayerBar'
 import { TrackProgress } from '@/modules/player/TrackProgress'
 import { InstallPrompt } from '@/modules/pwa/InstallPrompt'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
+import { WeatherForecastSection } from '@/modules/weather/WeatherForecastSection'
 import { SmartImage } from '@/ui'
 import type { TemplateProps } from '../index'
 import styles from './PetroleoTemplate.module.css'
@@ -144,10 +145,8 @@ export function PetroleoTemplate({ clientData, isLoading }: TemplateProps) {
           </div>
         </section>
 
-        <div className={styles.claim}>
-          <span className={styles.claimBar} />
-          <span className={styles.claimText}>{claim}</span>
-          <span className={styles.claimBar} />
+        <div className={styles.weatherBand}>
+          <WeatherForecastSection clientData={clientData} isLoading={isLoading} />
         </div>
 
         <div className={styles.content} id="contenido">

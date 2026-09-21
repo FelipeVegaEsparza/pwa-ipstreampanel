@@ -139,6 +139,7 @@ const MODERNO_ORDER: SectionId[] = [
 ]
 
 // Estilo cultural/editorial (radio13c.cl): parrilla protagonista.
+// El clima no se lista aquí: el template lo renderiza fijo bajo el hero.
 const PETROLEO_ORDER: SectionId[] = [
   'programs',
   'news',
@@ -149,7 +150,6 @@ const PETROLEO_ORDER: SectionId[] = [
   'promotions',
   'polls',
   'tv',
-  'weather',
   'galleries',
   'announcers',
   'sponsors',

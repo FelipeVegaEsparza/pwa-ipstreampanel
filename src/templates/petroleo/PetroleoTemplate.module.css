@@ -381,31 +381,13 @@
   padding-top: var(--space-3);
 }
 
-/* ---------- Cinta de presentación ---------- */
-.claim {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-4);
-  padding: var(--space-4) var(--space-5);
-  background: var(--nx-surface-2);
-  border-top: 1px solid var(--nx-border);
-  border-bottom: 1px solid var(--nx-border);
-}
-
-.claimBar {
-  flex: none;
-  width: 26px;
-  height: 3px;
-  border-radius: 2px;
-  background: var(--nx-primary);
-}
-
-.claimText {
-  max-width: 60ch;
-  color: var(--nx-muted);
-  font-size: 0.95rem;
-  text-align: center;
+/* ---------- Proyección del clima ---------- */
+.weatherBand {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4) 0;
+  scroll-margin-top: 150px;
 }
 
 /* ---------- Contenido del dashboard ---------- */
