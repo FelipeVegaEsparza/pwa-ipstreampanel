@@ -4,6 +4,8 @@
   right: 0;
   bottom: 0;
   z-index: 40;
+  max-width: var(--page-max-width, none);
+  margin: 0 auto;
   background: var(--color-surface);
   border-top: 1px solid var(--color-border);
 }

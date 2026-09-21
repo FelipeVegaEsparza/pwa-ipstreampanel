@@ -72,9 +72,13 @@
   position: sticky;
   top: 0;
   z-index: 50;
+  background: var(--nx-bg);
 }
 
 .topStrip {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
   background: linear-gradient(to bottom left, var(--nx-primary-dark), var(--nx-primary));
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
@@ -176,6 +180,9 @@
 }
 
 .header {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
   background: var(--nx-surface);
   border-bottom: 6px solid var(--nx-primary);
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
