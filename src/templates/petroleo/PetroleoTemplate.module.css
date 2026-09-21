@@ -225,7 +225,7 @@
 
 .heroInner {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(180px, 280px);
+  grid-template-columns: minmax(0, 1fr) minmax(110px, 140px);
   gap: clamp(var(--space-4), 4vw, var(--space-6));
   align-items: center;
   padding: 0;
@@ -500,7 +500,7 @@
   }
 
   .heroMedia {
-    max-width: 240px;
+    max-width: 120px;
     order: -1;
     margin: 0 auto;
     width: 100%;
