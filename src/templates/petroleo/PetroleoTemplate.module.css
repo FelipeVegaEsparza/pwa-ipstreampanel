@@ -396,6 +396,11 @@
   padding-top: var(--space-3);
 }
 
+/* ---------- Botones de instalar (solo móvil, bajo el hero) ---------- */
+.installRow {
+  display: none;
+}
+
 /* ---------- Proyección del clima ---------- */
 .weatherBand {
   width: 100%;
@@ -448,6 +453,16 @@
 
   .actions {
     display: none;
+  }
+
+  .installRow {
+    display: flex;
+    justify-content: center;
+    padding: 0 var(--page-pad-x);
+  }
+
+  .installRow img {
+    height: 34px;
   }
 }
 

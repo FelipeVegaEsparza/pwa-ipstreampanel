@@ -3,7 +3,6 @@ import { sendContactMessage, type ContactSubmitResult } from '@/core/api'
 import { useTenant } from '@/core/config/TenantContext'
 import { SocialLinks } from '@/modules/social/SocialNetworksSection'
 import { getSocialLinks } from '@/modules/social/brand'
-import { InstallPrompt } from '@/modules/pwa/InstallPrompt'
 import { Section, SmartImage } from '@/ui'
 import type { SectionDataProps } from '@/modules/content/format'
 import styles from './ContactSection.module.css'
@@ -171,10 +170,6 @@ export function ContactSection({ clientData, withBrand = false }: ContactSection
           <SmartImage className={styles.brandLogo} src={logo} alt={name ?? ''} />
           {description && <p className={styles.brandDesc}>{description}</p>}
           {links.length > 0 && <SocialLinks links={links} />}
-          <div className={styles.installMobile}>
-            <span className={styles.installLabel}>Instala la app</span>
-            <InstallPrompt />
-          </div>
         </aside>
         <div className={styles.formCol}>
           <ContactForm />

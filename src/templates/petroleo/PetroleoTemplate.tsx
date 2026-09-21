@@ -145,6 +145,10 @@ export function PetroleoTemplate({ clientData, isLoading }: TemplateProps) {
           </div>
         </section>
 
+        <div className={styles.installRow}>
+          <InstallPrompt />
+        </div>
+
         <div className={styles.weatherBand}>
           <WeatherForecastSection clientData={clientData} isLoading={isLoading} />
         </div>
