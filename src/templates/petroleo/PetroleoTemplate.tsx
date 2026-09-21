@@ -4,6 +4,7 @@ import { useLiveRadio } from '@/modules/player/useLiveRadio'
 import { NextTrack } from '@/modules/player/NextTrack'
 import { PlayerBar } from '@/modules/player/PlayerBar'
 import { TrackProgress } from '@/modules/player/TrackProgress'
+import { VuMeter } from '@/modules/player/VuMeter'
 import { InstallPrompt } from '@/modules/pwa/InstallPrompt'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
 import { WeatherForecastSection } from '@/modules/weather/WeatherForecastSection'
@@ -86,6 +87,7 @@ export function PetroleoTemplate({ clientData, isLoading }: TemplateProps) {
 
       <main className={styles.main}>
         <section className={styles.hero} id="vivo">
+          <VuMeter className={styles.vuLayer} />
           <div className={styles.heroInner}>
             <div className={styles.heroMedia}>
               <SmartImage

@@ -231,6 +231,7 @@
 }
 
 .hero {
+  position: relative;
   width: 100%;
   max-width: var(--page-max-width);
   margin: 0 auto;
@@ -238,7 +239,24 @@
   scroll-margin-top: 150px;
 }
 
+.vuLayer {
+  position: absolute;
+  right: var(--space-4);
+  bottom: var(--space-2);
+  left: var(--space-4);
+  z-index: 0;
+  height: clamp(90px, 18vh, 160px);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.vuLayer span {
+  background: linear-gradient(180deg, var(--nx-primary-light), rgba(168, 204, 51, 0.2));
+}
+
 .heroInner {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: 3fr 7fr;
   gap: clamp(var(--space-4), 4vw, var(--space-6));
