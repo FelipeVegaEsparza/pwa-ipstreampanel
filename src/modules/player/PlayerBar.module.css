@@ -10,9 +10,9 @@
 
 .inner {
   width: 100%;
-  max-width: 1320px;
+  max-width: var(--page-max-width, 1320px);
   margin: 0 auto;
-  padding: 0 clamp(var(--space-4), 4vw, var(--space-6));
+  padding: 0 var(--page-pad-x, clamp(var(--space-4), 4vw, var(--space-6)));
 }
 
 .content {

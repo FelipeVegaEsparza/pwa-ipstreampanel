@@ -13,6 +13,9 @@
   --nx-border: rgba(255, 255, 255, 0.1);
   --nx-header: #0f1112;
 
+  --page-max-width: 1140px;
+  --page-pad-x: var(--space-4);
+
   --grid-min: 232px;
   --grid-gap: 16px;
   --card-radius: 8px;
@@ -82,7 +85,7 @@
   justify-content: space-between;
   gap: var(--space-4);
   width: 100%;
-  max-width: 1140px;
+  max-width: var(--page-max-width);
   margin: 0 auto;
   padding: 0 var(--space-4);
 }
@@ -184,7 +187,7 @@
   justify-content: space-between;
   gap: var(--space-4);
   width: 100%;
-  max-width: 1140px;
+  max-width: var(--page-max-width);
   height: 76px;
   margin: 0 auto;
   padding: 0 var(--space-4);
@@ -217,7 +220,7 @@
 
 .hero {
   width: 100%;
-  max-width: 1140px;
+  max-width: var(--page-max-width);
   margin: 0 auto;
   padding: var(--space-6) var(--space-4);
   scroll-margin-top: 150px;
@@ -384,7 +387,7 @@
 /* ---------- Proyección del clima ---------- */
 .weatherBand {
   width: 100%;
-  max-width: 1120px;
+  max-width: var(--page-max-width);
   margin: 0 auto;
   padding: var(--space-6) var(--space-4) 0;
   scroll-margin-top: 150px;
@@ -393,7 +396,7 @@
 /* ---------- Contenido del dashboard ---------- */
 .content {
   width: 100%;
-  max-width: 1120px;
+  max-width: var(--page-max-width);
   margin: 0 auto;
   padding: var(--space-6) var(--space-4);
   scroll-margin-top: 150px;
