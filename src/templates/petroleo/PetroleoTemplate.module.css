@@ -203,29 +203,6 @@
   object-fit: contain;
 }
 
-.brandName {
-  font-family: 'Syne', 'Montserrat', sans-serif;
-  font-size: 1.28rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--nx-text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.badge {
-  flex: none;
-  padding: 3px 8px;
-  border-radius: 4px;
-  background: var(--nx-primary);
-  color: #ffffff;
-  font-size: 0.6rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
 .actions {
   display: flex;
   align-items: center;
@@ -248,8 +225,8 @@
 
 .heroInner {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 400px);
-  gap: clamp(var(--space-5), 5vw, var(--space-6));
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 280px);
+  gap: clamp(var(--space-4), 4vw, var(--space-6));
   align-items: center;
   padding: clamp(var(--space-5), 4vw, var(--space-6));
   border: 1px solid var(--nx-border);
@@ -281,16 +258,16 @@
 .headline {
   margin: 0;
   font-family: 'Syne', 'Montserrat', sans-serif;
-  font-size: clamp(2rem, 5vw, 3.1rem);
+  font-size: clamp(1.55rem, 3.4vw, 2.45rem);
   font-weight: 800;
-  line-height: 1.02;
+  line-height: 1.04;
   letter-spacing: -0.03em;
   color: var(--nx-text);
 }
 
 .artist {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 1.02rem;
   color: var(--nx-muted);
 }
 
@@ -321,13 +298,13 @@
 }
 
 .play {
-  width: 60px;
-  height: 60px;
+  width: 54px;
+  height: 54px;
   border: none;
   border-radius: 50%;
   background: var(--nx-primary);
   color: #ffffff;
-  font-size: 1.35rem;
+  font-size: 1.2rem;
   cursor: pointer;
   box-shadow: 0 14px 30px rgba(124, 162, 0, 0.35);
   transition: transform 150ms ease, background 150ms ease;
@@ -527,7 +504,7 @@
   }
 
   .heroMedia {
-    max-width: 320px;
+    max-width: 240px;
     order: -1;
     margin: 0 auto;
     width: 100%;

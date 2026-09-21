@@ -73,9 +73,7 @@ export function PetroleoTemplate({ clientData, isLoading }: TemplateProps) {
         <header className={styles.header} id="inicio">
           <div className={styles.headerInner}>
             <a href="#inicio" className={styles.brandGroup}>
-              <SmartImage className={styles.logo} src={live.basic?.logoUrl} alt="" />
-              <span className={styles.brandName}>{displayName}</span>
-              <span className={styles.badge}>Petróleo</span>
+              <SmartImage className={styles.logo} src={live.basic?.logoUrl} alt={displayName} />
             </a>
 
             <div className={styles.actions}>

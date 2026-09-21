@@ -18,12 +18,12 @@ vi.mock('@/core/config/tenant', async (importOriginal) => {
   }
 })
 
-const NEW_TEMPLATES: Array<{ id: string; label: string }> = [
+const NEW_TEMPLATES: Array<{ id: string; label?: string }> = [
   { id: 'blue', label: 'Blue' },
   { id: 'moderno', label: 'Moderno' },
   { id: 'tradicional', label: 'Tradicional' },
   { id: 'app', label: 'App' },
-  { id: 'petroleo', label: 'Petróleo' },
+  { id: 'petroleo' },
   { id: 'playlist', label: 'Playlist' }
 ]
 
@@ -54,7 +54,9 @@ describe('templates nuevos', () => {
     baked.clientId = 'cmtest'
     for (const template of NEW_TEMPLATES) {
       const { unmount } = renderTemplate(template.id)
-      expect(screen.getByText(template.label)).toBeInTheDocument()
+      if (template.label) {
+        expect(screen.getByText(template.label)).toBeInTheDocument()
+      }
       expect((await screen.findAllByText('Radio Test')).length).toBeGreaterThan(0)
       unmount()
     }
