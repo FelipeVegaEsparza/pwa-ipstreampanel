@@ -248,6 +248,12 @@
   width: 100%;
 }
 
+.gcBar {
+  width: calc(100% - 2 * var(--bar-inset-x, 0px));
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+}
+
 .hero {
   position: relative;
   width: 100%;

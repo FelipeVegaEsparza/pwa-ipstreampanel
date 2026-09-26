@@ -129,8 +129,6 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
             </div>
           </header>
 
-          <GcBar messages={clientData?.gcBar} />
-
           <div className={styles.heroInner}>
             <div className={styles.coverCard}>
               <SmartImage
@@ -198,6 +196,8 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
           </div>
         </div>
       </section>
+
+      <GcBar messages={clientData?.gcBar} />
 
       <section className={styles.weatherBar}>
         <div className={styles.container}>

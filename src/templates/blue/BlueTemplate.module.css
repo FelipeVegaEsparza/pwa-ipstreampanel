@@ -177,6 +177,12 @@
   padding: var(--space-5) var(--space-5) var(--space-6);
 }
 
+.gcBar {
+  width: 100%;
+  max-width: 1160px;
+  margin: 0 auto;
+}
+
 .footer {
   position: relative;
   padding: var(--space-4) var(--space-5);

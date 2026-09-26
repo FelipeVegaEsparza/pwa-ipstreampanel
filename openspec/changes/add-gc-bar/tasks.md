@@ -17,6 +17,7 @@
 - [x] 3.2 Insertar la barra debajo del `headerWrap` (antes de `<main>`) en `PetroleoTemplate`, manteniendo intacto el ticker de noticias; verificar que `petroleoblue` también la muestra al heredar de `petroleo`
 - [x] 3.3 Insertar la barra en la parte superior del layout de contenido de `PlaylistTemplate`, que no tiene header; verificar que se renderiza sin romper el layout responsive
 - [x] 3.4 Asegurar que la barra se muestre en todas las rutas (home, listados y detalles) por estar fuera del `<Outlet />`; verificar renderizando cada template en el test de templates
+- [x] 3.5 Contener la barra al ancho del contenido en `blue` (1160px) y `petroleo` (`--page-max-width`) con centrado, y mover la barra de `covered` a la posición entre el hero y la barra de instalación PWA; verificar con `npm run typecheck` y `npm run test`
 
 ## 4. Pruebas y verificación
 

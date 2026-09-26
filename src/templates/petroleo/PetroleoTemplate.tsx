@@ -95,7 +95,7 @@ export function PetroleoTemplate({
         </header>
       </div>
 
-      <GcBar messages={clientData?.gcBar} />
+      <GcBar messages={clientData?.gcBar} className={styles.gcBar} />
 
       <main className={styles.main}>
         <section className={styles.hero} id="vivo">

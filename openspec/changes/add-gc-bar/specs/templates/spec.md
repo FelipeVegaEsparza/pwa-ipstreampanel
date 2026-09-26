@@ -3,15 +3,23 @@
 ## ADDED Requirements
 
 ### Requirement: Barra GC en todos los templates
-Todos los templates SHALL mostrar la barra de mensajes GC debajo de su header y en todas las rutas, siempre que el cliente tenga mensajes. En el template `petroleo` la barra SHALL mostrarse debajo del header y mantenerse separada del ticker de noticias existente. En el template `playlist`, que no tiene header, la barra SHALL mostrarse en la parte superior del layout de contenido. El template `petroleoblue` SHALL heredar el comportamiento de `petroleo`.
+Todos los templates SHALL mostrar la barra de mensajes GC debajo de su header y en todas las rutas, siempre que el cliente tenga mensajes. En el template `petroleo` la barra SHALL mostrarse debajo del header y mantenerse separada del ticker de noticias existente. En el template `playlist`, que no tiene header, la barra SHALL mostrarse en la parte superior del layout de contenido. En el template `covered` la barra SHALL mostrarse entre el hero y la barra que contiene la fecha, el clima y el prompt de instalación PWA. En los templates `blue` y `petroleo` la barra SHALL estar contenida al mismo ancho máximo que el resto del contenido de la página y centrada. El template `petroleoblue` SHALL heredar el comportamiento de `petroleo`.
 
 #### Scenario: Template con header
-- **WHEN** se renderiza cualquiera de los templates con header (`minimalista`, `moderna`, `blue`, `moderno`, `tradicional`, `app`, `covered`, `petroleo`, `petroleoblue`) y el cliente tiene mensajes
+- **WHEN** se renderiza cualquiera de los templates con header (`minimalista`, `moderna`, `blue`, `moderno`, `tradicional`, `app`, `petroleo`, `petroleoblue`) y el cliente tiene mensajes
 - **THEN** la barra GC aparece debajo del header, en la home y en las rutas de listado/detalle
 
 #### Scenario: Template sin header
 - **WHEN** se renderiza el template `playlist` y el cliente tiene mensajes
 - **THEN** la barra GC aparece en la parte superior del layout de contenido
+
+#### Scenario: covered entre el hero y la barra de instalación
+- **WHEN** se renderiza el template `covered` con mensajes GC
+- **THEN** la barra GC aparece después del hero y antes de la barra con fecha, clima e instalación PWA
+
+#### Scenario: Ancho contenido en blue y petroleo
+- **WHEN** se renderiza la barra GC en `blue` o `petroleo`
+- **THEN** la barra queda centrada con el mismo ancho máximo que el contenido de la página, sin ocupar todo el ancho del viewport
 
 #### Scenario: petroleo con ticker de noticias
 - **WHEN** se renderiza el template `petroleo` con mensajes GC y con noticias

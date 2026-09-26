@@ -131,7 +131,7 @@ export function BlueTemplate({ clientData, isLoading }: TemplateProps) {
         </div>
       </header>
 
-      <GcBar messages={clientData?.gcBar} />
+      <GcBar messages={clientData?.gcBar} className={styles.gcBar} />
 
       <main className={styles.main}>
         <Outlet />

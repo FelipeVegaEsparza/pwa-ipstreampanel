@@ -81,8 +81,13 @@ de pantalla, y `@media (prefers-reduced-motion: reduce)` desactiva la animación
 ### 4. Ubicación: debajo del header en todos los templates
 
 - Templates con `<header>` (`minimalista`, `moderna`, `blue`, `moderno`,
-  `tradicional`, `app`, `covered`): insertar la barra inmediatamente después de
-  cerrar el header.
+  `tradicional`, `app`): insertar la barra inmediatamente después de cerrar el
+  header.
+- `covered`: insertar la barra entre el hero y la barra de fecha/clima/instalación
+  PWA.
+- `blue` y `petroleo`: la barra se contiene al ancho máximo del contenido
+  (1160px en `blue`; `--page-max-width` en `petroleo`) y se centra, en vez de
+  ocupar todo el ancho del viewport.
 - `petroleo`: insertar debajo del `headerWrap`, antes de `<main>`, para no
   mezclarla con el ticker de noticias que está arriba. `petroleoblue` hereda.
 - `playlist` (sin header): insertar en la parte superior del layout de

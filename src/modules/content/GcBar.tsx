@@ -5,9 +5,10 @@ import styles from './GcBar.module.css'
 
 interface GcBarProps {
   messages?: GcBarMessage[] | null
+  className?: string
 }
 
-export function GcBar({ messages }: GcBarProps) {
+export function GcBar({ messages, className }: GcBarProps) {
   const texts = asArray(messages)
     .slice()
     .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
@@ -33,7 +34,11 @@ export function GcBar({ messages }: GcBarProps) {
   )
 
   return (
-    <div className={styles.bar} role="region" aria-label="Mensajes">
+    <div
+      className={`${styles.bar}${className ? ` ${className}` : ''}`}
+      role="region"
+      aria-label="Mensajes"
+    >
       <div
         className={styles.track}
         style={{ animationDuration: `${duration}s` } as CSSProperties}
