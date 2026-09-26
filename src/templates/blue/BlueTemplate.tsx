@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom'
 import { useLiveRadio } from '@/modules/player/useLiveRadio'
 import { PlayerBar } from '@/modules/player/PlayerBar'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
+import { GcBar } from '@/modules/content/GcBar'
 import { SmartImage } from '@/ui'
 import {
   FaBullhorn,
@@ -129,6 +130,8 @@ export function BlueTemplate({ clientData, isLoading }: TemplateProps) {
           )}
         </div>
       </header>
+
+      <GcBar messages={clientData?.gcBar} />
 
       <main className={styles.main}>
         <Outlet />

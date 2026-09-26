@@ -29,7 +29,8 @@ const NEW_TEMPLATES: Array<{ id: string; label?: string }> = [
 ]
 
 const clientData = {
-  basicData: { projectName: 'Radio Test' }
+  basicData: { projectName: 'Radio Test' },
+  gcBar: [{ id: 'gc1', text: 'Mensaje GC', order: 0 }]
 } as unknown as FullClientData
 
 function renderTemplate(templateId: string) {
@@ -59,6 +60,7 @@ describe('templates nuevos', () => {
         expect(screen.getByText(template.label)).toBeInTheDocument()
       }
       expect((await screen.findAllByText('Radio Test')).length).toBeGreaterThan(0)
+      expect(screen.getAllByText('Mensaje GC').length).toBeGreaterThan(0)
       unmount()
     }
   })

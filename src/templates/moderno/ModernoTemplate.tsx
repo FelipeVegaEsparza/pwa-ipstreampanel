@@ -5,6 +5,7 @@ import { PlayerBar } from '@/modules/player/PlayerBar'
 import { TrackProgress } from '@/modules/player/TrackProgress'
 import { InstallPrompt } from '@/modules/pwa/InstallPrompt'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
+import { GcBar } from '@/modules/content/GcBar'
 import { SmartImage } from '@/ui'
 import type { TemplateProps } from '../index'
 import styles from './ModernoTemplate.module.css'
@@ -62,6 +63,8 @@ export function ModernoTemplate({ clientData, isLoading }: TemplateProps) {
           <InstallPrompt />
         </div>
       </header>
+
+      <GcBar messages={clientData?.gcBar} />
 
       <main className={styles.main}>
         <section

@@ -5,6 +5,7 @@ import { PlayerBar } from '@/modules/player/PlayerBar'
 import { TrackProgress } from '@/modules/player/TrackProgress'
 import { InstallPrompt } from '@/modules/pwa/InstallPrompt'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
+import { GcBar } from '@/modules/content/GcBar'
 import { Weather } from '@/modules/weather/Weather'
 import { DigitalClock, SmartImage } from '@/ui'
 import type { TemplateProps } from '../index'
@@ -50,6 +51,8 @@ export function TradicionalTemplate({ clientData, isLoading }: TemplateProps) {
           <InstallPrompt />
         </div>
       </header>
+
+      <GcBar messages={clientData?.gcBar} />
 
       <main className={styles.main}>
         <section className={styles.console}>

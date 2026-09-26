@@ -9,6 +9,7 @@ import { usePlayer } from '@/modules/player/PlayerContext'
 import { useMediaSession } from '@/modules/player/useMediaSession'
 import { NextTrack } from '@/modules/player/NextTrack'
 import { TrackProgress } from '@/modules/player/TrackProgress'
+import { GcBar } from '@/modules/content/GcBar'
 import type { TemplateProps } from '../index'
 import styles from './ModernaTemplate.module.css'
 
@@ -52,6 +53,8 @@ export function ModernaTemplate({ clientData, isLoading }: TemplateProps) {
           <span className={styles.badge}>Moderna</span>
         </div>
       </header>
+
+      <GcBar messages={clientData?.gcBar} />
 
       <main className={styles.main}>
         <section

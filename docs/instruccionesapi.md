@@ -55,6 +55,7 @@ Todos los endpoints GET son de solo lectura. Solo aceptan POST:
 | 22 | `/api/public/{clientId}/chat/messages` | POST | Chat |
 | 23 | `/api/public/{clientId}/chat/online` | GET | Chat |
 | 24 | `/api/public/{clientId}/pwa/register` | POST | PWA |
+| 25 | `/api/public/{clientId}/gc-bar` | GET | Barra de mensajes |
 
 ---
 
@@ -88,7 +89,8 @@ GET {BASE}/api/public/{clientId}
   "events": [ ],
   "promotions": [ ],
   "podcasts": [ ],
-  "videocasts": [ ]
+  "videocasts": [ ],
+  "gcBar": [ ]
 }
 ```
 
@@ -112,6 +114,7 @@ GET {BASE}/api/public/{clientId}
 | `promotions` | `array` | Promociones (ver §14) |
 | `podcasts` | `array` | Últimos 10 podcasts audio (ver §15) |
 | `videocasts` | `array` | Últimos 10 videocasts video (ver §17) |
+| `gcBar` | `array` | Mensajes de la barra GC (ver §19) |
 
 ### Errores
 
@@ -839,6 +842,42 @@ POST {BASE}/api/public/{clientId}/pwa/register
 | `firstTime` | `boolean` | `true` si es primera vez de este dispositivo |
 
 > **Idempotente:** si el mismo `deviceId` ya existe, no se duplica. Debe enviarse **una sola vez** por dispositivo.
+
+---
+
+## 19. Barra de Mensajes (GC Bar)
+
+Mensajes cortos configurables por el cliente para una barra con texto en movimiento. También vienen incluidos en la respuesta completa del cliente (`gcBar`, ver §1).
+
+```
+GET {BASE}/api/public/{clientId}/gc-bar
+```
+
+### Respuesta (200 OK) — array
+
+```json
+[
+  {
+    "id": "cmuiv208h0003n0qzabub0cef",
+    "text": "La musica y programas que te acompañan desde Chile Chico",
+    "order": 0,
+    "createdAt": "2026-09-26T20:47:13.073Z",
+    "updatedAt": "2026-09-26T20:47:13.073Z"
+  }
+]
+```
+
+### Campos
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `id` | `string` | ID del mensaje |
+| `text` | `string` | Texto a mostrar en la barra |
+| `order` | `number` | Orden de aparición (ascendente) |
+| `createdAt` | `string` | Fecha ISO 8601 de creación |
+| `updatedAt` | `string` | Fecha ISO 8601 de actualización |
+
+> Si no hay mensajes, el endpoint devuelve un array vacío (`[]`).
 
 ---
 

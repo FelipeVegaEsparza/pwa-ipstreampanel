@@ -12,6 +12,7 @@ import { useTrackProgress } from '@/modules/player/useTrackProgress'
 import { VuMeter } from '@/modules/player/VuMeter'
 import { ShareButton } from '@/modules/share/ShareButton'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
+import { GcBar } from '@/modules/content/GcBar'
 import { Weather } from '@/modules/weather/Weather'
 import { SmartImage } from '@/ui'
 import styles from './CoveredTemplate.module.css'
@@ -127,6 +128,8 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
               )}
             </div>
           </header>
+
+          <GcBar messages={clientData?.gcBar} />
 
           <div className={styles.heroInner}>
             <div className={styles.coverCard}>

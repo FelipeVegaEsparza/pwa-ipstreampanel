@@ -7,6 +7,7 @@ import { TrackProgress } from '@/modules/player/TrackProgress'
 import { VuMeter } from '@/modules/player/VuMeter'
 import { InstallPrompt } from '@/modules/pwa/InstallPrompt'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
+import { GcBar } from '@/modules/content/GcBar'
 import { WeatherForecastSection } from '@/modules/weather/WeatherForecastSection'
 import { SmartImage } from '@/ui'
 import type { TemplateProps } from '../index'
@@ -93,6 +94,8 @@ export function PetroleoTemplate({
           </div>
         </header>
       </div>
+
+      <GcBar messages={clientData?.gcBar} />
 
       <main className={styles.main}>
         <section className={styles.hero} id="vivo">

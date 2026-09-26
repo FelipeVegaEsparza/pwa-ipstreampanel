@@ -12,6 +12,7 @@ import { useTrackProgress } from '@/modules/player/useTrackProgress'
 import { VuMeter } from '@/modules/player/VuMeter'
 import { ShareButton } from '@/modules/share/ShareButton'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
+import { GcBar } from '@/modules/content/GcBar'
 import { useHlsVideo } from '@/modules/tv/useHlsVideo'
 import { Weather } from '@/modules/weather/Weather'
 import { DigitalClock, SmartImage } from '@/ui'
@@ -90,6 +91,8 @@ export function MinimalistaTemplate({ clientData, isLoading }: TemplateProps) {
           <SmartImage className={styles.logo} src={basic?.logoUrl} alt={name} />
           <Weather location={basic?.location} />
         </header>
+
+        <GcBar messages={clientData?.gcBar} />
 
         {isHome ? (
           <div className={styles.columns}>

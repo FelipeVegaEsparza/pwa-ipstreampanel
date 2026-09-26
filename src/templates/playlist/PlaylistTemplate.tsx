@@ -5,6 +5,7 @@ import { NextTrack } from '@/modules/player/NextTrack'
 import { TrackProgress } from '@/modules/player/TrackProgress'
 import { InstallPrompt } from '@/modules/pwa/InstallPrompt'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
+import { GcBar } from '@/modules/content/GcBar'
 import { SmartImage } from '@/ui'
 import {
   getSectionOrder,
@@ -60,6 +61,8 @@ export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
           </button>
         </div>
       )}
+
+      <GcBar messages={clientData?.gcBar} />
 
       <div className={styles.layout}>
         <aside className={styles.deck}>

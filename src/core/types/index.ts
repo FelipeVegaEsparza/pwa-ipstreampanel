@@ -3,6 +3,14 @@ export interface ClientInfo {
   name: string
 }
 
+export interface GcBarMessage {
+  id: string
+  text: string
+  order: number
+  createdAt: string
+  updatedAt: string
+}
+
 export interface FullClientData {
   client: ClientInfo
   selectedTemplate: string | null
@@ -20,6 +28,7 @@ export interface FullClientData {
   promotions: Promotion[]
   podcasts: Podcast[]
   videocasts: Videocast[]
+  gcBar?: GcBarMessage[]
 }
 
 export interface BasicLocation {
