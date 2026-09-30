@@ -58,3 +58,7 @@
 ## 11. Sin sección de redes
 
 - [x] 11.1 Quitar `social` del orden de `moderno2` (las redes ya están en header y footer); verificar con test de `ContentSections` y `npm run build`.
+
+## 12. VU meter en el reproductor
+
+- [x] 12.1 Agregar un fondo opcional de VU meter al `PlayerBar` y activarlo en `moderno2`; verificar con tests de `PlayerBar`/`moderno2` y `npm run build`.

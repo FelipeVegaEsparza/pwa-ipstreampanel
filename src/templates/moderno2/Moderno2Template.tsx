@@ -213,7 +213,10 @@ export function Moderno2Template({ clientData, isLoading }: TemplateProps) {
         </div>
       </footer>
 
-      <PlayerBar fallbackCovers={[live.basic?.coverUrl, live.basic?.logoUrl]} />
+      <PlayerBar
+        fallbackCovers={[live.basic?.coverUrl, live.basic?.logoUrl]}
+        vuMeter
+      />
     </div>
   )
 }

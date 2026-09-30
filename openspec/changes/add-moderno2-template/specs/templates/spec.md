@@ -74,6 +74,19 @@ programas, SHALL mostrar un aviso sin romper la sección.
 - **WHEN** un cliente con template distinto de `moderno2` muestra su programación
 - **THEN** conserva la variante que ese template usaba
 
+### Requirement: VU meter de fondo en el reproductor de moderno2
+El template `moderno2` SHALL mostrar barras de VU meter como fondo del
+reproductor inferior, por detrás de los controles y con opacidad baja para no
+afectar la legibilidad.
+
+#### Scenario: Fondo del reproductor
+- **WHEN** un cliente usa `moderno2`
+- **THEN** el reproductor inferior muestra barras de VU meter de fondo
+
+#### Scenario: Otros templates
+- **WHEN** un cliente usa un template distinto de `moderno2`
+- **THEN** su reproductor no incorpora el fondo de VU meter
+
 ### Requirement: Tipografías self-hosted del template moderno2
 El template `moderno2` SHALL usar las tipografías Bebas Neue (títulos de
 display) y Montserrat (texto base) servidas desde el propio origen, sin depender

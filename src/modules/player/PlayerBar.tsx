@@ -3,14 +3,17 @@ import { useStreaming } from '@/core/hooks/useStreaming'
 import { SmartImage } from '@/ui'
 import { usePlayer } from './PlayerContext'
 import { TrackProgress } from './TrackProgress'
+import { VuMeter } from './VuMeter'
 import styles from './PlayerBar.module.css'
 
 interface PlayerBarProps {
   /** Covers alternativos (portada de la radio/logo) si el tema no trae portada. */
   fallbackCovers?: Array<string | null | undefined>
+  /** Dibuja el VU meter como fondo del reproductor. */
+  vuMeter?: boolean
 }
 
-export function PlayerBar({ fallbackCovers }: PlayerBarProps = {}) {
+export function PlayerBar({ fallbackCovers, vuMeter = false }: PlayerBarProps = {}) {
   const { streamUrl, isPlaying, toggle } = usePlayer()
   const tenant = useTenant()
   const clientId = tenant.status === 'ready' ? tenant.clientId : null
@@ -33,6 +36,7 @@ export function PlayerBar({ fallbackCovers }: PlayerBarProps = {}) {
 
   return (
     <div className={styles.bar}>
+      {vuMeter && <VuMeter className={styles.vuBg} bars={72} />}
       <div className={styles.inner}>
         <TrackProgress
           variant="thin"

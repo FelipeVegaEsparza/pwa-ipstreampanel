@@ -13,10 +13,23 @@
 }
 
 .inner {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: var(--page-max-width, 1320px);
   margin: 0 auto;
   padding: 0 var(--page-pad-x, clamp(var(--space-4), 4vw, var(--space-6)));
+}
+
+/* VU meter de fondo del reproductor (opcional por template). */
+.vuBg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 0;
+  opacity: 0.16;
 }
 
 .content {
