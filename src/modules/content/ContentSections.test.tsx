@@ -7,6 +7,7 @@ import type { FullClientData } from '@/core/types'
 import { ContentSectionStack } from './ContentSections'
 import contentStyles from './content.module.css'
 import contactSocialStyles from './ContactSocialSection.module.css'
+import newsStyles from './NewsSection.module.css'
 
 function fullData(selectedTemplate: string): FullClientData {
   const base = {
@@ -298,6 +299,36 @@ describe('ContentSectionStack', () => {
     expect(
       headings.some((heading) => heading.getAttribute('data-bg-text'))
     ).toBe(false)
+  })
+
+  it('en moderno2 muestra una noticia principal y hasta tres secundarias', () => {
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } }
+    })
+    const data = fullData('moderno2')
+    data.news = [1, 2, 3, 4].map((n) => ({
+      id: `n${n}`,
+      name: `Noticia ${n}`,
+      slug: `noticia-${n}`,
+      shortText: '',
+      longText: '',
+      imageUrl: null,
+      createdAt: '2026-01-01T00:00:00.000Z',
+      updatedAt: '2026-01-01T00:00:00.000Z'
+    }))
+
+    const { container } = render(
+      <QueryClientProvider client={queryClient}>
+        <TenantProvider>
+          <MemoryRouter>
+            <ContentSectionStack clientData={data} isLoading={false} />
+          </MemoryRouter>
+        </TenantProvider>
+      </QueryClientProvider>
+    )
+
+    expect(container.querySelector(`.${newsStyles.layout}`)).not.toBeNull()
+    expect(container.querySelectorAll(`.${newsStyles.sideCard}`)).toHaveLength(3)
   })
 
   it('combina contacto y síguenos en una sección de dos columnas en covered', () => {

@@ -35,6 +35,20 @@ SHALL aplicarse únicamente cuando el template seleccionado es `moderno2`.
 - **WHEN** un cliente con template distinto de `moderno2` abre su home
 - **THEN** las secciones conservan el orden que ese template usaba
 
+### Requirement: Noticias del template moderno2
+El template `moderno2` SHALL mostrar la sección de noticias con una noticia
+principal a la izquierda y hasta tres noticias secundarias a la derecha, y SHALL
+usar para las tarjetas de contenido la paleta oscura del template en lugar de
+tarjetas blancas.
+
+#### Scenario: Noticia principal y secundarias
+- **WHEN** el cliente tiene noticias y usa `moderno2`
+- **THEN** se muestra una noticia principal a la izquierda y hasta tres noticias a la derecha
+
+#### Scenario: Paleta oscura de las tarjetas
+- **WHEN** se renderiza la sección de noticias en `moderno2`
+- **THEN** las tarjetas usan el fondo y el texto oscuros del template
+
 ### Requirement: Tipografías self-hosted del template moderno2
 El template `moderno2` SHALL usar las tipografías Bebas Neue (títulos de
 display) y Montserrat (texto base) servidas desde el propio origen, sin depender

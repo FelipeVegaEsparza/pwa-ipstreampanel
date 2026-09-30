@@ -46,3 +46,7 @@
 ## 8. Navegación pegada al scroll
 
 - [x] 8.1 Hacer `sticky` la barra de navegación de `moderno2` para que acompañe el scroll, con el menú móvil desplegándose bajo la barra; verificar con `npm run typecheck`, tests de `moderno2` y `npm run build`.
+
+## 9. Noticias y tarjetas oscuras
+
+- [x] 9.1 Usar la variante `featured` de noticias en `moderno2` (1 principal izquierda + 3 derecha) y aplicar la paleta oscura de tarjetas del template; verificar con test de `ContentSections` y `npm run build`.

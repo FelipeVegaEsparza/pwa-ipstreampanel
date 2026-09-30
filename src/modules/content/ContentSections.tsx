@@ -36,7 +36,8 @@ const NEWS_VARIANTS: Record<string, NewsVariant> = {
   blue: 'featured',
   moderno: 'overlay',
   tradicional: 'rows',
-  playlist: 'rows'
+  playlist: 'rows',
+  moderno2: 'featured'
 }
 
 const PROGRAM_VARIANTS: Record<string, ProgramVariant> = {

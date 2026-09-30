@@ -21,6 +21,13 @@
   --section-title-transform: uppercase;
   --section-gap: 5rem;
 
+  --content-card-bg: #17171a;
+  --content-card-border: rgba(255, 255, 255, 0.08);
+  --content-text: #f5f5f5;
+  --content-muted: rgba(255, 255, 255, 0.6);
+  --content-accent: #ff9500;
+  --content-skeleton-bg: rgba(255, 255, 255, 0.08);
+
   --container-width: 1200px;
   --container-padding: 1rem;
   --nav-height: 80px;
