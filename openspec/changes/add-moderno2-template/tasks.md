@@ -53,4 +53,4 @@
 
 ## 10. Programación por día
 
-- [x] 10.1 Agregar la variante `tabs` a `ProgramsSection` (días Lunes–Domingo arriba, contenido del día seleccionado) y usarla en `moderno2`; verificar con tests de `ProgramsSection`/`ContentSections` y `npm run build`.
+- [x] 10.1 Agregar la variante `tabs` a `ProgramsSection` (días Lunes–Domingo arriba y tarjetas con imagen, horario, días y descripción del día seleccionado) y usarla en `moderno2`; verificar con tests de `ProgramsSection`/`ContentSections` y `npm run build`.

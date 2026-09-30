@@ -28,26 +28,39 @@ function programDays(program: Program): number[] {
   })
 }
 
+function programDayLabels(program: Program): string {
+  return [...new Set(programDays(program))]
+    .map((day) => normalizeWeekDay(day))
+    .join(' · ')
+}
+
 interface ProgramsSectionProps extends SectionDataProps {
   variant?: 'list' | 'cards' | 'tabs'
 }
 
-function ProgramRows({ programs }: { programs: Program[] }) {
-  if (programs.length === 0) {
-    return <p className={styles.muted}>Sin programación para este día.</p>
-  }
+/** Card de un programa con todos los datos que expone la API. */
+function ProgramCard({ program }: { program: Program }) {
+  const days = programDayLabels(program)
   return (
-    <>
-      {programs.map((program) => (
-        <div key={program.id} className={styles.programRow}>
-          <span className={styles.programTime}>
+    <Card>
+      <SmartImage
+        className={styles.programCardMedia}
+        src={program.imageUrl}
+        alt={program.name}
+      />
+      <div className={styles.programCardBody}>
+        <div className={styles.schedule}>
+          <span className={styles.scheduleTime}>
             {program.startTime}–{program.endTime}
           </span>
-          <span className={styles.programName}>{program.name}</span>
-          <span className={styles.programDesc}>{program.description}</span>
+          {days && <span className={styles.scheduleDays}>{days}</span>}
         </div>
-      ))}
-    </>
+        <h3 className={styles.itemTitle}>{program.name}</h3>
+        {program.description && (
+          <p className={styles.muted}>{program.description}</p>
+        )}
+      </div>
+    </Card>
   )
 }
 
@@ -72,6 +85,7 @@ function ProgramsTabs({ programs }: { programs: Program[] }) {
   const resolvedDay =
     activeDay ??
     ((byDay.get(today)?.length ?? 0) > 0 ? today : fallbackDay)
+  const dayPrograms = byDay.get(resolvedDay) ?? []
 
   return (
     <div className={styles.programTabs}>
@@ -93,7 +107,15 @@ function ProgramsTabs({ programs }: { programs: Program[] }) {
         })}
       </div>
       <div className={styles.tabPanel} role="tabpanel">
-        <ProgramRows programs={byDay.get(resolvedDay) ?? []} />
+        {dayPrograms.length === 0 ? (
+          <p className={styles.muted}>Sin programación para este día.</p>
+        ) : (
+          <Grid>
+            {dayPrograms.map((program) => (
+              <ProgramCard key={program.id} program={program} />
+            ))}
+          </Grid>
+        )}
       </div>
     </div>
   )
@@ -110,34 +132,9 @@ export function ProgramsSection({
     return (
       <Section title="Programación" visible={programs.length > 0} loading={isLoading}>
         <Grid>
-          {programs.map((program) => {
-            const days = [...new Set(programDays(program))]
-              .map((day) => normalizeWeekDay(day))
-              .join(' · ')
-            return (
-              <Card key={program.id}>
-                <SmartImage
-                  className={styles.programCardMedia}
-                  src={program.imageUrl}
-                  alt={program.name}
-                />
-                <div className={styles.programCardBody}>
-                  <h3 className={styles.itemTitle}>{program.name}</h3>
-                  {program.description && (
-                    <p className={styles.muted}>{program.description}</p>
-                  )}
-                  <div className={styles.schedule}>
-                    <span className={styles.scheduleTime}>
-                      {program.startTime}–{program.endTime}
-                    </span>
-                    {days && (
-                      <span className={styles.scheduleDays}>{days}</span>
-                    )}
-                  </div>
-                </div>
-              </Card>
-            )
-          })}
+          {programs.map((program) => (
+            <ProgramCard key={program.id} program={program} />
+          ))}
         </Grid>
       </Section>
     )
@@ -166,19 +163,28 @@ export function ProgramsSection({
       {byDay.map((group) => (
         <div key={group.dayIndex}>
           <h3 className={styles.day}>{normalizeWeekDay(group.dayIndex)}</h3>
-          <ProgramRows programs={group.items} />
+          {group.items.map((program) => (
+            <div key={program.id} className={styles.programRow}>
+              <span className={styles.programTime}>
+                {program.startTime}–{program.endTime}
+              </span>
+              <span className={styles.programName}>{program.name}</span>
+              <span className={styles.programDesc}>{program.description}</span>
+            </div>
+          ))}
         </div>
       ))}
 
-      {orphan && noDays.map((program) => (
-        <div key={program.id} className={styles.programRow}>
-          <span className={styles.programTime}>
-            {program.startTime}–{program.endTime}
-          </span>
-          <span className={styles.programName}>{program.name}</span>
-          <span className={styles.programDesc}>{program.description}</span>
-        </div>
-      ))}
+      {orphan &&
+        noDays.map((program) => (
+          <div key={program.id} className={styles.programRow}>
+            <span className={styles.programTime}>
+              {program.startTime}–{program.endTime}
+            </span>
+            <span className={styles.programName}>{program.name}</span>
+            <span className={styles.programDesc}>{program.description}</span>
+          </div>
+        ))}
     </Section>
   )
 }

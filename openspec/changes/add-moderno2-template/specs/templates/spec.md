@@ -51,13 +51,18 @@ tarjetas blancas.
 
 ### Requirement: Programación por día del template moderno2
 El template `moderno2` SHALL mostrar la programación separada por día: una fila
-de días en la parte superior (Lunes a Domingo) y, al seleccionar un día, el
-listado de programas de ese día. Si el día seleccionado no tiene programas, SHALL
-mostrar un aviso sin romper la sección.
+de días en la parte superior (Lunes a Domingo) y, al seleccionar un día, las
+tarjetas de los programas de ese día con los datos que expone la API (imagen,
+horario de inicio y fin, días y descripción). Si el día seleccionado no tiene
+programas, SHALL mostrar un aviso sin romper la sección.
 
 #### Scenario: Cambio de día
 - **WHEN** el usuario selecciona un día en la programación de `moderno2`
-- **THEN** se muestra la programación de ese día y se oculta la de los demás
+- **THEN** se muestran las tarjetas de los programas de ese día y se ocultan las de los demás
+
+#### Scenario: Tarjeta con datos del programa
+- **WHEN** se muestra un programa en `moderno2`
+- **THEN** la tarjeta incluye su imagen, su horario de inicio y fin y su descripción
 
 #### Scenario: Día sin programación
 - **WHEN** el día seleccionado no tiene programas

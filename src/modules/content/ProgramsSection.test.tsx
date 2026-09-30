@@ -78,12 +78,17 @@ describe('ProgramsSection', () => {
     expect(screen.queryByText('Lunes')).toBeNull()
   })
 
-  it('variante tabs: lista los días y filtra el contenido por día', () => {
+  it('variante tabs: lista los días y muestra tarjetas del día seleccionado', () => {
     render(
       <ProgramsSection
         clientData={clientDataWith([
           program({ id: 'a', name: 'Show Lunes', weekDays: [1] }),
-          program({ id: 'b', name: 'Show Martes', weekDays: [2] })
+          program({
+            id: 'b',
+            name: 'Show Martes',
+            weekDays: [2],
+            imageUrl: '/api/uploads/martes.png'
+          })
         ])}
         isLoading={false}
         variant="tabs"
@@ -93,11 +98,16 @@ describe('ProgramsSection', () => {
     expect(screen.getAllByRole('tab')).toHaveLength(7)
 
     fireEvent.click(screen.getByRole('tab', { name: 'Martes' }))
-    expect(screen.getByText('Show Martes')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Show Martes' })).toBeInTheDocument()
+    expect(screen.getByText('08:00–10:00')).toBeInTheDocument()
+    expect(screen.getByText('Programa matutino')).toBeInTheDocument()
+    expect(screen.getByAltText('Show Martes').getAttribute('src')).toContain(
+      '/api/uploads/martes.png'
+    )
     expect(screen.queryByText('Show Lunes')).toBeNull()
 
     fireEvent.click(screen.getByRole('tab', { name: 'Lunes' }))
-    expect(screen.getByText('Show Lunes')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Show Lunes' })).toBeInTheDocument()
     expect(screen.queryByText('Show Martes')).toBeNull()
   })
 
