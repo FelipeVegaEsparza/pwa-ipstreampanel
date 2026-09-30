@@ -74,6 +74,24 @@ programas, SHALL mostrar un aviso sin romper la sección.
 - **WHEN** un cliente con template distinto de `moderno2` muestra su programación
 - **THEN** conserva la variante que ese template usaba
 
+### Requirement: Bloque de contacto al final de moderno2
+El template `moderno2` SHALL mostrar, al final del contenido y antes del footer,
+un bloque con el formulario de contacto a la izquierda (que envía al dashboard
+vía la API pública) y, a la derecha, el cover de la radio, los botones de redes
+sociales y los botones para instalar la PWA.
+
+#### Scenario: Formulario a la izquierda
+- **WHEN** el cliente usa `moderno2`
+- **THEN** el bloque final muestra el formulario de contacto a la izquierda
+
+#### Scenario: Cover, redes e instalar a la derecha
+- **WHEN** el cliente usa `moderno2`
+- **THEN** a la derecha se muestran el cover de la radio, las redes y los botones de instalación de la PWA
+
+#### Scenario: Otros templates
+- **WHEN** un cliente usa un template distinto de `moderno2`
+- **THEN** este bloque no se muestra
+
 ### Requirement: Barra de mensajes bajo la navegación en moderno2
 El template `moderno2` SHALL mostrar la barra de mensajes (GC bar) integrada en
 la barra de navegación principal, con el mismo ancho que esta, debajo de los

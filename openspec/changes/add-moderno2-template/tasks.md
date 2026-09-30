@@ -70,3 +70,7 @@
 ## 14. Barra de mensajes bajo la navegación
 
 - [x] 14.1 Integrar la GC bar dentro de la navegación principal (mismo ancho, debajo de los enlaces) en `moderno2`; verificar con tests de `moderno2` y `npm run build`.
+
+## 15. Bloque de contacto al final
+
+- [x] 15.1 Agregar al final de `moderno2` el formulario de contacto a la izquierda y, a la derecha, el cover de la radio, las redes sociales y los botones de instalar la PWA; verificar con test de `moderno2` y `npm run build`.

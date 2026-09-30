@@ -206,4 +206,27 @@ describe('Moderno2Template', () => {
     ).toBeInTheDocument()
     expect(screen.getAllByText('Tema Historial').length).toBeGreaterThan(0)
   })
+
+  it('muestra el bloque de contacto con formulario, redes e instalar app', () => {
+    const data = clientData()
+    data.socialNetworks = {
+      facebook: 'https://facebook.com/radio',
+      youtube: null,
+      instagram: null,
+      tiktok: null,
+      whatsapp: null,
+      x: null,
+      createdAt: '2026-01-01T00:00:00.000Z',
+      updatedAt: '2026-01-01T00:00:00.000Z'
+    }
+
+    renderTemplate(data)
+
+    expect(
+      screen.getByRole('heading', { name: 'Contáctanos' })
+    ).toBeInTheDocument()
+    expect(screen.getByLabelText('Formulario de contacto')).toBeInTheDocument()
+    expect(screen.getByText('Síguenos')).toBeInTheDocument()
+    expect(screen.getByText('Instala la app')).toBeInTheDocument()
+  })
 })

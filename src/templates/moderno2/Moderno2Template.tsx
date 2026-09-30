@@ -17,6 +17,7 @@ import {
   type SectionId
 } from '@/modules/content/sections'
 import type { TemplateProps } from '../index'
+import { Moderno2Contact } from './Moderno2Contact'
 import styles from './Moderno2Template.module.css'
 
 type NavId = SectionId | 'inicio'
@@ -175,6 +176,7 @@ export function Moderno2Template({ clientData, isLoading }: TemplateProps) {
             <Outlet />
             <SongHistorySection tracks={history} />
             <MultiCityWeather location={clientData?.basicData?.location} />
+            <Moderno2Contact clientData={clientData} />
           </SectionHeadingContext.Provider>
         </div>
       </main>
