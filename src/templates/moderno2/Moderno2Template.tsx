@@ -26,6 +26,7 @@ export function Moderno2Template({ clientData, isLoading }: TemplateProps) {
   const socialLinks = getSocialLinks(clientData?.socialNetworks)
   const history = useSongHistory(clientData?.client?.id, live.currentTrack)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [navFixed, setNavFixed] = useState(false)
 
   const displayName = isLoading ? 'Cargando…' : live.name
   const airLabel =
@@ -47,13 +48,20 @@ export function Moderno2Template({ clientData, isLoading }: TemplateProps) {
     return () => window.removeEventListener('keydown', onKey)
   }, [menuOpen])
 
+  useEffect(() => {
+    const onScroll = () => setNavFixed(window.scrollY > 0)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   const hrefFor = (id: NavId): string =>
     id === 'inicio' ? '#section-inicio' : `#${sectionAnchorId(id)}`
 
   return (
     <div className={styles.page}>
-      <header className={styles.navBar}>
-        <div className={`${styles.container} ${styles.navInner}`}>
+      <header className={`${styles.navBar} ${navFixed ? styles.navBarFixed : ''}`}>
+        <div className={styles.navInner}>
           <a className={styles.logoLink} href="#section-inicio">
             <SmartImage
               className={styles.logo}
