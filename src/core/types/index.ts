@@ -14,6 +14,7 @@ export interface GcBarMessage {
 export interface FullClientData {
   client: ClientInfo
   selectedTemplate: string | null
+  accentColor?: string | null
   oneSignalAppId: string | null
   basicData: BasicData | null
   socialNetworks: SocialNetworks | null

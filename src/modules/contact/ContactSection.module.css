@@ -89,7 +89,7 @@
   padding: var(--space-3) var(--space-5);
   font: inherit;
   font-weight: 600;
-  color: var(--content-accent-text, #ffffff);
+  color: var(--brand-accent-contrast, var(--content-accent-text, #ffffff));
   background: var(--content-accent, #1c1b1a);
   border: none;
   border-radius: 999px;

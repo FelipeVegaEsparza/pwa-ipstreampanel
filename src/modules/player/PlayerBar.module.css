@@ -144,7 +144,7 @@
   border-radius: 50%;
   border: none;
   background: var(--color-primary);
-  color: #fff;
+  color: var(--brand-accent-contrast, #fff);
   font-size: 1.05rem;
   flex-shrink: 0;
   justify-self: center;

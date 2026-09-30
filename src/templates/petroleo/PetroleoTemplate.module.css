@@ -2,10 +2,10 @@
 
 .page {
   /* Sistema "nexoradio" (JK Bogotana) en clave oscura: gris oscuro + verde olivo */
-  --nx-primary: #7ca200;
-  --nx-primary-dark: #5f7d00;
+  --nx-primary: var(--brand-accent, #7ca200);
+  --nx-primary-dark: var(--brand-accent-hover, #5f7d00);
   --nx-primary-light: #a8cc33;
-  --nx-primary-rgb: 124, 162, 0;
+  --nx-primary-rgb: var(--brand-accent-rgb, 124, 162, 0);
   --nx-primary-light-rgb: 168, 204, 51;
   --nx-bg: #17191a;
   --nx-surface: #202325;
@@ -26,11 +26,11 @@
   --card-border-w: 1px;
   --card-bg: #202325;
   --card-border: rgba(255, 255, 255, 0.1);
-  --card-border-hover: #7ca200;
+  --card-border-hover: var(--brand-accent, #7ca200);
   --card-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
   --card-shadow-hover: 0 16px 34px rgba(0, 0, 0, 0.5);
   --card-lift: -4px;
-  --card-accent: #7ca200;
+  --card-accent: var(--brand-accent, #7ca200);
   --card-accent-h: 3px;
 
   --section-title-font: 'Syne', 'Montserrat', sans-serif;
@@ -41,7 +41,7 @@
   --section-title-spacing: 0.03em;
   --section-rule-w: 54px;
   --section-rule-h: 4px;
-  --section-rule-c: #7ca200;
+  --section-rule-c: var(--brand-accent, #7ca200);
   --section-gap: 44px;
 
   --color-bg: #17191a;
@@ -49,8 +49,8 @@
   --color-surface-alt: #2a2e30;
   --color-text: #f1f2ee;
   --color-text-muted: #9aa09b;
-  --color-primary: #7ca200;
-  --color-primary-hover: #8fb70a;
+  --color-primary: var(--brand-accent, #7ca200);
+  --color-primary-hover: var(--brand-accent-hover, #8fb70a);
   --color-border: rgba(255, 255, 255, 0.12);
   --content-card-bg: #202325;
   --content-card-border: rgba(255, 255, 255, 0.1);
@@ -73,17 +73,17 @@
 
 /* Variante azul del template petroleo: mismos componentes, otra paleta. */
 .blue {
-  --nx-primary: #2563eb;
-  --nx-primary-dark: #1d4ed8;
+  --nx-primary: var(--brand-accent, #2563eb);
+  --nx-primary-dark: var(--brand-accent-hover, #1d4ed8);
   --nx-primary-light: #60a5fa;
-  --nx-primary-rgb: 37, 99, 235;
+  --nx-primary-rgb: var(--brand-accent-rgb, 37, 99, 235);
   --nx-primary-light-rgb: 96, 165, 250;
-  --card-border-hover: #2563eb;
-  --card-accent: #2563eb;
+  --card-border-hover: var(--brand-accent, #2563eb);
+  --card-accent: var(--brand-accent, #2563eb);
   --section-title-color: #60a5fa;
-  --section-rule-c: #2563eb;
-  --color-primary: #2563eb;
-  --color-primary-hover: #3b82f6;
+  --section-rule-c: var(--brand-accent, #2563eb);
+  --color-primary: var(--brand-accent, #2563eb);
+  --color-primary-hover: var(--brand-accent-hover, #3b82f6);
   --content-accent: #60a5fa;
 }
 

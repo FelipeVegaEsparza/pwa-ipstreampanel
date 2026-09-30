@@ -56,7 +56,7 @@
   border: none;
   border-radius: 999px;
   background: var(--tpl-accent, #1c1b1a);
-  color: var(--tpl-accent-text, #ffffff);
+  color: var(--brand-accent-contrast, var(--tpl-accent-text, #ffffff));
   font-size: 1rem;
   padding: var(--space-3) var(--space-6);
   cursor: pointer;

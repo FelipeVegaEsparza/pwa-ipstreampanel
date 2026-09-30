@@ -7,8 +7,8 @@
 
   --tpl-text: #ffffff;
   --tpl-muted: rgba(255, 255, 255, 0.75);
-  --tpl-accent: #ffffff;
-  --tpl-accent-text: #0b0b12;
+  --tpl-accent: var(--brand-accent, #ffffff);
+  --tpl-accent-text: var(--brand-accent-contrast, #0b0b12);
   --tpl-card-border: rgba(255, 255, 255, 0.25);
   --tpl-skeleton: rgba(255, 255, 255, 0.15);
 }

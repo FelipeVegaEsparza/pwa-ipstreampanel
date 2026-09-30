@@ -5,13 +5,13 @@
   --card-radius: 14px;
   --card-border-w: 1px;
   --card-bg: #191c2f;
-  --card-bg-img: linear-gradient(160deg, rgba(255, 77, 126, 0.06), transparent 55%);
+  --card-bg-img: linear-gradient(160deg, rgba(var(--brand-accent-rgb, 255, 77, 126), 0.06), transparent 55%);
   --card-border: #262b46;
-  --card-border-hover: #ff4d7e;
+  --card-border-hover: var(--brand-accent, #ff4d7e);
   --card-shadow: 0 10px 24px rgba(6, 8, 20, 0.4);
   --card-shadow-hover: 0 20px 44px rgba(6, 8, 20, 0.6);
   --card-lift: -4px;
-  --card-accent: #ff4d7e;
+  --card-accent: var(--brand-accent, #ff4d7e);
   --card-accent-h: 0;
 
   --section-title-color: #c3c9ea;
@@ -21,7 +21,7 @@
   --section-title-spacing: 0.22em;
   --section-rule-w: 42px;
   --section-rule-h: 3px;
-  --section-rule-c: linear-gradient(90deg, #ff4d7e, #8a5cff);
+  --section-rule-c: linear-gradient(90deg, var(--brand-accent, #ff4d7e), #8a5cff);
   --section-gap: 46px;
   --overlay-min: 250px;
 
@@ -30,14 +30,14 @@
   --color-surface-alt: #1f2340;
   --color-text: #f4f6ff;
   --color-text-muted: #9aa3c7;
-  --color-primary: #ff4d7e;
-  --color-primary-hover: #e6396c;
+  --color-primary: var(--brand-accent, #ff4d7e);
+  --color-primary-hover: var(--brand-accent-hover, #e6396c);
   --color-border: rgba(154, 163, 199, 0.18);
   --content-card-bg: #191c2f;
   --content-card-border: #262b46;
   --content-text: #f4f6ff;
   --content-muted: #a6aed3;
-  --content-accent: #ff4d7e;
+  --content-accent: var(--brand-accent, #ff4d7e);
   --content-skeleton-bg: rgba(255, 255, 255, 0.1);
 
   min-height: 100svh;

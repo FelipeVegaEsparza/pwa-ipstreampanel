@@ -6,11 +6,11 @@
   --card-border-w: 1px;
   --card-bg: #1a1e1b;
   --card-border: rgba(255, 255, 255, 0.04);
-  --card-border-hover: rgba(30, 215, 96, 0.35);
+  --card-border-hover: rgba(var(--brand-accent-rgb, 30, 215, 96), 0.35);
   --card-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
   --card-shadow-hover: 0 14px 30px rgba(0, 0, 0, 0.45);
   --card-lift: -3px;
-  --card-accent: #1ed760;
+  --card-accent: var(--brand-accent, #1ed760);
   --card-accent-h: 0;
 
   --section-title-color: #8fa496;
@@ -26,20 +26,20 @@
   --color-surface-alt: #1c241d;
   --color-text: #edf6ef;
   --color-text-muted: #93a59a;
-  --color-primary: #1ed760;
-  --color-primary-hover: #17b854;
+  --color-primary: var(--brand-accent, #1ed760);
+  --color-primary-hover: var(--brand-accent-hover, #17b854);
   --color-border: #26302a;
   --content-card-bg: #1a1e1b;
   --content-card-border: #2b332c;
   --content-text: #edf6ef;
   --content-muted: #9db0a2;
-  --content-accent: #1ed760;
+  --content-accent: var(--brand-accent, #1ed760);
   --content-skeleton-bg: rgba(255, 255, 255, 0.08);
 
   min-height: 100svh;
   background:
-    radial-gradient(900px 420px at 12% -5%, rgba(30, 215, 96, 0.12), transparent 60%),
-    radial-gradient(700px 400px at 100% 0%, rgba(30, 215, 96, 0.05), transparent 55%),
+    radial-gradient(900px 420px at 12% -5%, rgba(var(--brand-accent-rgb, 30, 215, 96), 0.12), transparent 60%),
+    radial-gradient(700px 400px at 100% 0%, rgba(var(--brand-accent-rgb, 30, 215, 96), 0.05), transparent 55%),
     #0b0e0c;
   color: var(--color-text);
   padding-bottom: var(--space-5);
@@ -67,7 +67,7 @@
   padding: var(--space-5);
   border: 1px solid #212a23;
   border-radius: 18px;
-  background: linear-gradient(180deg, rgba(30, 215, 96, 0.05), transparent 30%),
+  background: linear-gradient(180deg, rgba(var(--brand-accent-rgb, 30, 215, 96), 0.05), transparent 30%),
     linear-gradient(180deg, #161d18, #10150f);
   box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
 }
@@ -123,7 +123,7 @@
   inset: -1px;
   border-radius: 14px;
   padding: 1px;
-  background: linear-gradient(160deg, rgba(30, 215, 96, 0.7), rgba(30, 215, 96, 0.08) 45%, transparent);
+  background: linear-gradient(160deg, rgba(var(--brand-accent-rgb, 30, 215, 96), 0.7), rgba(var(--brand-accent-rgb, 30, 215, 96), 0.08) 45%, transparent);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -134,7 +134,7 @@
   position: absolute;
   inset: 4%;
   z-index: 0;
-  background: radial-gradient(circle, rgba(30, 215, 96, 0.28), transparent 68%);
+  background: radial-gradient(circle, rgba(var(--brand-accent-rgb, 30, 215, 96), 0.28), transparent 68%);
   filter: blur(30px);
 }
 
@@ -207,7 +207,7 @@
 .onDot {
   background: var(--color-primary);
   animation: breathe 1.8s ease-in-out infinite;
-  box-shadow: 0 0 10px rgba(30, 215, 96, 0.8);
+  box-shadow: 0 0 10px rgba(var(--brand-accent-rgb, 30, 215, 96), 0.8);
 }
 
 .offDot {
@@ -257,7 +257,7 @@
   color: #04120a;
   font-size: 1.3rem;
   cursor: pointer;
-  box-shadow: 0 10px 26px rgba(30, 215, 96, 0.35);
+  box-shadow: 0 10px 26px rgba(var(--brand-accent-rgb, 30, 215, 96), 0.35);
   transition: transform 150ms ease, background 150ms ease;
 }
 
@@ -317,7 +317,7 @@
 .socialLink:hover {
   color: var(--color-primary);
   border-color: var(--color-primary);
-  background: rgba(30, 215, 96, 0.08);
+  background: rgba(var(--brand-accent-rgb, 30, 215, 96), 0.08);
 }
 
 .deckInstall {

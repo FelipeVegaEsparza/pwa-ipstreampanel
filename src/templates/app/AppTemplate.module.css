@@ -6,11 +6,11 @@
   --card-border-w: 1px;
   --card-bg: #ffffff;
   --card-border: rgba(15, 23, 42, 0.05);
-  --card-border-hover: rgba(79, 70, 229, 0.35);
+  --card-border-hover: rgba(var(--brand-accent-rgb, 79, 70, 229), 0.35);
   --card-shadow: 0 2px 12px rgba(15, 23, 42, 0.07);
-  --card-shadow-hover: 0 18px 38px rgba(79, 70, 229, 0.18);
+  --card-shadow-hover: 0 18px 38px rgba(var(--brand-accent-rgb, 79, 70, 229), 0.18);
   --card-lift: -4px;
-  --card-accent: #4f46e5;
+  --card-accent: var(--brand-accent, #4f46e5);
   --card-accent-h: 0;
 
   --section-title-color: #64748b;
@@ -20,7 +20,7 @@
   --section-title-spacing: 0.2em;
   --section-rule-w: 26px;
   --section-rule-h: 3px;
-  --section-rule-c: linear-gradient(90deg, #4f46e5, #22d3ee);
+  --section-rule-c: linear-gradient(90deg, var(--brand-accent, #4f46e5), #22d3ee);
   --section-gap: 34px;
 
   --color-bg: #eef1fa;
@@ -28,14 +28,14 @@
   --color-surface-alt: #e3e8f7;
   --color-text: #0f172a;
   --color-text-muted: #64748b;
-  --color-primary: #4f46e5;
-  --color-primary-hover: #4338ca;
+  --color-primary: var(--brand-accent, #4f46e5);
+  --color-primary-hover: var(--brand-accent-hover, #4338ca);
   --color-border: rgba(15, 23, 42, 0.08);
   --content-card-bg: #ffffff;
   --content-card-border: rgba(15, 23, 42, 0.06);
   --content-text: #0f172a;
   --content-muted: #64748b;
-  --content-accent: #4f46e5;
+  --content-accent: var(--brand-accent, #4f46e5);
   --content-skeleton-bg: rgba(15, 23, 42, 0.07);
 
   min-height: 100svh;

@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { TenantProvider } from '@/core/config/TenantContext'
 import { PlayerProvider } from '@/modules/player/PlayerContext'
 import type { FullClientData } from '@/core/types'
-import { getTemplate } from './index'
+import { getTemplate, TemplateSlot } from './index'
 
 const baked = vi.hoisted(() => ({ clientId: null as string | null }))
 
@@ -76,4 +76,53 @@ describe('templates nuevos', () => {
       screen.queryByRole('button', { name: 'Instalar en iPhone o iPad' })
     ).toBeNull()
   })
+
+  it('aplica el accentColor del cliente como token global', () => {
+    baked.clientId = 'cmtest'
+    const data = {
+      ...clientData,
+      accentColor: '#ff6b00'
+    } as unknown as FullClientData
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } }
+    })
+
+    const { unmount } = render(
+      <QueryClientProvider client={queryClient}>
+        <TenantProvider>
+          <PlayerProvider>
+            <MemoryRouter>
+              <TemplateSlot
+                templateId="moderno2"
+                clientData={data}
+                isLoading={false}
+              />
+            </MemoryRouter>
+          </PlayerProvider>
+        </TenantProvider>
+      </QueryClientProvider>
+    )
+
+    expect(
+      document.documentElement.style.getPropertyValue('--brand-accent')
+    ).toBe('#ff6b00')
+
+    unmount()
+    expect(
+      document.documentElement.style.getPropertyValue('--brand-accent')
+    ).toBe('')
+  })
+})
+
+afterEach(() => {
+  const root = document.documentElement
+  for (const token of [
+    '--brand-accent',
+    '--brand-accent-hover',
+    '--brand-accent-rgb',
+    '--brand-accent-soft',
+    '--brand-accent-contrast'
+  ]) {
+    root.style.removeProperty(token)
+  }
 })

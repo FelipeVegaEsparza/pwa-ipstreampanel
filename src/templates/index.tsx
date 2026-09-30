@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react'
 import type { FullClientData } from '@/core/types'
+import { useAccentTheme } from '@/modules/theme/useAccentTheme'
 import { MinimalistaTemplate } from './minimalista/MinimalistaTemplate'
 import { ModernaTemplate } from './moderna/ModernaTemplate'
 import { BlueTemplate } from './blue/BlueTemplate'
@@ -46,6 +47,7 @@ export function TemplateSlot({
   clientData,
   isLoading
 }: TemplateProps & { templateId?: string | null }) {
+  useAccentTheme(clientData?.accentColor)
   const Template = getTemplate(templateId)
   return <Template clientData={clientData} isLoading={isLoading} />
 }

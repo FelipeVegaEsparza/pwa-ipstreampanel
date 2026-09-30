@@ -7,7 +7,7 @@
   --content-card-border: #e6e8ec;
   --content-text: #17171c;
   --content-muted: #5f6672;
-  --content-accent: #7c3aed;
+  --content-accent: var(--brand-accent, #7c3aed);
   --content-skeleton-bg: rgba(0, 0, 0, 0.07);
 
   /* Títulos de sección con acento de marca (solo este template). */
@@ -19,11 +19,11 @@
   --section-bar-w: 4px;
   --section-bar-gap: 10px;
   --section-bar-radius: 2px;
-  --section-bar-c: linear-gradient(180deg, #7c3aed, #a855f7);
+  --section-bar-c: linear-gradient(180deg, var(--brand-accent, #7c3aed), #a855f7);
 
   --section-rule-w: 48px;
   --section-rule-h: 3px;
-  --section-rule-c: linear-gradient(90deg, #7c3aed, #a855f7);
+  --section-rule-c: linear-gradient(90deg, var(--brand-accent, #7c3aed), #a855f7);
 }
 
 .container {
@@ -42,8 +42,8 @@
 
   --tpl-text: #ffffff;
   --tpl-muted: rgba(255, 255, 255, 0.8);
-  --tpl-accent: #ffffff;
-  --tpl-accent-text: #0a0a0f;
+  --tpl-accent: var(--brand-accent, #ffffff);
+  --tpl-accent-text: var(--brand-accent-contrast, #0a0a0f);
   --tpl-card-border: rgba(255, 255, 255, 0.28);
   --tpl-skeleton: rgba(255, 255, 255, 0.15);
 }

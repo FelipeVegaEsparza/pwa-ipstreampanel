@@ -7,11 +7,11 @@
   --card-bg: #fffdf6;
   --card-bg-img: linear-gradient(180deg, #fffef9, #fbf4e4);
   --card-border: #e0d2b8;
-  --card-border-hover: #a3271c;
+  --card-border-hover: var(--brand-accent, #a3271c);
   --card-shadow: 3px 3px 0 rgba(120, 84, 44, 0.1);
-  --card-shadow-hover: 5px 5px 0 rgba(163, 39, 28, 0.14);
+  --card-shadow-hover: 5px 5px 0 rgba(var(--brand-accent-rgb, 163, 39, 28), 0.14);
   --card-lift: -2px;
-  --card-accent: #a3271c;
+  --card-accent: var(--brand-accent, #a3271c);
   --card-accent-h: 3px;
 
   --section-title-font: Georgia, 'Times New Roman', serif;
@@ -22,7 +22,7 @@
   --section-title-spacing: 0.02em;
   --section-rule-w: 0;
   --section-rule-h: 2px;
-  --section-rule-c: #a3271c;
+  --section-rule-c: var(--brand-accent, #a3271c);
   --section-gap: 42px;
 
   --color-bg: #f2e9d8;
@@ -30,14 +30,14 @@
   --color-surface-alt: #efe3cd;
   --color-text: #2b2016;
   --color-text-muted: #7d6a53;
-  --color-primary: #a3271c;
-  --color-primary-hover: #8c2016;
+  --color-primary: var(--brand-accent, #a3271c);
+  --color-primary-hover: var(--brand-accent-hover, #8c2016);
   --color-border: rgba(120, 84, 44, 0.3);
   --content-card-bg: #fffdf6;
   --content-card-border: #e4d5b9;
   --content-text: #2b2016;
   --content-muted: #7d6a53;
-  --content-accent: #a3271c;
+  --content-accent: var(--brand-accent, #a3271c);
   --content-skeleton-bg: rgba(120, 84, 44, 0.14);
 
   min-height: 100svh;
