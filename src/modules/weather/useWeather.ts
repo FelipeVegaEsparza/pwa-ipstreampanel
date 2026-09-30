@@ -26,13 +26,22 @@ export function lonValue(location: BasicLocation | null | undefined): number | n
   return lon
 }
 
-export function useWeather(location: BasicLocation | null | undefined) {
+export interface UseWeatherOptions {
+  /** Refresca el clima cada N ms (0 = sin refresco periódico). */
+  refreshIntervalMs?: number
+}
+
+export function useWeather(
+  location: BasicLocation | null | undefined,
+  options: UseWeatherOptions = {}
+) {
   const [data, setData] = useState<WeatherData | null>(null)
 
   const lat = latValue(location)
   const lon = lonValue(location)
   const hasCoords = Boolean(location) && lat !== null && lon !== null
   const country = location?.country
+  const refreshIntervalMs = options.refreshIntervalMs ?? 0
 
   useEffect(() => {
     // Sin coordenadas válidas se trata igual que sin ubicación:
@@ -93,14 +102,20 @@ export function useWeather(location: BasicLocation | null | undefined) {
     window.addEventListener('online', handleOnline)
     document.addEventListener('visibilitychange', handleVisibility)
 
+    const intervalId =
+      refreshIntervalMs > 0
+        ? window.setInterval(attempt, refreshIntervalMs)
+        : undefined
+
     return () => {
       active = false
       if (controller) controller.abort()
       if (timer !== undefined) window.clearTimeout(timer)
+      if (intervalId !== undefined) window.clearInterval(intervalId)
       window.removeEventListener('online', handleOnline)
       document.removeEventListener('visibilitychange', handleVisibility)
     }
-  }, [hasCoords, lat, lon, country])
+  }, [hasCoords, lat, lon, country, refreshIntervalMs])
 
   return data
 }

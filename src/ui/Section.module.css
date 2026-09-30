@@ -38,3 +38,7 @@
   border-radius: 2px;
   background: var(--section-rule-c, transparent);
 }
+
+.highlight {
+  color: var(--section-highlight-color, var(--color-primary, #6366f1));
+}

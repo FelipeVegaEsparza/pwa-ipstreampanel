@@ -23,6 +23,7 @@ import {
   type SectionId
 } from './sections'
 import type { SectionDataProps } from './format'
+import { SectionHeadingContext } from '@/ui/SectionHeadingContext'
 
 type NewsVariant = 'grid' | 'featured' | 'rows' | 'overlay'
 type ProgramVariant = 'list' | 'cards'
@@ -152,20 +153,21 @@ export function ContentSectionStack({ clientData, isLoading }: SectionDataProps)
   const template = clientData?.selectedTemplate
 
   return (
-    <>
+    <SectionHeadingContext.Provider value={template === 'moderno2'}>
       {getSectionOrder(template).map((id) => (
         <div key={id} id={sectionAnchorId(id)} style={{ scrollMarginTop: 96 }}>
           {sectionFor(id, { clientData, isLoading }, template)}
         </div>
       ))}
       {template !== 'minimalista' &&
+        template !== 'moderno2' &&
         !(template && CONTACT_SOCIAL_SCHEMES[template]) && (
           <ContactSection
             clientData={clientData}
             withBrand={template === 'petroleo' || template === 'petroleoblue'}
           />
         )}
-    </>
+    </SectionHeadingContext.Provider>
   )
 }
 

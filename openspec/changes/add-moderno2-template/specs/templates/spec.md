@@ -1,0 +1,62 @@
+# Spec Delta
+
+## ADDED Requirements
+
+### Requirement: Template moderno2
+El sistema SHALL renderizar el template `moderno2` cuando `selectedTemplate`
+coincida con ese id, manteniendo el fallback al template por defecto para ids
+desconocidos o `null`. El template SHALL reutilizar el shell compartido
+(reproductor persistente, secciones de contenido y PWA), diferenciándose por su
+hero de reproductor, navegación por secciones y paleta.
+
+#### Scenario: Template seleccionado
+- **WHEN** el panel entrega `selectedTemplate: "moderno2"`
+- **THEN** se renderiza el diseño `moderno2`
+
+#### Scenario: Fallback
+- **WHEN** `selectedTemplate` es un id no registrado o `null`
+- **THEN** se renderiza el template por defecto sin romper la aplicación
+
+### Requirement: Orden de secciones del template moderno2
+El template `moderno2` SHALL mostrar las secciones de contenido en el orden
+noticias, programas, TV en vivo, videos, locutores, auspiciadores/promociones,
+redes y clima, mostrando cada sección solo si su recurso tiene datos. El orden
+SHALL aplicarse únicamente cuando el template seleccionado es `moderno2`.
+
+#### Scenario: Home de moderno2 con datos
+- **WHEN** un cliente con template `moderno2` abre la home
+- **THEN** las secciones se muestran en el orden definido para `moderno2`
+
+#### Scenario: Sección sin datos
+- **WHEN** en un cliente `moderno2` una sección no tiene datos
+- **THEN** esa sección no se renderiza y no altera el orden del resto
+
+#### Scenario: Otro template
+- **WHEN** un cliente con template distinto de `moderno2` abre su home
+- **THEN** las secciones conservan el orden que ese template usaba
+
+### Requirement: Tipografías self-hosted del template moderno2
+El template `moderno2` SHALL usar las tipografías Bebas Neue (títulos de
+display) y Montserrat (texto base) servidas desde el propio origen, sin depender
+de Google Fonts, de modo que la experiencia offline de la PWA no se degrade.
+
+#### Scenario: Fuentes servidas localmente
+- **WHEN** el template `moderno2` carga
+- **THEN** las fuentes se sirven desde el origen de la aplicación y no desde un CDN externo
+
+#### Scenario: Sin conexión
+- **WHEN** el usuario abre la aplicación sin conexión y las fuentes están en caché
+- **THEN** el template conserva sus tipografías
+
+### Requirement: Hero y titulares del template moderno2
+El template `moderno2` SHALL mostrar un hero con el tema actual y la navegación
+por secciones, y SHALL mostrar los titulares de sección con una palabra gigante
+de fondo derivada del título y un texto resaltado, de forma adaptativa.
+
+#### Scenario: Hero
+- **WHEN** el cliente usa `moderno2`
+- **THEN** el hero muestra la portada, el título y el artista del tema actual, y el control de reproducción
+
+#### Scenario: Titular de sección
+- **WHEN** se renderiza una sección del template `moderno2`
+- **THEN** el titular muestra el texto de la sección y una palabra gigante de fondo

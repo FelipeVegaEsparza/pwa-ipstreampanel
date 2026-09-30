@@ -10,6 +10,7 @@ import { PetroleoTemplate } from './petroleo/PetroleoTemplate'
 import { PetroleoBlueTemplate } from './petroleoblue/PetroleoBlueTemplate'
 import { PlaylistTemplate } from './playlist/PlaylistTemplate'
 import { CoveredTemplate } from './covered/CoveredTemplate'
+import { Moderno2Template } from './moderno2/Moderno2Template'
 
 export const DEFAULT_TEMPLATE_ID = 'minimalista'
 
@@ -28,7 +29,8 @@ const templates: Record<string, ComponentType<TemplateProps>> = {
   petroleo: PetroleoTemplate,
   petroleoblue: PetroleoBlueTemplate,
   playlist: PlaylistTemplate,
-  covered: CoveredTemplate
+  covered: CoveredTemplate,
+  moderno2: Moderno2Template
 }
 
 export function getTemplate(

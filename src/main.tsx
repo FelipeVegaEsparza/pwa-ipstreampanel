@@ -6,6 +6,7 @@ import { App } from '@/app/App'
 import { TenantProvider } from '@/core/config/TenantContext'
 import { PlayerProvider } from '@/modules/player/PlayerContext'
 import './index.css'
+import './templates/moderno2/fonts.css'
 
 const queryClient = new QueryClient({
   defaultOptions: {

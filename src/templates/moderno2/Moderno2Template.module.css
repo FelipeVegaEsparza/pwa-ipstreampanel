@@ -1,0 +1,411 @@
+/* Template `moderno2` (estilo radioladeliciosa).
+   Las familias se definen en ./fonts.css (self-hosted). */
+
+.page {
+  --template-display-font: 'Bebas Neue', sans-serif;
+  --primary-font: 'Montserrat', sans-serif;
+  --secondary-font: 'Montserrat', sans-serif;
+
+  --template-bg: #0d0d0f;
+  --template-surface: #141416;
+  --template-text: #f5f5f5;
+  --template-muted: rgba(255, 255, 255, 0.6);
+  --template-primary: #ff6b00;
+  --template-primary-soft: #ff9500;
+  --template-border: rgba(255, 140, 0, 0.16);
+
+  --section-bg-text-color: #cbd5e1;
+  --section-highlight-color: var(--template-primary-soft);
+  --section-title-color: #ffffff;
+  --section-title-weight: 800;
+  --section-title-transform: uppercase;
+
+  --container-width: 1200px;
+  --container-padding: 1rem;
+
+  min-height: 100svh;
+  font-family: var(--primary-font);
+  color: var(--template-text);
+  background: var(--template-bg);
+  padding-bottom: var(--player-height, 72px);
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+@media (min-width: 992px) {
+  .page {
+    --container-padding: 1.5rem;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Hero                                                                */
+/* ------------------------------------------------------------------ */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--template-border);
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.heroBgImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(28px) saturate(1.1);
+  transform: scale(1.15);
+  opacity: 0.5;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 120% at 50% 0%, rgba(255, 107, 0, 0.18) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(13, 13, 15, 0.55) 0%, rgba(13, 13, 15, 0.96) 100%);
+}
+
+.heroInner {
+  position: relative;
+  z-index: 1;
+  padding-top: 1.25rem;
+  padding-bottom: 2.5rem;
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 56px;
+}
+
+.logoLink {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+
+.logo {
+  height: 44px;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+}
+
+.nav {
+  flex: 1;
+}
+
+.navList {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--template-display-font);
+  font-size: 1.35rem;
+  letter-spacing: 0.02em;
+  color: var(--template-text);
+  white-space: nowrap;
+}
+
+.navLink {
+  color: inherit;
+  transition: color 0.2s ease;
+}
+
+.navLink:hover {
+  color: var(--template-primary-soft);
+}
+
+.topActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: none;
+}
+
+.socials {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--template-text);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.socialLink:hover {
+  background: var(--template-primary);
+  color: #fff;
+}
+
+.menuBtn {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--template-border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--template-text);
+  font-size: 1.2rem;
+}
+
+.heroBody {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+
+.heroCover {
+  width: 220px;
+  height: 220px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+  background: var(--template-surface);
+}
+
+.heroCoverImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heroInfo {
+  min-width: 0;
+}
+
+.liveBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(255, 107, 0, 0.16);
+  border: 1px solid var(--template-border);
+  color: var(--template-primary-soft);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.onDot,
+.offDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.onDot {
+  background: #ff3b30;
+  box-shadow: 0 0 8px rgba(255, 59, 48, 0.8);
+}
+
+.offDot {
+  background: #6b7280;
+}
+
+.song {
+  margin: 0.6rem 0 0.2rem;
+  font-family: var(--template-display-font);
+  font-weight: 400;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  line-height: 1;
+  color: #fff;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.artist {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--template-muted);
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.4rem;
+}
+
+.playBtn,
+.secondaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.6rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  border: 1px solid transparent;
+}
+
+.playBtn {
+  background: linear-gradient(135deg, var(--template-primary), var(--template-primary-soft));
+  color: #fff;
+}
+
+.playBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.secondaryBtn {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--template-border);
+  color: var(--template-text);
+}
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.content {
+  padding: 2rem 0 3rem;
+}
+
+.footer {
+  border-top: 1px solid var(--template-border);
+  padding: 1.5rem 0;
+  background: var(--template-surface);
+}
+
+.footerInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.footerText {
+  font-size: 0.85rem;
+  color: var(--template-muted);
+}
+
+.footerText strong {
+  color: var(--template-text);
+}
+
+/* ------------------------------------------------------------------ */
+/* Titulares "display": palabra gigante de fondo + texto resaltado.    */
+/* El atributo data-bg-text lo emite la UI compartida `Section`.       */
+/* ------------------------------------------------------------------ */
+
+.page [data-bg-text] {
+  position: relative;
+  z-index: 1;
+}
+
+.page [data-bg-text]::before {
+  content: attr(data-bg-text);
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: -1;
+  display: block;
+  width: auto;
+  height: auto;
+  margin: 0;
+  background: none;
+  border-radius: 0;
+  font-size: clamp(1.5rem, 10vw, 6rem);
+  font-weight: 900;
+  line-height: 0.85;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  opacity: 0.25;
+  color: var(--section-bg-text-color, #cbd5e1);
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Responsive                                                          */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 991px) {
+  .navList {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(78vw, 320px);
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding: 4.5rem 1.5rem 1.5rem;
+    margin: 0;
+    background: var(--template-bg);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 50;
+    overflow-y: auto;
+  }
+
+  .navListOpen {
+    transform: translateX(0);
+  }
+
+  .navLink {
+    display: block;
+    padding: 0.6rem 0;
+    font-size: 1.6rem;
+  }
+
+  .menuBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 767px) {
+  .heroBody {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    justify-items: start;
+  }
+
+  .heroCover {
+    width: 160px;
+    height: 160px;
+  }
+
+  .topActions .socials {
+    display: none;
+  }
+}

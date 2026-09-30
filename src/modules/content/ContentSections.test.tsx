@@ -234,10 +234,70 @@ const COVERED_ORDER = [
   'Síguenos'
 ]
 
+// El clima multi-ciudad y el historial de moderno2 se componen en el template,
+// no en el stack data-driven.
+const MODERNO2_ORDER = [
+  'Noticias',
+  'Programación',
+  'TV en vivo',
+  'Videos',
+  'Locutores',
+  'Auspiciadores',
+  'Promociones',
+  'Síguenos'
+]
+
 describe('ContentSectionStack', () => {
   it('antepone el orden editorial en la home de covered', () => {
     const { container } = renderStack('covered')
     expect(sectionTitles(container)).toEqual(COVERED_ORDER)
+  })
+
+  it('usa el orden propio de moderno2 y no muestra contacto', () => {
+    const { container } = renderStack('moderno2')
+    const titles = sectionTitles(container)
+    expect(titles).toEqual(MODERNO2_ORDER)
+    expect(titles).not.toContain('Contáctanos')
+  })
+
+  it('omite secciones sin datos en moderno2 sin alterar el orden', () => {
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } }
+    })
+    const data = fullData('moderno2')
+    data.news = []
+    data.videos = []
+    const { container } = render(
+      <QueryClientProvider client={queryClient}>
+        <TenantProvider>
+          <MemoryRouter>
+            <ContentSectionStack clientData={data} isLoading={false} />
+          </MemoryRouter>
+        </TenantProvider>
+      </QueryClientProvider>
+    )
+    const titles = sectionTitles(container)
+    expect(titles).not.toContain('Noticias')
+    expect(titles).not.toContain('Videos')
+    expect(titles.indexOf('Programación')).toBeLessThan(titles.indexOf('TV en vivo'))
+    expect(titles.indexOf('Locutores')).toBeLessThan(titles.indexOf('Auspiciadores'))
+  })
+
+  it('en moderno2 los titulares llevan la palabra gigante de fondo', () => {
+    const { container } = renderStack('moderno2')
+    const headings = Array.from(container.querySelectorAll('section h2'))
+    expect(headings.length).toBeGreaterThan(0)
+    expect(
+      headings.every((heading) => heading.getAttribute('data-bg-text'))
+    ).toBe(true)
+  })
+
+  it('otros templates no emiten data-bg-text', () => {
+    const { container } = renderStack('moderna')
+    const headings = Array.from(container.querySelectorAll('section h2'))
+    expect(
+      headings.some((heading) => heading.getAttribute('data-bg-text'))
+    ).toBe(false)
   })
 
   it('combina contacto y síguenos en una sección de dos columnas en covered', () => {

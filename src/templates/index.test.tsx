@@ -10,6 +10,7 @@ import { PetroleoTemplate } from './petroleo/PetroleoTemplate'
 import { PetroleoBlueTemplate } from './petroleoblue/PetroleoBlueTemplate'
 import { PlaylistTemplate } from './playlist/PlaylistTemplate'
 import { CoveredTemplate } from './covered/CoveredTemplate'
+import { Moderno2Template } from './moderno2/Moderno2Template'
 
 describe('getTemplate', () => {
   it('devuelve el template registrado para cada id', () => {
@@ -23,6 +24,7 @@ describe('getTemplate', () => {
     expect(getTemplate('petroleoblue')).toBe(PetroleoBlueTemplate)
     expect(getTemplate('playlist')).toBe(PlaylistTemplate)
     expect(getTemplate('covered')).toBe(CoveredTemplate)
+    expect(getTemplate('moderno2')).toBe(Moderno2Template)
   })
 
   it('devuelve el template por defecto ante id desconocido o nulo', () => {

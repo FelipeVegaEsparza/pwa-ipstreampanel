@@ -22,6 +22,13 @@ No hay geocoding: la ciudad y las coordenadas vienen en la API del panel.
 - **Pronóstico** (`WeatherForecast`): como sección **"Proyección del clima en
   {ciudad}"** dentro del stack de contenido, por lo que aparece en todos los
   templates en la posición definida por el orden de secciones de cada uno.
+- **Clima multi-ciudad** (`MultiCityWeather`): solo en el template `moderno2`.
+  Muestra una tarjeta principal con la ciudad del panel (`basicData.location`)
+  más una grilla fija con las 9 ciudades de Chile (Valparaíso, Concepción,
+  Antofagasta, La Serena, Temuco, Puerto Montt, Punta Arenas, Iquique, Arica).
+  Cada tarjeta consulta el proveedor por su cuenta (un fallo no afecta al
+  resto) y el conjunto se refresca cada 10 minutos. Si el cliente no tiene
+  ciudad configurada, la tarjeta principal se omite y la grilla sigue visible.
 
 ## Sección "Proyección del clima en {ciudad}"
 
@@ -46,4 +53,5 @@ iconos (`weatherIcon`) en `src/modules/weather/label.ts`.
 - `src/modules/weather/Weather.tsx` — clima actual.
 - `src/modules/weather/WeatherForecast.tsx` — tira de pronóstico.
 - `src/modules/weather/WeatherForecastSection.tsx` — sección para el stack.
+- `src/modules/weather/MultiCityWeather.tsx` — vista multi-ciudad de `moderno2`.
 - `src/modules/content/sections.ts` / `ContentSections.tsx` — integración.
