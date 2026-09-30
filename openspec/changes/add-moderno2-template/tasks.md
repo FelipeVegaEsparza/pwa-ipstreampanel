@@ -54,3 +54,7 @@
 ## 10. Programación por día
 
 - [x] 10.1 Agregar la variante `tabs` a `ProgramsSection` (días Lunes–Domingo arriba y tarjetas con imagen, horario, días y descripción del día seleccionado) y usarla en `moderno2`; verificar con tests de `ProgramsSection`/`ContentSections` y `npm run build`.
+
+## 11. Sin sección de redes
+
+- [x] 11.1 Quitar `social` del orden de `moderno2` (las redes ya están en header y footer); verificar con test de `ContentSections` y `npm run build`.

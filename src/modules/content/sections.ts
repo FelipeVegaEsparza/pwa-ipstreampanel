@@ -194,8 +194,9 @@ const BLUE_ORDER: SectionId[] = [
 ]
 
 // Portal `moderno2` (estilo radioladeliciosa): noticias y programación primero,
-// luego radio, video y equipo; auspiciadores/promociones y redes cierran el
-// stack. El clima multi-ciudad y el historial los compone el propio template.
+// luego radio, video y equipo; auspiciadores/promociones cierran el stack. El
+// clima multi-ciudad y el historial los compone el propio template. Las redes
+// sociales no van como sección: se muestran en el header y el footer.
 const MODERNO2_ORDER: SectionId[] = [
   'news',
   'programs',
@@ -203,8 +204,7 @@ const MODERNO2_ORDER: SectionId[] = [
   'videos',
   'announcers',
   'sponsors',
-  'promotions',
-  'social'
+  'promotions'
 ]
 
 export function getSectionOrder(template: string | null | undefined): SectionId[] {

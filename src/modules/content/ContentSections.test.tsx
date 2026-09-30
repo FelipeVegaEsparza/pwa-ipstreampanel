@@ -244,8 +244,7 @@ const MODERNO2_ORDER = [
   'Videos',
   'Locutores',
   'Auspiciadores',
-  'Promociones',
-  'Síguenos'
+  'Promociones'
 ]
 
 describe('ContentSectionStack', () => {
