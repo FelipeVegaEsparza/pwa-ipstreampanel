@@ -7,7 +7,8 @@ const TOKENS = [
   '--brand-accent-hover',
   '--brand-accent-rgb',
   '--brand-accent-soft',
-  '--brand-accent-contrast'
+  '--brand-accent-contrast',
+  '--brand-accent-on'
 ]
 
 afterEach(() => {
@@ -29,12 +30,16 @@ describe('useAccentTheme', () => {
     expect(style.getPropertyValue('--brand-accent-contrast')).toMatch(
       /^#(ffffff|000000)$/
     )
+    expect(style.getPropertyValue('--brand-accent-on')).toBe('1')
   })
 
   it('no aplica tokens cuando es null', () => {
     renderHook(() => useAccentTheme(null))
     expect(
       document.documentElement.style.getPropertyValue('--brand-accent')
+    ).toBe('')
+    expect(
+      document.documentElement.style.getPropertyValue('--brand-accent-on')
     ).toBe('')
   })
 

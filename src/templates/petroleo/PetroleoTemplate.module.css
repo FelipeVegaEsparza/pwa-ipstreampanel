@@ -43,6 +43,11 @@
   --section-rule-h: 4px;
   --section-rule-c: var(--brand-accent, #7ca200);
   --section-gap: 44px;
+  --section-bar-w: calc(4px * var(--brand-accent-on, 0));
+  --section-bar-h: 1.05em;
+  --section-bar-gap: calc(10px * var(--brand-accent-on, 0));
+  --section-bar-radius: 2px;
+  --section-bar-c: var(--brand-accent, transparent);
 
   --color-bg: #17191a;
   --color-surface: #202325;

@@ -11,6 +11,12 @@
   --tpl-accent-text: var(--brand-accent-contrast, #0b0b12);
   --tpl-card-border: rgba(255, 255, 255, 0.25);
   --tpl-skeleton: rgba(255, 255, 255, 0.15);
+
+  --section-bar-w: calc(4px * var(--brand-accent-on, 0));
+  --section-bar-h: 1.05em;
+  --section-bar-gap: calc(10px * var(--brand-accent-on, 0));
+  --section-bar-radius: 2px;
+  --section-bar-c: var(--brand-accent, transparent);
 }
 
 /* Fondo dinámico */

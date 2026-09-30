@@ -121,7 +121,8 @@ afterEach(() => {
     '--brand-accent-hover',
     '--brand-accent-rgb',
     '--brand-accent-soft',
-    '--brand-accent-contrast'
+    '--brand-accent-contrast',
+    '--brand-accent-on'
   ]) {
     root.style.removeProperty(token)
   }

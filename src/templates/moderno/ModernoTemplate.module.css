@@ -23,6 +23,11 @@
   --section-rule-h: 3px;
   --section-rule-c: linear-gradient(90deg, var(--brand-accent, #ff4d7e), #8a5cff);
   --section-gap: 46px;
+  --section-bar-w: calc(4px * var(--brand-accent-on, 0));
+  --section-bar-h: 1.05em;
+  --section-bar-gap: calc(10px * var(--brand-accent-on, 0));
+  --section-bar-radius: 2px;
+  --section-bar-c: var(--brand-accent, transparent);
   --overlay-min: 250px;
 
   --color-bg: #0b0d1a;

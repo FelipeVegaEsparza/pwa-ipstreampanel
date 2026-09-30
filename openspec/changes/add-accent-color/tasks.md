@@ -23,3 +23,9 @@
 - [x] 4.2 Documentar el contrato `accentColor`, la derivación y el fallback en `docs/`; verificar por revisión del archivo.
 - [x] 4.3 Ejecutar `npm run lint`, `npm run typecheck`, `npm run test` y `npm run build`; verificar que pasan sin errores.
 - [x] 4.4 Validar el cambio con `openspec validate add-accent-color` sin issues.
+
+## 5. Protagonismo del acento
+
+- [x] 5.1 Agregar un flag de acento en `useAccentTheme` y una marca de acento en los títulos de sección (visible solo con acento); verificar con `npm run build`.
+- [x] 5.2 Aplicar el acento al borde superior del reproductor solo cuando hay acento; verificar con `npm run build`.
+- [x] 5.3 Ejecutar `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build` y `openspec validate add-accent-color`.

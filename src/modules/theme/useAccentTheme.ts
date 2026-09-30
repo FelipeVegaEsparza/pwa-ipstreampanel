@@ -6,7 +6,8 @@ const TOKENS = [
   '--brand-accent-hover',
   '--brand-accent-rgb',
   '--brand-accent-soft',
-  '--brand-accent-contrast'
+  '--brand-accent-contrast',
+  '--brand-accent-on'
 ] as const
 
 function clearTokens(root: HTMLElement): void {
@@ -37,6 +38,8 @@ export function useAccentTheme(
     root.style.setProperty('--brand-accent-rgb', tokens.rgb)
     root.style.setProperty('--brand-accent-soft', tokens.soft)
     root.style.setProperty('--brand-accent-contrast', tokens.contrast)
+    // Flag para activar refuerzos de "protagonismo" solo cuando hay acento.
+    root.style.setProperty('--brand-accent-on', '1')
 
     return () => clearTokens(root)
   }, [accentColor])

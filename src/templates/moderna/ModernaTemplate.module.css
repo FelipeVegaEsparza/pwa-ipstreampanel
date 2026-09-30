@@ -12,6 +12,12 @@
   --content-muted: #c9c5bd;
   --content-accent: var(--brand-accent, #ffb86b);
   --content-skeleton-bg: rgba(255, 255, 255, 0.12);
+
+  --section-bar-w: calc(4px * var(--brand-accent-on, 0));
+  --section-bar-h: 1.05em;
+  --section-bar-gap: calc(10px * var(--brand-accent-on, 0));
+  --section-bar-radius: 2px;
+  --section-bar-c: var(--brand-accent, transparent);
 }
 
 .header {

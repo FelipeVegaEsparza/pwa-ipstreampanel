@@ -47,6 +47,16 @@ Cada plantilla consume los tokens canónicos con su color como fallback, por
 ejemplo `--content-accent: var(--brand-accent, #ff9500)`. Así el override
 realmente aplica (las variables se definen en `.page`, que es descendiente).
 
+### Protagonismo
+
+Para que el acento tenga más presencia sin romper el diseño, cuando hay color se
+activa el flag `--brand-accent-on: 1` y:
+
+- Los títulos de sección muestran una **marca de acento** (barra vertical). Sin
+  color, el ancho es `0` y no cambia nada.
+- El reproductor inferior usa el acento en su **borde superior**.
+- Se mantienen los fondos y tipografías base de cada plantilla.
+
 ## Derivación de variantes
 
 `deriveAccent(hex)` en `src/core/color`:
