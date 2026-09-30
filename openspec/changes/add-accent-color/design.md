@@ -8,8 +8,8 @@ Ver `proposal.md - Why`. Hoy cada template define su acento en su propio
 algunos valores derivados hardcodeados (p. ej. gradientes `rgba(...)` en
 `playlist`). Los componentes compartidos (`PlayerBar`, `TrackProgress`,
 `Section`, `GcBar`) leen `--color-primary` / `--section-highlight-color` /
-`--content-accent`. Los datos del cliente llegan por `useFullClientData` y hoy
-no incluyen ningún color.
+`--content-accent`. Los datos del cliente llegan por `useFullClientData`.
+El panel ya desplegó el campo `accentColor` (ver contrato confirmado abajo).
 
 ## Goals / Non-Goals
 
@@ -35,6 +35,30 @@ el shell, sin recompilar. Alternativas descartadas: bakear el color en el build
 por cliente (`client.json`) exige redesplegar por cada cambio, contra el
 precedente de `selectedTemplate`; `localStorage` es un ajuste por dispositivo,
 no por radio.
+
+**Contrato confirmado del panel** (`GET /api/public/{clientId}`):
+
+```
+{
+  "client": { "id": "cm...", "name": "Radio Ejemplo FM" },
+  "selectedTemplate": "moderno2",
+  "accentColor": "#ff6b00",        <-- campo raiz nuevo, hermano de selectedTemplate
+  "oneSignalAppId": null,
+  "basicData": { ... },
+  ...
+}
+```
+
+- Tipo: `string | null`. Formato: `#rrggbb` en minúsculas (6 dígitos hex).
+- `null` = usar el color propio de la plantilla; no es error.
+- La API nunca devuelve `""` ni valores inválidos: si el guardado es inválido,
+  responde `null`.
+- **Solo** viene en la raíz de `GET /api/public/{clientId}`; **no** en
+  `/basic-data`.
+- El resto del contrato no cambió.
+
+El frontend igual normaliza y valida defensivamente (`/^#[0-9a-f]{6}$/i` +
+`toLowerCase()`) por si llegara un valor inesperado.
 
 ### 2. Tokens canónicos con fallback (por qué no alcanza con inyectar arriba)
 
@@ -91,8 +115,9 @@ el `clientData` ya presente en el árbol.
 
 ## Risks / Trade-offs
 
-- [El panel aún no expone `accentColor`] → El frontend queda inerte (usa los
-  defaults) hasta que el panel lo entregue; no rompe nada.
+- [Panel ya desplegado] → El campo `accentColor` ya existe en la API y hoy
+  devuelve `null` para los clientes existentes; al no haber color, el frontend
+  usa los defaults de la plantilla.
 - [Color libre y accesibilidad] → El contraste texto-sobre-acento se deriva por
   luminancia; si un color es muy oscuro y se usa como **texto sobre fondo
   oscuro**, puede perder legibilidad. Se mitiga recomendando colores con
@@ -110,13 +135,12 @@ el `clientData` ya presente en el árbol.
 
 - Cambio aditivo: sin migración de datos. Los clientes sin `accentColor`
   conservan su aspecto actual.
-- Despliegue: primero el frontend (inerte), luego el panel expone el campo.
+- Despliegue: el panel ya expone el campo; falta desplegar el frontend, que es
+  inerte hasta que un cliente configure un color.
 - Rollback: quitar el contenedor que inyecta los tokens devuelve todo a los
   defaults de cada template.
 
 ## Open Questions
 
-- ¿El panel expondrá el campo solo en la raíz de `GET /api/public/{clientId}` o
-  también en `/basic-data`? (No cambia el enfoque del frontend.)
 - ¿Conviene un `--brand-accent-readable` para acento usado como texto sobre
   fondos oscuros? (Deferible; no cambia specs ni tareas.)
