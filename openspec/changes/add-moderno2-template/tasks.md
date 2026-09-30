@@ -74,3 +74,7 @@
 ## 15. Bloque de contacto al final
 
 - [x] 15.1 Agregar al final de `moderno2` el formulario de contacto a la izquierda y, a la derecha, el cover de la radio, las redes sociales y los botones de instalar la PWA; verificar con test de `moderno2` y `npm run build`.
+
+## 16. Historial tras las noticias
+
+- [x] 16.1 Mover la sección de historial de canciones para que se muestre justo después de la sección de noticias (inyectada en el stack vía `ContentSlotsContext`); verificar con tests de `moderno2`/`ContentSections` y `npm run build`.

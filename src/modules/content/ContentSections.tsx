@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react'
+import { Fragment, type ReactNode } from 'react'
 import { useTenant } from '@/core/config/TenantContext'
 import { useFullClientData } from '@/core/hooks/useFullClientData'
 import { ContactSection } from '@/modules/contact/ContactSection'
@@ -24,6 +24,7 @@ import {
 } from './sections'
 import type { SectionDataProps } from './format'
 import { SectionHeadingContext } from '@/ui/SectionHeadingContext'
+import { useContentSlots } from './ContentSlotsContext'
 
 type NewsVariant = 'grid' | 'featured' | 'rows' | 'overlay'
 type ProgramVariant = 'list' | 'cards' | 'tabs'
@@ -153,13 +154,17 @@ function sectionFor(
 
 export function ContentSectionStack({ clientData, isLoading }: SectionDataProps) {
   const template = clientData?.selectedTemplate
+  const slots = useContentSlots()
 
   return (
     <SectionHeadingContext.Provider value={template === 'moderno2'}>
       {getSectionOrder(template).map((id) => (
-        <div key={id} id={sectionAnchorId(id)} style={{ scrollMarginTop: 96 }}>
-          {sectionFor(id, { clientData, isLoading }, template)}
-        </div>
+        <Fragment key={id}>
+          <div id={sectionAnchorId(id)} style={{ scrollMarginTop: 96 }}>
+            {sectionFor(id, { clientData, isLoading }, template)}
+          </div>
+          {slots.after?.[id]}
+        </Fragment>
       ))}
       {template !== 'minimalista' &&
         template !== 'moderno2' &&

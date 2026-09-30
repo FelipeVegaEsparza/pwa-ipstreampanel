@@ -41,11 +41,16 @@ para no crecer indefinidamente.
 
 ### Requirement: Historial visible en el template moderno2
 El template `moderno2` SHALL mostrar el historial de canciones reproducidas como
-una sección, y SHALL NO mostrarla cuando el historial esté vacío.
+una sección ubicada justo después de la sección de noticias, y SHALL NO mostrarla
+cuando el historial esté vacío.
 
 #### Scenario: Historial con entradas
 - **WHEN** el historial tiene al menos una canción y el template es `moderno2`
 - **THEN** la sección de historial se muestra con las canciones acumuladas
+
+#### Scenario: Ubicación tras las noticias
+- **WHEN** el template es `moderno2` y hay historial
+- **THEN** la sección de historial se ubica inmediatamente después de la sección de noticias
 
 #### Scenario: Historial vacío
 - **WHEN** no hay canciones acumuladas

@@ -1,9 +1,10 @@
 import { render, screen } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest'
 import { TenantProvider } from '@/core/config/TenantContext'
 import { PlayerProvider } from '@/modules/player/PlayerContext'
+import { ContentSectionStack } from '@/modules/content/ContentSections'
 import type { FullClientData } from '@/core/types'
 import { Moderno2Template } from './Moderno2Template'
 
@@ -90,8 +91,19 @@ function renderTemplate(data: FullClientData) {
     <QueryClientProvider client={queryClient}>
       <TenantProvider>
         <PlayerProvider>
-          <MemoryRouter>
-            <Moderno2Template clientData={data} isLoading={false} />
+          <MemoryRouter initialEntries={['/']}>
+            <Routes>
+              <Route
+                element={<Moderno2Template clientData={data} isLoading={false} />}
+              >
+                <Route
+                  index
+                  element={
+                    <ContentSectionStack clientData={data} isLoading={false} />
+                  }
+                />
+              </Route>
+            </Routes>
           </MemoryRouter>
         </PlayerProvider>
       </TenantProvider>
@@ -205,6 +217,12 @@ describe('Moderno2Template', () => {
       screen.getByRole('heading', { name: 'Canciones sonadas' })
     ).toBeInTheDocument()
     expect(screen.getAllByText('Tema Historial').length).toBeGreaterThan(0)
+
+    const news = screen.getByRole('heading', { name: 'Noticias' })
+    const history = screen.getByRole('heading', { name: 'Canciones sonadas' })
+    expect(news.compareDocumentPosition(history)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING
+    )
   })
 
   it('muestra el bloque de contacto con formulario, redes e instalar app', () => {

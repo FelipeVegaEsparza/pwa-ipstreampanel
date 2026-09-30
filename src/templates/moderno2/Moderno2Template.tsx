@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom'
 import { useLiveRadio } from '@/modules/player/useLiveRadio'
 import { PlayerBar } from '@/modules/player/PlayerBar'
 import { GcBar } from '@/modules/content/GcBar'
+import { ContentSlotsContext } from '@/modules/content/ContentSlotsContext'
 import { useSongHistory } from '@/modules/history/useSongHistory'
 import { SongHistorySection } from '@/modules/history/SongHistorySection'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
@@ -173,8 +174,11 @@ export function Moderno2Template({ clientData, isLoading }: TemplateProps) {
       <main className={styles.content}>
         <div className={styles.container}>
           <SectionHeadingContext.Provider value>
-            <Outlet />
-            <SongHistorySection tracks={history} />
+            <ContentSlotsContext.Provider
+              value={{ after: { news: <SongHistorySection tracks={history} /> } }}
+            >
+              <Outlet />
+            </ContentSlotsContext.Provider>
             <MultiCityWeather location={clientData?.basicData?.location} />
             <Moderno2Contact clientData={clientData} />
           </SectionHeadingContext.Provider>
