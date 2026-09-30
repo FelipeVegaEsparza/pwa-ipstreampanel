@@ -66,3 +66,7 @@
 ## 13. Todas las secciones del panel
 
 - [x] 13.1 Incluir el resto de secciones con datos (podcasts, videocasts, galerías, eventos y encuestas) en el orden de `moderno2`; verificar con test de `ContentSections` y `npm run build`.
+
+## 14. Barra de mensajes bajo la navegación
+
+- [x] 14.1 Colocar la GC bar justo debajo de la navegación principal (antes del hero) en `moderno2`; verificar con tests de `moderno2` y `npm run build`.

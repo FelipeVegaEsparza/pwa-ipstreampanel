@@ -74,6 +74,19 @@ programas, SHALL mostrar un aviso sin romper la sección.
 - **WHEN** un cliente con template distinto de `moderno2` muestra su programación
 - **THEN** conserva la variante que ese template usaba
 
+### Requirement: Barra de mensajes bajo la navegación en moderno2
+El template `moderno2` SHALL mostrar la barra de mensajes (GC bar) justo debajo
+de la barra de navegación principal y antes del hero, cuando `gcBar` tenga
+mensajes.
+
+#### Scenario: Barra de mensajes
+- **WHEN** el cliente `moderno2` tiene mensajes en `gcBar`
+- **THEN** la barra de mensajes se muestra debajo de la navegación y antes del hero
+
+#### Scenario: Sin mensajes
+- **WHEN** `gcBar` está vacío o no existe
+- **THEN** no se muestra la barra y no altera el layout
+
 ### Requirement: VU meter de fondo en el reproductor de moderno2
 El template `moderno2` SHALL mostrar barras de VU meter como fondo del
 reproductor inferior, por detrás de los controles y con opacidad baja para no
