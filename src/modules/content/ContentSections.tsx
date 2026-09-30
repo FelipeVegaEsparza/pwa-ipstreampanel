@@ -26,7 +26,7 @@ import type { SectionDataProps } from './format'
 import { SectionHeadingContext } from '@/ui/SectionHeadingContext'
 
 type NewsVariant = 'grid' | 'featured' | 'rows' | 'overlay'
-type ProgramVariant = 'list' | 'cards'
+type ProgramVariant = 'list' | 'cards' | 'tabs'
 
 // Cada template presenta la información de forma distinta: aquí se define qué
 // "forma" usa para noticias y programación (el resto hereda la paleta propia
@@ -43,7 +43,8 @@ const NEWS_VARIANTS: Record<string, NewsVariant> = {
 const PROGRAM_VARIANTS: Record<string, ProgramVariant> = {
   covered: 'cards',
   blue: 'cards',
-  playlist: 'cards'
+  playlist: 'cards',
+  moderno2: 'tabs'
 }
 
 const ANNOUNCER_VARIANTS: Record<string, 'avatar'> = {

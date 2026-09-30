@@ -298,3 +298,57 @@
     flex-basis: 100%;
   }
 }
+
+/* Variante "tabs" de programación: días arriba, contenido del día abajo. */
+.programTabs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.tabsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tab {
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid var(--content-card-border, rgba(128, 128, 128, 0.25));
+  background: transparent;
+  color: var(--content-muted, #6b6761);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.tab:hover {
+  color: var(--content-text, inherit);
+  border-color: var(--content-accent, #1c1b1a);
+}
+
+.tabActive {
+  background: var(--content-accent, #1c1b1a);
+  border-color: var(--content-accent, #1c1b1a);
+  color: var(--content-card-bg, #fff);
+}
+
+.tabPanel {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 640px) {
+  .tabsList {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+  }
+
+  .tab {
+    flex: none;
+  }
+}

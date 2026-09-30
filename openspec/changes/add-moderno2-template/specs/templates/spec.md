@@ -49,6 +49,24 @@ tarjetas blancas.
 - **WHEN** se renderiza la sección de noticias en `moderno2`
 - **THEN** las tarjetas usan el fondo y el texto oscuros del template
 
+### Requirement: Programación por día del template moderno2
+El template `moderno2` SHALL mostrar la programación separada por día: una fila
+de días en la parte superior (Lunes a Domingo) y, al seleccionar un día, el
+listado de programas de ese día. Si el día seleccionado no tiene programas, SHALL
+mostrar un aviso sin romper la sección.
+
+#### Scenario: Cambio de día
+- **WHEN** el usuario selecciona un día en la programación de `moderno2`
+- **THEN** se muestra la programación de ese día y se oculta la de los demás
+
+#### Scenario: Día sin programación
+- **WHEN** el día seleccionado no tiene programas
+- **THEN** se muestra un aviso de que no hay programación para ese día
+
+#### Scenario: Otro template conserva su variante
+- **WHEN** un cliente con template distinto de `moderno2` muestra su programación
+- **THEN** conserva la variante que ese template usaba
+
 ### Requirement: Tipografías self-hosted del template moderno2
 El template `moderno2` SHALL usar las tipografías Bebas Neue (títulos de
 display) y Montserrat (texto base) servidas desde el propio origen, sin depender

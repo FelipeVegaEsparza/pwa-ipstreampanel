@@ -50,3 +50,7 @@
 ## 9. Noticias y tarjetas oscuras
 
 - [x] 9.1 Usar la variante `featured` de noticias en `moderno2` (1 principal izquierda + 3 derecha) y aplicar la paleta oscura de tarjetas del template; verificar con test de `ContentSections` y `npm run build`.
+
+## 10. Programación por día
+
+- [x] 10.1 Agregar la variante `tabs` a `ProgramsSection` (días Lunes–Domingo arriba, contenido del día seleccionado) y usarla en `moderno2`; verificar con tests de `ProgramsSection`/`ContentSections` y `npm run build`.

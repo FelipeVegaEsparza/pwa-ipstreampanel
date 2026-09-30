@@ -331,6 +331,11 @@ describe('ContentSectionStack', () => {
     expect(container.querySelectorAll(`.${newsStyles.sideCard}`)).toHaveLength(3)
   })
 
+  it('en moderno2 la programación usa tabs por día', () => {
+    const { container } = renderStack('moderno2')
+    expect(container.querySelectorAll('[role="tab"]')).toHaveLength(7)
+  })
+
   it('combina contacto y síguenos en una sección de dos columnas en covered', () => {
     const { container } = renderStack('covered')
     const grid = container.querySelector(`.${contactSocialStyles.grid}`)

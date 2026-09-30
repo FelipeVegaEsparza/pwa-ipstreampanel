@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import type { FullClientData, Program } from '@/core/types'
 import { ProgramsSection } from './ProgramsSection'
@@ -76,5 +76,41 @@ describe('ProgramsSection', () => {
     expect(screen.getByText('08:00–10:00')).toBeInTheDocument()
     expect(screen.getByText('Lunes · Miércoles')).toBeInTheDocument()
     expect(screen.queryByText('Lunes')).toBeNull()
+  })
+
+  it('variante tabs: lista los días y filtra el contenido por día', () => {
+    render(
+      <ProgramsSection
+        clientData={clientDataWith([
+          program({ id: 'a', name: 'Show Lunes', weekDays: [1] }),
+          program({ id: 'b', name: 'Show Martes', weekDays: [2] })
+        ])}
+        isLoading={false}
+        variant="tabs"
+      />
+    )
+
+    expect(screen.getAllByRole('tab')).toHaveLength(7)
+
+    fireEvent.click(screen.getByRole('tab', { name: 'Martes' }))
+    expect(screen.getByText('Show Martes')).toBeInTheDocument()
+    expect(screen.queryByText('Show Lunes')).toBeNull()
+
+    fireEvent.click(screen.getByRole('tab', { name: 'Lunes' }))
+    expect(screen.getByText('Show Lunes')).toBeInTheDocument()
+    expect(screen.queryByText('Show Martes')).toBeNull()
+  })
+
+  it('variante tabs: avisa cuando el día no tiene programación', () => {
+    render(
+      <ProgramsSection
+        clientData={clientDataWith([program({ weekDays: [1] })])}
+        isLoading={false}
+        variant="tabs"
+      />
+    )
+
+    fireEvent.click(screen.getByRole('tab', { name: 'Domingo' }))
+    expect(screen.getByText('Sin programación para este día.')).toBeInTheDocument()
   })
 })
