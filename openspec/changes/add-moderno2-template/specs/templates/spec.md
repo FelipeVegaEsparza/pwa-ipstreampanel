@@ -51,11 +51,17 @@ de Google Fonts, de modo que la experiencia offline de la PWA no se degrade.
 ### Requirement: Hero y titulares del template moderno2
 El template `moderno2` SHALL mostrar un hero con el tema actual y la navegación
 por secciones, y SHALL mostrar los titulares de sección con una palabra gigante
-de fondo derivada del título y un texto resaltado, de forma adaptativa.
+de fondo derivada del título y un texto resaltado, de forma adaptativa. La
+navegación por secciones SHALL permanecer visible (pegada al borde superior)
+mientras el usuario avanza por el sitio.
 
 #### Scenario: Hero
 - **WHEN** el cliente usa `moderno2`
 - **THEN** el hero muestra la portada, el título y el artista del tema actual, y el control de reproducción
+
+#### Scenario: Navegación pegada al scroll
+- **WHEN** el usuario se desplaza hacia abajo por el sitio en `moderno2`
+- **THEN** la barra de navegación permanece visible en la parte superior
 
 #### Scenario: Titular de sección
 - **WHEN** se renderiza una sección del template `moderno2`

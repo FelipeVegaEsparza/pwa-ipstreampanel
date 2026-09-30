@@ -42,3 +42,7 @@
 - [x] 7.1 Ejecutar `npm run lint`, `npm run typecheck` y `npm run test`; verificar que pasan sin errores.
 - [x] 7.2 Ejecutar `npm run build` y confirmar que las fuentes, el template `moderno2` y las secciones quedan en `dist/`.
 - [x] 7.3 Validar el cambio con `openspec validate add-moderno2-template` sin issues.
+
+## 8. Navegación pegada al scroll
+
+- [x] 8.1 Hacer `sticky` la barra de navegación de `moderno2` para que acompañe el scroll, con el menú móvil desplegándose bajo la barra; verificar con `npm run typecheck`, tests de `moderno2` y `npm run build`.

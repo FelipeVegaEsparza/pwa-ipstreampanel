@@ -52,6 +52,65 @@ export function Moderno2Template({ clientData, isLoading }: TemplateProps) {
 
   return (
     <div className={styles.page}>
+      <header className={styles.navBar}>
+        <div className={`${styles.container} ${styles.navInner}`}>
+          <a className={styles.logoLink} href="#section-inicio">
+            <SmartImage
+              className={styles.logo}
+              src={live.basic?.logoUrl}
+              alt={displayName}
+            />
+          </a>
+
+          <nav className={styles.nav} aria-label="Secciones">
+            <ul
+              className={`${styles.navList} ${menuOpen ? styles.navListOpen : ''}`}
+            >
+              {navItems.map((item) => (
+                <li key={item.id}>
+                  <a
+                    className={styles.navLink}
+                    href={hrefFor(item.id)}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className={styles.topActions}>
+            {socialLinks.length > 0 && (
+              <div className={styles.socials}>
+                {socialLinks.map((link) => (
+                  <a
+                    key={link.key}
+                    className={styles.socialLink}
+                    href={link.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={link.label}
+                    title={link.label}
+                  >
+                    <BrandIcon name={link.key} size={16} />
+                  </a>
+                ))}
+              </div>
+            )}
+            <button
+              type="button"
+              className={styles.menuBtn}
+              onClick={() => setMenuOpen((open) => !open)}
+              aria-label="Abrir menú de secciones"
+              aria-expanded={menuOpen}
+            >
+              ☰
+            </button>
+          </div>
+        </div>
+      </header>
+
       <header className={styles.hero} id="section-inicio">
         <div className={styles.heroBg} aria-hidden="true">
           {live.artwork && (
@@ -61,63 +120,6 @@ export function Moderno2Template({ clientData, isLoading }: TemplateProps) {
         </div>
 
         <div className={`${styles.container} ${styles.heroInner}`}>
-          <div className={styles.topBar}>
-            <a className={styles.logoLink} href="#section-inicio">
-              <SmartImage
-                className={styles.logo}
-                src={live.basic?.logoUrl}
-                alt={displayName}
-              />
-            </a>
-
-            <nav className={styles.nav} aria-label="Secciones">
-              <ul
-                className={`${styles.navList} ${menuOpen ? styles.navListOpen : ''}`}
-              >
-                {navItems.map((item) => (
-                  <li key={item.id}>
-                    <a
-                      className={styles.navLink}
-                      href={hrefFor(item.id)}
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            <div className={styles.topActions}>
-              {socialLinks.length > 0 && (
-                <div className={styles.socials}>
-                  {socialLinks.map((link) => (
-                    <a
-                      key={link.key}
-                      className={styles.socialLink}
-                      href={link.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={link.label}
-                      title={link.label}
-                    >
-                      <BrandIcon name={link.key} size={16} />
-                    </a>
-                  ))}
-                </div>
-              )}
-              <button
-                type="button"
-                className={styles.menuBtn}
-                onClick={() => setMenuOpen((open) => !open)}
-                aria-label="Abrir menú de secciones"
-                aria-expanded={menuOpen}
-              >
-                ☰
-              </button>
-            </div>
-          </div>
-
           <div className={styles.heroBody}>
             <div className={styles.heroCover}>
               <SmartImage

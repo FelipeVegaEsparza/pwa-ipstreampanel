@@ -148,10 +148,9 @@ describe('Moderno2Template', () => {
   it('navega a las secciones disponibles con anclas', () => {
     renderTemplate(clientData())
 
-    expect(screen.getByRole('link', { name: 'Inicio' })).toHaveAttribute(
-      'href',
-      '#section-inicio'
-    )
+    const inicio = screen.getByRole('link', { name: 'Inicio' })
+    expect(inicio).toHaveAttribute('href', '#section-inicio')
+    expect(inicio.closest('header')).not.toBeNull()
     expect(screen.getByRole('link', { name: 'Noticias' })).toHaveAttribute(
       'href',
       '#seccion-news'
