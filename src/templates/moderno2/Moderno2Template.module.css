@@ -32,6 +32,12 @@
   --container-padding: 1rem;
   --nav-height: 120px;
 
+  /* Reproductor inferior con la misma forma que el menú (pastilla flotante). */
+  --page-max-width: calc(var(--container-width) - 2 * var(--container-padding));
+  --bar-inset-x: 1rem;
+  --bar-radius: 0.75rem;
+  --player-inset: 1rem;
+
   position: relative;
   min-height: 100svh;
   font-family: var(--primary-font);
@@ -39,7 +45,7 @@
   background:
     radial-gradient(900px 420px at 50% -10%, var(--brand-accent-soft, transparent), transparent 60%),
     var(--template-bg);
-  padding-bottom: var(--player-height, 72px);
+  padding-bottom: calc(var(--player-height, 72px) + 2rem);
 }
 
 .container {
