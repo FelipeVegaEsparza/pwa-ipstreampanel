@@ -146,6 +146,10 @@ mientras el usuario avanza por el sitio.
 - **WHEN** el usuario se desplaza hacia abajo por el sitio en `moderno2`
 - **THEN** la barra de navegación permanece visible en la parte superior
 
+#### Scenario: Hero centrado en pantallas pequeñas
+- **WHEN** el sitio `moderno2` se ve en una pantalla pequeña
+- **THEN** el cover, el título y las acciones del hero se muestran centrados
+
 #### Scenario: Titular de sección
 - **WHEN** se renderiza una sección del template `moderno2`
 - **THEN** el titular muestra el texto de la sección y una palabra gigante de fondo

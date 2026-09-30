@@ -78,3 +78,7 @@
 ## 16. Historial tras las noticias
 
 - [x] 16.1 Mover la sección de historial de canciones para que se muestre justo después de la sección de noticias (inyectada en el stack vía `ContentSlotsContext`); verificar con tests de `moderno2`/`ContentSections` y `npm run build`.
+
+## 17. Hero centrado en móvil
+
+- [x] 17.1 Centrar cover, título y acciones del hero de `moderno2` en pantallas pequeñas; verificar con `npm run build`.
