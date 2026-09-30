@@ -19,7 +19,7 @@
 .fill {
   height: 100%;
   border-radius: 999px;
-  background: var(--bar-fill, var(--color-primary, #6366f1));
+  background: var(--brand-accent, var(--bar-fill, var(--color-primary, #6366f1)));
   transition: width 0.3s linear;
 }
 
@@ -29,7 +29,7 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    var(--color-primary, #6366f1) 50%,
+    var(--brand-accent, var(--color-primary, #6366f1)) 50%,
     transparent 100%
   );
   background-size: 200% 100%;
