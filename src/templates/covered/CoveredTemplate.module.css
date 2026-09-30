@@ -279,8 +279,8 @@
 .play {
   border: none;
   border-radius: 999px;
-  background: #ffffff;
-  color: #170f2b;
+  background: var(--brand-accent, #ffffff);
+  color: var(--brand-accent-contrast, #170f2b);
   font-weight: 700;
   font-size: 1rem;
   padding: var(--space-3) var(--space-6);

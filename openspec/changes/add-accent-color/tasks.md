@@ -35,3 +35,4 @@
 - [x] 6.1 Hacer que los fondos con gradiente de los templates incluyan un realce derivado del acento (neutro cuando no hay color); verificar con `npm run build`.
 - [x] 6.2 Ejecutar `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build` y `openspec validate add-accent-color`.
 - [x] 6.3 Hacer que el `PlayerBar` y el progreso prefieran `--brand-accent` (funciona aunque el template no defina `--color-primary`); verificar con `npm run build` y tests.
+- [x] 6.4 Hacer que los reproductores propios de `covered` y `minimalista` usen el acento en su botón de play; verificar con `npm run build`.
