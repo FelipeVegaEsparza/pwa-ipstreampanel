@@ -18,12 +18,12 @@ hero de reproductor, navegación por secciones y paleta.
 - **THEN** se renderiza el template por defecto sin romper la aplicación
 
 ### Requirement: Orden de secciones del template moderno2
-El template `moderno2` SHALL mostrar las secciones de contenido en el orden
-noticias, programas, TV en vivo, videos, locutores, auspiciadores/promociones y
-luego el clima, mostrando cada sección solo si su recurso tiene datos. El orden
-SHALL aplicarse únicamente cuando el template seleccionado es `moderno2`. Las
-redes sociales SHALL NO mostrarse como sección, ya que están presentes en el
-header y el footer.
+El template `moderno2` SHALL mostrar todas las secciones de contenido cuyos
+recursos tengan datos: noticias, programas, TV en vivo, videos, locutores,
+auspiciadores, promociones, podcasts, videocasts, galerías, eventos y encuestas;
+y luego el clima. El orden SHALL aplicarse únicamente cuando el template
+seleccionado es `moderno2`. Las redes sociales SHALL NO mostrarse como sección,
+ya que están presentes en el header y el footer.
 
 #### Scenario: Home de moderno2 con datos
 - **WHEN** un cliente con template `moderno2` abre la home

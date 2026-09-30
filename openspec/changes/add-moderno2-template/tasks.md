@@ -62,3 +62,7 @@
 ## 12. VU meter en el reproductor
 
 - [x] 12.1 Agregar un fondo opcional de VU meter al `PlayerBar` y activarlo en `moderno2`; verificar con tests de `PlayerBar`/`moderno2` y `npm run build`.
+
+## 13. Todas las secciones del panel
+
+- [x] 13.1 Incluir el resto de secciones con datos (podcasts, videocasts, galerías, eventos y encuestas) en el orden de `moderno2`; verificar con test de `ContentSections` y `npm run build`.
