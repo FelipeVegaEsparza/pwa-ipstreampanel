@@ -109,9 +109,8 @@ export function Moderno2Template({ clientData, isLoading }: TemplateProps) {
             </button>
           </div>
         </div>
+        <GcBar className={styles.gcBar} messages={clientData?.gcBar} />
       </header>
-
-      <GcBar messages={clientData?.gcBar} />
 
       <header className={styles.hero} id="section-inicio">
         <div className={styles.heroBg} aria-hidden="true">

@@ -69,4 +69,4 @@
 
 ## 14. Barra de mensajes bajo la navegación
 
-- [x] 14.1 Colocar la GC bar justo debajo de la navegación principal (antes del hero) en `moderno2`; verificar con tests de `moderno2` y `npm run build`.
+- [x] 14.1 Integrar la GC bar dentro de la navegación principal (mismo ancho, debajo de los enlaces) en `moderno2`; verificar con tests de `moderno2` y `npm run build`.

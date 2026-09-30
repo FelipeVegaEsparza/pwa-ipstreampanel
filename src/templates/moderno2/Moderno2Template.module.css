@@ -30,7 +30,7 @@
 
   --container-width: 1200px;
   --container-padding: 1rem;
-  --nav-height: 80px;
+  --nav-height: 120px;
 
   position: relative;
   min-height: 100svh;
@@ -93,7 +93,8 @@
   padding-bottom: 4.5rem;
 }
 
-/* Barra de navegación: pastilla redondeada, centrada y pegada al scroll. */
+/* Barra de navegación: pastilla redondeada, centrada y pegada al scroll.
+   La GC bar va dentro, como parte de la misma pastilla. */
 .navBar {
   position: sticky;
   top: 1rem;
@@ -101,7 +102,6 @@
   width: calc(100% - 2rem);
   max-width: calc(var(--container-width) - 2 * var(--container-padding));
   margin: 1.5rem auto 0.75rem;
-  padding: 0.75rem 1.5rem;
   border-radius: 0.75rem;
   background: rgba(13, 13, 15, 0.72);
   border: 1px solid var(--template-border);
@@ -123,6 +123,14 @@
   justify-content: space-between;
   gap: 1rem;
   min-height: 56px;
+  padding: 0.75rem 1.5rem;
+}
+
+/* La GC bar ocupa el ancho de la pastilla y cierra sus esquinas inferiores. */
+.gcBar {
+  border-top: 1px solid var(--template-border);
+  border-bottom-left-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
 }
 
 .logoLink {
