@@ -48,7 +48,7 @@
   flex-direction: column;
   padding-bottom: calc(var(--player-height) + var(--space-3));
   background:
-    radial-gradient(860px 380px at 100% -8%, rgba(79, 70, 229, 0.14), transparent 60%),
+    radial-gradient(860px 380px at 100% -8%, rgba(var(--brand-accent-rgb, 79, 70, 229), 0.14), transparent 60%),
     radial-gradient(700px 320px at -8% 12%, rgba(34, 211, 238, 0.1), transparent 55%),
     var(--color-bg);
   color: var(--color-text);

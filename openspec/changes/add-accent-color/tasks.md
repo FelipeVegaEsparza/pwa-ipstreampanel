@@ -29,3 +29,8 @@
 - [x] 5.1 Agregar un flag de acento en `useAccentTheme` y una marca de acento en los títulos de sección (visible solo con acento); verificar con `npm run build`.
 - [x] 5.2 Aplicar el acento al borde superior del reproductor solo cuando hay acento; verificar con `npm run build`.
 - [x] 5.3 Ejecutar `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build` y `openspec validate add-accent-color`.
+
+## 6. Fondo con acento
+
+- [x] 6.1 Hacer que los fondos con gradiente de los templates incluyan un realce derivado del acento (neutro cuando no hay color); verificar con `npm run build`.
+- [x] 6.2 Ejecutar `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build` y `openspec validate add-accent-color`.

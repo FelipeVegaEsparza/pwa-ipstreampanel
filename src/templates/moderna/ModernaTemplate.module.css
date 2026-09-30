@@ -3,7 +3,9 @@
   flex-direction: column;
   min-height: 100svh;
   padding-bottom: var(--player-height);
-  background: #0d0d0d;
+  background:
+    radial-gradient(900px 420px at 50% -10%, var(--brand-accent-soft, transparent), transparent 60%),
+    #0d0d0d;
   color: #f2f0ea;
 
   --content-card-bg: #181818;

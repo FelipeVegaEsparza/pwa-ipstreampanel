@@ -54,10 +54,11 @@ de texto con contraste suficiente según la luminancia del acento.
 
 ### Requirement: Protagonismo del acento
 Cuando el cliente define un `accentColor`, el acento SHALL tener presencia
-destacada en los títulos de sección (una marca de acento) y en el reproductor,
-además de los roles que ya lo usan, sin alterar los fondos ni las tipografías
-base del template. Cuando no hay `accentColor`, esos elementos adicionales SHALL
-quedar neutros para no cambiar el diseño original.
+destacada en los títulos de sección (una marca de acento), en el reproductor y
+en los fondos con gradiente de los templates (un realce derivado del acento),
+además de los roles que ya lo usan, sin alterar las tipografías ni la estructura
+del diseño. Cuando no hay `accentColor`, estos realces SHALL quedar neutros para
+no cambiar el diseño original.
 
 #### Scenario: Título de sección con acento
 - **WHEN** el cliente tiene `accentColor`
@@ -67,9 +68,13 @@ quedar neutros para no cambiar el diseño original.
 - **WHEN** el cliente tiene `accentColor`
 - **THEN** el reproductor incorpora el acento en su borde superior
 
+#### Scenario: Fondo con realce del acento
+- **WHEN** el cliente tiene `accentColor`
+- **THEN** los fondos con gradiente de los templates incluyen un realce derivado del acento
+
 #### Scenario: Sin acento no cambia el diseño
 - **WHEN** el cliente no tiene `accentColor`
-- **THEN** los títulos y el reproductor se ven igual que antes
+- **THEN** los títulos, el reproductor y los fondos se ven igual que antes
 
 ### Requirement: Alcance sobre componentes compartidos
 El acento por cliente SHALL aplicarse también a los componentes compartidos que

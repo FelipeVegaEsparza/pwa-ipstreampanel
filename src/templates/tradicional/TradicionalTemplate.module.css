@@ -50,7 +50,7 @@
   flex-direction: column;
   padding-bottom: calc(var(--player-height) + var(--space-3));
   background:
-    radial-gradient(760px 300px at 100% 0%, rgba(163, 39, 28, 0.05), transparent 60%),
+    radial-gradient(760px 300px at 100% 0%, rgba(var(--brand-accent-rgb, 163, 39, 28), 0.05), transparent 60%),
     repeating-linear-gradient(0deg, transparent 0 27px, rgba(120, 84, 44, 0.035) 27px 28px),
     var(--color-bg);
   color: var(--color-text);

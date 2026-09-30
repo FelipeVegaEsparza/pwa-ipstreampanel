@@ -36,7 +36,9 @@
   min-height: 100svh;
   font-family: var(--primary-font);
   color: var(--template-text);
-  background: var(--template-bg);
+  background:
+    radial-gradient(900px 420px at 50% -10%, var(--brand-accent-soft, transparent), transparent 60%),
+    var(--template-bg);
   padding-bottom: var(--player-height, 72px);
 }
 

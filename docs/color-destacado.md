@@ -55,7 +55,11 @@ activa el flag `--brand-accent-on: 1` y:
 - Los títulos de sección muestran una **marca de acento** (barra vertical). Sin
   color, el ancho es `0` y no cambia nada.
 - El reproductor inferior usa el acento en su **borde superior**.
-- Se mantienen los fondos y tipografías base de cada plantilla.
+- Los **fondos con gradiente** de los templates incluyen un realce derivado del
+  acento (`rgba(var(--brand-accent-rgb, ...), alpha)` en los gradientes que ya
+  existían, o un `--brand-accent-soft` añadido en los fondos planos). Sin color,
+  el realce es el original/transparente y no cambia nada.
+- Se mantienen las tipografías y la estructura base de cada plantilla.
 
 ## Derivación de variantes
 
