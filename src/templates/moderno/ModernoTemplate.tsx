@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom'
+import { useServiceMode } from '@/core/service'
 import { useLiveRadio } from '@/modules/player/useLiveRadio'
 import { NextTrack } from '@/modules/player/NextTrack'
 import { PlayerBar } from '@/modules/player/PlayerBar'
@@ -6,12 +7,16 @@ import { TrackProgress } from '@/modules/player/TrackProgress'
 import { InstallPrompt } from '@/modules/pwa/InstallPrompt'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
 import { GcBar } from '@/modules/content/GcBar'
+import { TvPlayer } from '@/modules/tv/TvPlayer'
 import { SmartImage } from '@/ui'
 import type { TemplateProps } from '../index'
 import styles from './ModernoTemplate.module.css'
 
 export function ModernoTemplate({ clientData, isLoading }: TemplateProps) {
-  const live = useLiveRadio(clientData)
+  const mode = useServiceMode(clientData)
+  const radioEnabled = mode !== 'tv'
+  const tvUrl = (clientData?.basicData?.videoStreamingUrl ?? '').trim() || null
+  const live = useLiveRadio(clientData, { enabled: radioEnabled })
   const socialLinks = getSocialLinks(clientData?.socialNetworks)
   const displayName = isLoading ? 'Cargando…' : live.name
   const onAir = live.status !== 'off'
@@ -39,10 +44,12 @@ export function ModernoTemplate({ clientData, isLoading }: TemplateProps) {
         </nav>
 
         <div className={styles.actions}>
-          <span className={`${styles.liveChip} ${onAir ? styles.liveChipOn : ''}`}>
-            <span className={styles.liveDot} />
-            EN VIVO{live.bitrate ? ` · ${live.bitrate}` : ''}
-          </span>
+          {radioEnabled && (
+            <span className={`${styles.liveChip} ${onAir ? styles.liveChipOn : ''}`}>
+              <span className={styles.liveDot} />
+              EN VIVO{live.bitrate ? ` · ${live.bitrate}` : ''}
+            </span>
+          )}
           {socialLinks.length > 0 && (
             <div className={styles.socials}>
               {socialLinks.map((link) => (
@@ -67,65 +74,71 @@ export function ModernoTemplate({ clientData, isLoading }: TemplateProps) {
       <GcBar messages={clientData?.gcBar} />
 
       <main className={styles.main}>
-        <section
-          className={styles.hero}
-          id="vivo"
-          style={live.artwork ? { backgroundImage: `url(${live.artwork})` } : undefined}
-        >
-          <div className={styles.heroScrim} aria-hidden="true" />
-          <div className={styles.heroInner}>
-            <div className={styles.heroCopy}>
-              <p className={styles.eyebrow}>
-                <span className={styles.liveDot} />
-                {live.status === 'off' ? 'Fuera del aire' : live.isLive ? 'Transmisión en vivo' : 'Al aire'}
-              </p>
-              <h1 className={styles.headline}>
-                {live.currentTrack?.title ?? 'La playlist de tu vida'}
-              </h1>
-              <p className={styles.artist}>
-                {live.currentTrack?.artist ?? displayName}
-                {city ? ` · ${city}` : ''}
-              </p>
-              <div className={styles.heroMeta}>
-                <span>{live.listeners} oyentes ahora</span>
-                {live.bitrate ? <span>· {live.bitrate} kbps</span> : null}
-              </div>
-              <div className={styles.controls}>
-                <button
-                  type="button"
-                  className={styles.play}
-                  onClick={live.toggle}
-                  disabled={!live.streamUrl}
-                >
-                  {live.isPlaying ? 'Pausar' : 'Escuchar en vivo'}
-                </button>
-              </div>
-              <div className={styles.progressWrap}>
-                <TrackProgress
-                  duration={live.currentTrack?.duration}
-                  trackKey={live.trackKey}
-                  isPlaying={live.isPlaying}
-                  serverElapsed={live.currentTrack?.elapsed}
-                />
-              </div>
-            </div>
-
-            <div className={styles.heroCover}>
-              <SmartImage
-                className={styles.cover}
-                crossfade
-                src={live.trackCover}
-                fallbacks={live.fallbacks}
-                alt=""
-              />
-              {live.nextTrack && (
-                <div className={styles.heroNext}>
-                  <NextTrack next={live.nextTrack} fallbackCover={live.basic?.coverUrl} />
+        {radioEnabled ? (
+          <section
+            className={styles.hero}
+            id="vivo"
+            style={live.artwork ? { backgroundImage: `url(${live.artwork})` } : undefined}
+          >
+            <div className={styles.heroScrim} aria-hidden="true" />
+            <div className={styles.heroInner}>
+              <div className={styles.heroCopy}>
+                <p className={styles.eyebrow}>
+                  <span className={styles.liveDot} />
+                  {live.status === 'off' ? 'Fuera del aire' : live.isLive ? 'Transmisión en vivo' : 'Al aire'}
+                </p>
+                <h1 className={styles.headline}>
+                  {live.currentTrack?.title ?? 'La playlist de tu vida'}
+                </h1>
+                <p className={styles.artist}>
+                  {live.currentTrack?.artist ?? displayName}
+                  {city ? ` · ${city}` : ''}
+                </p>
+                <div className={styles.heroMeta}>
+                  <span>{live.listeners} oyentes ahora</span>
+                  {live.bitrate ? <span>· {live.bitrate} kbps</span> : null}
                 </div>
-              )}
+                <div className={styles.controls}>
+                  <button
+                    type="button"
+                    className={styles.play}
+                    onClick={live.toggle}
+                    disabled={!live.streamUrl}
+                  >
+                    {live.isPlaying ? 'Pausar' : 'Escuchar en vivo'}
+                  </button>
+                </div>
+                <div className={styles.progressWrap}>
+                  <TrackProgress
+                    duration={live.currentTrack?.duration}
+                    trackKey={live.trackKey}
+                    isPlaying={live.isPlaying}
+                    serverElapsed={live.currentTrack?.elapsed}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.heroCover}>
+                <SmartImage
+                  className={styles.cover}
+                  crossfade
+                  src={live.trackCover}
+                  fallbacks={live.fallbacks}
+                  alt=""
+                />
+                {live.nextTrack && (
+                  <div className={styles.heroNext}>
+                    <NextTrack next={live.nextTrack} fallbackCover={live.basic?.coverUrl} />
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        ) : (
+          <section className={styles.hero} id="vivo">
+            {tvUrl && <TvPlayer src={tvUrl} autoPlay />}
+          </section>
+        )}
 
         <div className={styles.content} id="contenido">
           <Outlet />
@@ -215,7 +228,9 @@ export function ModernoTemplate({ clientData, isLoading }: TemplateProps) {
           © {displayName} · Todos los derechos reservados · IPStream Panel
         </div>
       </footer>
-      <PlayerBar fallbackCovers={[live.basic?.coverUrl, live.basic?.logoUrl]} />
+      {radioEnabled && (
+        <PlayerBar fallbackCovers={[live.basic?.coverUrl, live.basic?.logoUrl]} />
+      )}
     </div>
   )
 }

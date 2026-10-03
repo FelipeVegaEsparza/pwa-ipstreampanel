@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom'
+import { useServiceMode } from '@/core/service'
 import { useLiveRadio } from '@/modules/player/useLiveRadio'
 import { NextTrack } from '@/modules/player/NextTrack'
 import { PlayerBar } from '@/modules/player/PlayerBar'
@@ -6,13 +7,17 @@ import { TrackProgress } from '@/modules/player/TrackProgress'
 import { InstallPrompt } from '@/modules/pwa/InstallPrompt'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
 import { GcBar } from '@/modules/content/GcBar'
+import { TvPlayer } from '@/modules/tv/TvPlayer'
 import { Weather } from '@/modules/weather/Weather'
 import { SmartImage } from '@/ui'
 import type { TemplateProps } from '../index'
 import styles from './AppTemplate.module.css'
 
 export function AppTemplate({ clientData, isLoading }: TemplateProps) {
-  const live = useLiveRadio(clientData)
+  const mode = useServiceMode(clientData)
+  const radioEnabled = mode !== 'tv'
+  const tvUrl = (clientData?.basicData?.videoStreamingUrl ?? '').trim() || null
+  const live = useLiveRadio(clientData, { enabled: radioEnabled })
   const socialLinks = getSocialLinks(clientData?.socialNetworks)
   const displayName = isLoading ? 'Cargando…' : live.name
   const isOn = live.status !== 'off'
@@ -26,10 +31,12 @@ export function AppTemplate({ clientData, isLoading }: TemplateProps) {
             <span className={styles.appName}>
               {displayName} <span className={styles.badge}>App</span>
             </span>
-            <span className={styles.appStatus}>
-              <span className={isOn ? styles.onDot : styles.offDot} />
-              {isOn ? 'En línea' : 'Fuera del aire'}
-            </span>
+            {radioEnabled && (
+              <span className={styles.appStatus}>
+                <span className={isOn ? styles.onDot : styles.offDot} />
+                {isOn ? 'En línea' : 'Fuera del aire'}
+              </span>
+            )}
           </div>
         </div>
         <div className={styles.appActions}>
@@ -41,52 +48,58 @@ export function AppTemplate({ clientData, isLoading }: TemplateProps) {
       <GcBar messages={clientData?.gcBar} />
 
       <main className={styles.main}>
-        <section className={styles.heroCard}>
-          <div className={styles.heroCoverWrap}>
-            <SmartImage
-              className={styles.heroCover}
-              crossfade
-              src={live.trackCover}
-              fallbacks={live.fallbacks}
-              alt=""
-            />
-          </div>
-          <div className={styles.heroBody}>
-            <span className={styles.eyebrow}>
-              {live.isLive ? 'EN VIVO' : 'Reproduciendo'}
-            </span>
-            <h1 className={styles.song}>
-              {live.currentTrack?.title ?? 'Descubre nuestra señal'}
-            </h1>
-            <p className={styles.artist}>{live.currentTrack?.artist ?? displayName}</p>
-            <div className={styles.heroMeta}>
-              <span>{live.listeners} oyentes</span>
-              {live.bitrate ? <span>· {live.bitrate} kbps</span> : null}
-            </div>
-            <button
-              type="button"
-              className={styles.play}
-              onClick={live.toggle}
-              disabled={!live.streamUrl}
-            >
-              {live.isPlaying ? '❚❚ Pausa' : '▶ Reproducir'}
-            </button>
-            <div className={styles.progressWrap}>
-              <TrackProgress
-                duration={live.currentTrack?.duration}
-                trackKey={live.trackKey}
-                isPlaying={live.isPlaying}
-                serverElapsed={live.currentTrack?.elapsed}
-              />
-            </div>
-          </div>
-        </section>
+        {radioEnabled ? (
+          <>
+            <section className={styles.heroCard}>
+              <div className={styles.heroCoverWrap}>
+                <SmartImage
+                  className={styles.heroCover}
+                  crossfade
+                  src={live.trackCover}
+                  fallbacks={live.fallbacks}
+                  alt=""
+                />
+              </div>
+              <div className={styles.heroBody}>
+                <span className={styles.eyebrow}>
+                  {live.isLive ? 'EN VIVO' : 'Reproduciendo'}
+                </span>
+                <h1 className={styles.song}>
+                  {live.currentTrack?.title ?? 'Descubre nuestra señal'}
+                </h1>
+                <p className={styles.artist}>{live.currentTrack?.artist ?? displayName}</p>
+                <div className={styles.heroMeta}>
+                  <span>{live.listeners} oyentes</span>
+                  {live.bitrate ? <span>· {live.bitrate} kbps</span> : null}
+                </div>
+                <button
+                  type="button"
+                  className={styles.play}
+                  onClick={live.toggle}
+                  disabled={!live.streamUrl}
+                >
+                  {live.isPlaying ? '❚❚ Pausa' : '▶ Reproducir'}
+                </button>
+                <div className={styles.progressWrap}>
+                  <TrackProgress
+                    duration={live.currentTrack?.duration}
+                    trackKey={live.trackKey}
+                    isPlaying={live.isPlaying}
+                    serverElapsed={live.currentTrack?.elapsed}
+                  />
+                </div>
+              </div>
+            </section>
 
-        {live.nextTrack && (
-          <section className={styles.nextCard}>
-            <span className={styles.nextTitle}>A continuación</span>
-            <NextTrack next={live.nextTrack} fallbackCover={live.basic?.coverUrl} />
-          </section>
+            {live.nextTrack && (
+              <section className={styles.nextCard}>
+                <span className={styles.nextTitle}>A continuación</span>
+                <NextTrack next={live.nextTrack} fallbackCover={live.basic?.coverUrl} />
+              </section>
+            )}
+          </>
+        ) : (
+          tvUrl && <TvPlayer src={tvUrl} autoPlay />
         )}
 
         <div className={styles.feed}>
@@ -114,7 +127,9 @@ export function AppTemplate({ clientData, isLoading }: TemplateProps) {
       </main>
 
       <footer className={styles.footer}>{displayName} · IPStream Panel</footer>
-      <PlayerBar fallbackCovers={[live.basic?.coverUrl, live.basic?.logoUrl]} />
+      {radioEnabled && (
+        <PlayerBar fallbackCovers={[live.basic?.coverUrl, live.basic?.logoUrl]} />
+      )}
     </div>
   )
 }

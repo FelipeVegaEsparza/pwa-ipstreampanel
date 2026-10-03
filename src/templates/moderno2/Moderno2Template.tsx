@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
+import { useServiceMode } from '@/core/service'
 import { useLiveRadio } from '@/modules/player/useLiveRadio'
 import { PlayerBar } from '@/modules/player/PlayerBar'
 import { GcBar } from '@/modules/content/GcBar'
@@ -8,6 +9,7 @@ import { useSongHistory } from '@/modules/history/useSongHistory'
 import { SongHistorySection } from '@/modules/history/SongHistorySection'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
 import { MultiCityWeather } from '@/modules/weather/MultiCityWeather'
+import { TvPlayer } from '@/modules/tv/TvPlayer'
 import { SmartImage } from '@/ui'
 import { SectionHeadingContext } from '@/ui/SectionHeadingContext'
 import {
@@ -24,9 +26,14 @@ import styles from './Moderno2Template.module.css'
 type NavId = SectionId | 'inicio'
 
 export function Moderno2Template({ clientData, isLoading }: TemplateProps) {
-  const live = useLiveRadio(clientData)
+  const radioEnabled = useServiceMode(clientData) !== 'tv'
+  const tvUrl = (clientData?.basicData?.videoStreamingUrl ?? '').trim() || null
+  const live = useLiveRadio(clientData, { enabled: radioEnabled })
   const socialLinks = getSocialLinks(clientData?.socialNetworks)
-  const history = useSongHistory(clientData?.client?.id, live.currentTrack)
+  const history = useSongHistory(
+    radioEnabled ? clientData?.client?.id : null,
+    radioEnabled ? live.currentTrack : null
+  )
   const [menuOpen, setMenuOpen] = useState(false)
 
   const displayName = isLoading ? 'Cargando…' : live.name
@@ -116,54 +123,58 @@ export function Moderno2Template({ clientData, isLoading }: TemplateProps) {
 
       <header className={styles.hero} id="section-inicio">
         <div className={styles.heroBg} aria-hidden="true">
-          {live.artwork && (
+          {radioEnabled && live.artwork && (
             <img className={styles.heroBgImg} src={live.artwork} alt="" />
           )}
           <div className={styles.heroOverlay} />
         </div>
 
         <div className={`${styles.container} ${styles.heroInner}`}>
-          <div className={styles.heroBody}>
-            <div className={styles.heroCover}>
-              <SmartImage
-                className={styles.heroCoverImg}
-                crossfade
-                src={live.trackCover}
-                fallbacks={[...live.fallbacks]}
-                alt=""
-              />
-            </div>
-
-            <div className={styles.heroInfo}>
-              <span className={styles.liveBadge}>
-                <span
-                  className={live.status === 'off' ? styles.offDot : styles.onDot}
-                  aria-hidden="true"
+          {radioEnabled ? (
+            <div className={styles.heroBody}>
+              <div className={styles.heroCover}>
+                <SmartImage
+                  className={styles.heroCoverImg}
+                  crossfade
+                  src={live.trackCover}
+                  fallbacks={[...live.fallbacks]}
+                  alt=""
                 />
-                {airLabel}
-              </span>
-              <h1 className={styles.song}>
-                {live.currentTrack?.title ?? 'La radio suena en vivo'}
-              </h1>
-              <p className={styles.artist}>
-                {live.currentTrack?.artist ?? displayName}
-              </p>
+              </div>
 
-              <div className={styles.heroActions}>
-                <button
-                  type="button"
-                  className={styles.playBtn}
-                  onClick={live.toggle}
-                  disabled={!live.streamUrl}
-                >
-                  {live.isPlaying ? 'PAUSAR' : 'REPRODUCIR'}
-                </button>
-                <a className={styles.secondaryBtn} href={`#${sectionAnchorId('programs')}`}>
-                  PROGRAMAS
-                </a>
+              <div className={styles.heroInfo}>
+                <span className={styles.liveBadge}>
+                  <span
+                    className={live.status === 'off' ? styles.offDot : styles.onDot}
+                    aria-hidden="true"
+                  />
+                  {airLabel}
+                </span>
+                <h1 className={styles.song}>
+                  {live.currentTrack?.title ?? 'La radio suena en vivo'}
+                </h1>
+                <p className={styles.artist}>
+                  {live.currentTrack?.artist ?? displayName}
+                </p>
+
+                <div className={styles.heroActions}>
+                  <button
+                    type="button"
+                    className={styles.playBtn}
+                    onClick={live.toggle}
+                    disabled={!live.streamUrl}
+                  >
+                    {live.isPlaying ? 'PAUSAR' : 'REPRODUCIR'}
+                  </button>
+                  <a className={styles.secondaryBtn} href={`#${sectionAnchorId('programs')}`}>
+                    PROGRAMAS
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            tvUrl && <TvPlayer src={tvUrl} autoPlay />
+          )}
         </div>
       </header>
 
@@ -175,7 +186,11 @@ export function Moderno2Template({ clientData, isLoading }: TemplateProps) {
         <div className={styles.container}>
           <SectionHeadingContext.Provider value>
             <ContentSlotsContext.Provider
-              value={{ after: { news: <SongHistorySection tracks={history} /> } }}
+              value={{
+                after: radioEnabled
+                  ? { news: <SongHistorySection tracks={history} /> }
+                  : {}
+              }}
             >
               <Outlet />
             </ContentSlotsContext.Provider>
@@ -210,10 +225,12 @@ export function Moderno2Template({ clientData, isLoading }: TemplateProps) {
         </div>
       </footer>
 
-      <PlayerBar
-        fallbackCovers={[live.basic?.coverUrl, live.basic?.logoUrl]}
-        vuMeter
-      />
+      {radioEnabled && (
+        <PlayerBar
+          fallbackCovers={[live.basic?.coverUrl, live.basic?.logoUrl]}
+          vuMeter
+        />
+      )}
     </div>
   )
 }

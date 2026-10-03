@@ -7,10 +7,15 @@ interface MediaSessionData {
   artwork?: string | null
 }
 
-export function useMediaSession(data: MediaSessionData) {
+export function useMediaSession(
+  data: MediaSessionData,
+  options: { enabled?: boolean } = {}
+) {
   const { play, pause } = usePlayer()
+  const enabled = options.enabled ?? true
 
   useEffect(() => {
+    if (!enabled) return
     if (!('mediaSession' in navigator) || typeof MediaMetadata === 'undefined') {
       return
     }
@@ -27,5 +32,5 @@ export function useMediaSession(data: MediaSessionData) {
       navigator.mediaSession.setActionHandler('play', null)
       navigator.mediaSession.setActionHandler('pause', null)
     }
-  }, [data.title, data.artist, data.artwork, play, pause])
+  }, [enabled, data.title, data.artist, data.artwork, play, pause])
 }

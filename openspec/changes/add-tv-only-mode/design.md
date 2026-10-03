@@ -33,9 +33,10 @@ de secciones o un botón→modal en `minimalista`. El cliente TV-only real
 `'radio' | 'tv' | 'both'`, y un hook `useServiceMode(clientData)` la expone.
 
 Regla: `radioStreamingUrl` no vacío = radio; `videoStreamingUrl` no vacío = tv;
-ambos = `both`; ninguno = `radio`. `services` se usa solo si es reconocible
-(`'tv'` fuerza `tv` cuando no hay radio). Alternativa descartada: depender solo
-de `services` (no está documentado y sus valores no están garantizados).
+ambos = `both`; ninguno = `radio`. Solo se usan las URLs porque están
+documentadas en `docs/instruccionesapi.md`; no se depende del campo `services`
+(no documentado), para respetar la regla del proyecto de no usar campos fuera
+del contrato.
 
 ### 2. Gating de hooks sin condicionales
 
@@ -83,10 +84,8 @@ template. La UI no reimplementa la detección ni el consumo de streaming.
 
 ## Risks / Trade-offs
 
-- [`services` no documentado] → Solo se usa como pista; la inferencia por URL es
-  la fuente principal. Valores desconocidos se ignoran.
-- [Duplicación de TV] → El stack debe omitir `tv` en modo `tv`; si no, el video
-  aparece dos veces.
+- [Datos incompletos] → Sin URLs se cae a `radio` (comportamiento actual); el
+  error de video reusa "Reintentar".
 - [Fixtures de tests en modo tv por accidente] → Varios tests usan
   `videoStreamingUrl` con `radioStreamingUrl: null` (modo `tv`). Hay que
   ajustarlos para reflejar el modo buscado (agregar `radioStreamingUrl` donde se
@@ -95,8 +94,8 @@ template. La UI no reimplementa la detección ni el consumo de streaming.
   consulta `/streaming` en `tv`; se cubre con el `enabled`.
 - [PWA/offline] → El video usa `hls.js` bajo demanda (ya existente); el modo no
   altera la estrategia de caché.
-- [Estados nulos] → Sin URLs se cae a `radio` (comportamiento actual); el error
-  de video reusa "Reintentar".
+- [Duplicación de TV] → El stack debe omitir `tv` en modo `tv`; si no, el video
+  aparece dos veces.
 
 ## Migration Plan
 
@@ -110,5 +109,3 @@ template. La UI no reimplementa la detección ni el consumo de streaming.
 
 - ¿El bloque de video en `tv` lleva un encabezado ("TV en vivo") o es solo el
   reproductor? (Deferible; no cambia specs ni tareas.)
-- ¿Hay más valores posibles de `services` además de `radio`/`tv`? (Se ignoran
-  los desconocidos.)

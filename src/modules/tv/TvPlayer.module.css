@@ -1,0 +1,35 @@
+.player {
+  width: 100%;
+}
+
+.video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  display: block;
+  border-radius: var(--radius-md);
+  background: #000;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.errorText {
+  margin: 0;
+  color: var(--content-muted, #6b6761);
+  font-size: 0.9rem;
+}
+
+.retry {
+  border: 1px solid var(--content-card-border, rgba(128, 128, 128, 0.4));
+  background: transparent;
+  color: inherit;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font: inherit;
+  cursor: pointer;
+}

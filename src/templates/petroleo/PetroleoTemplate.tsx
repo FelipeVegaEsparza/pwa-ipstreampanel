@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import { FaBolt } from 'react-icons/fa6'
+import { useServiceMode } from '@/core/service'
 import { useLiveRadio } from '@/modules/player/useLiveRadio'
 import { NextTrack } from '@/modules/player/NextTrack'
 import { PlayerBar } from '@/modules/player/PlayerBar'
@@ -8,6 +9,7 @@ import { VuMeter } from '@/modules/player/VuMeter'
 import { InstallPrompt } from '@/modules/pwa/InstallPrompt'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
 import { GcBar } from '@/modules/content/GcBar'
+import { TvPlayer } from '@/modules/tv/TvPlayer'
 import { WeatherForecastSection } from '@/modules/weather/WeatherForecastSection'
 import { SmartImage } from '@/ui'
 import type { TemplateProps } from '../index'
@@ -23,7 +25,10 @@ export function PetroleoTemplate({
   isLoading,
   variant = 'green'
 }: PetroleoTemplateProps) {
-  const live = useLiveRadio(clientData)
+  const mode = useServiceMode(clientData)
+  const radioEnabled = mode !== 'tv'
+  const tvUrl = (clientData?.basicData?.videoStreamingUrl ?? '').trim() || null
+  const live = useLiveRadio(clientData, { enabled: radioEnabled })
   const socialLinks = getSocialLinks(clientData?.socialNetworks)
   const displayName = isLoading ? 'Cargando…' : live.name
   const onAir = live.status !== 'off'
@@ -98,66 +103,70 @@ export function PetroleoTemplate({
       <GcBar messages={clientData?.gcBar} className={styles.gcBar} />
 
       <main className={styles.main}>
-        <section className={styles.hero} id="vivo">
-          <VuMeter className={styles.vuLayer} />
-          <div className={styles.heroInner}>
-            <div className={styles.heroMedia}>
-              <SmartImage
-                className={styles.heroCover}
-                crossfade
-                src={live.trackCover}
-                fallbacks={live.fallbacks}
-                alt=""
-              />
-              <span className={styles.heroTag}>{onAir ? 'EN VIVO' : 'RADIO'}</span>
-              {city && <span className={styles.heroCity}>{city}</span>}
-            </div>
-
-            <div className={styles.heroInfo}>
-              <p className={styles.eyebrow}>{onAir ? 'Ahora suena' : 'Fuera del aire'}</p>
-              <h1 className={styles.headline}>{currentTitle}</h1>
-              <p className={styles.artist}>{currentArtist}</p>
-
-              <div className={styles.statsRow}>
-                <span className={styles.stat}>{live.listeners} oyentes</span>
-                <span className={styles.statSep}>•</span>
-                <span className={styles.stat}>{live.bitrate ? `${live.bitrate} kbps` : 'stream'}</span>
-                <span className={styles.statSep}>•</span>
-                <span className={styles.stat}>{showStatus}</span>
-              </div>
-
-              <div className={styles.controls}>
-                <button
-                  type="button"
-                  className={styles.play}
-                  onClick={live.toggle}
-                  disabled={!live.streamUrl}
-                  aria-label={live.isPlaying ? 'Pausar' : 'Escuchar en vivo'}
-                >
-                  {live.isPlaying ? '❚❚' : '▶'}
-                </button>
-                <span className={styles.playLabel}>
-                  {live.isPlaying ? 'Pausar transmisión' : 'Escuchar en vivo'}
-                </span>
-              </div>
-
-              <div className={styles.progressWrap}>
-                <TrackProgress
-                  duration={live.currentTrack?.duration}
-                  trackKey={live.trackKey}
-                  isPlaying={live.isPlaying}
-                  serverElapsed={live.currentTrack?.elapsed}
+        {radioEnabled ? (
+          <section className={styles.hero} id="vivo">
+            <VuMeter className={styles.vuLayer} />
+            <div className={styles.heroInner}>
+              <div className={styles.heroMedia}>
+                <SmartImage
+                  className={styles.heroCover}
+                  crossfade
+                  src={live.trackCover}
+                  fallbacks={live.fallbacks}
+                  alt=""
                 />
+                <span className={styles.heroTag}>{onAir ? 'EN VIVO' : 'RADIO'}</span>
+                {city && <span className={styles.heroCity}>{city}</span>}
               </div>
 
-              {live.nextTrack && (
-                <div className={styles.heroNext}>
-                  <NextTrack next={live.nextTrack} fallbackCover={live.basic?.coverUrl} />
+              <div className={styles.heroInfo}>
+                <p className={styles.eyebrow}>{onAir ? 'Ahora suena' : 'Fuera del aire'}</p>
+                <h1 className={styles.headline}>{currentTitle}</h1>
+                <p className={styles.artist}>{currentArtist}</p>
+
+                <div className={styles.statsRow}>
+                  <span className={styles.stat}>{live.listeners} oyentes</span>
+                  <span className={styles.statSep}>•</span>
+                  <span className={styles.stat}>{live.bitrate ? `${live.bitrate} kbps` : 'stream'}</span>
+                  <span className={styles.statSep}>•</span>
+                  <span className={styles.stat}>{showStatus}</span>
                 </div>
-              )}
+
+                <div className={styles.controls}>
+                  <button
+                    type="button"
+                    className={styles.play}
+                    onClick={live.toggle}
+                    disabled={!live.streamUrl}
+                    aria-label={live.isPlaying ? 'Pausar' : 'Escuchar en vivo'}
+                  >
+                    {live.isPlaying ? '❚❚' : '▶'}
+                  </button>
+                  <span className={styles.playLabel}>
+                    {live.isPlaying ? 'Pausar transmisión' : 'Escuchar en vivo'}
+                  </span>
+                </div>
+
+                <div className={styles.progressWrap}>
+                  <TrackProgress
+                    duration={live.currentTrack?.duration}
+                    trackKey={live.trackKey}
+                    isPlaying={live.isPlaying}
+                    serverElapsed={live.currentTrack?.elapsed}
+                  />
+                </div>
+
+                {live.nextTrack && (
+                  <div className={styles.heroNext}>
+                    <NextTrack next={live.nextTrack} fallbackCover={live.basic?.coverUrl} />
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        ) : (
+          tvUrl && <TvPlayer src={tvUrl} autoPlay />
+        )}
 
         <div className={styles.installRow}>
           <InstallPrompt />
@@ -172,7 +181,9 @@ export function PetroleoTemplate({
         </div>
       </main>
 
-      <PlayerBar fallbackCovers={[live.basic?.coverUrl, live.basic?.logoUrl]} />
+      {radioEnabled && (
+        <PlayerBar fallbackCovers={[live.basic?.coverUrl, live.basic?.logoUrl]} />
+      )}
     </div>
   )
 }

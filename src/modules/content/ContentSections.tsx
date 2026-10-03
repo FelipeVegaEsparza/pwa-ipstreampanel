@@ -1,5 +1,6 @@
 import { Fragment, type ReactNode } from 'react'
 import { useTenant } from '@/core/config/TenantContext'
+import { deriveServiceMode } from '@/core/service'
 import { useFullClientData } from '@/core/hooks/useFullClientData'
 import { ContactSection } from '@/modules/contact/ContactSection'
 import { ContactSocialSection } from './ContactSocialSection'
@@ -155,17 +156,22 @@ function sectionFor(
 export function ContentSectionStack({ clientData, isLoading }: SectionDataProps) {
   const template = clientData?.selectedTemplate
   const slots = useContentSlots()
+  const tvOnly = deriveServiceMode(clientData?.basicData) === 'tv'
 
   return (
     <SectionHeadingContext.Provider value={template === 'moderno2'}>
-      {getSectionOrder(template).map((id) => (
-        <Fragment key={id}>
-          <div id={sectionAnchorId(id)} style={{ scrollMarginTop: 96 }}>
-            {sectionFor(id, { clientData, isLoading }, template)}
-          </div>
-          {slots.after?.[id]}
-        </Fragment>
-      ))}
+      {getSectionOrder(template).map((id) => {
+        // En modo solo TV el video ya es el contenido principal del template.
+        if (id === 'tv' && tvOnly) return null
+        return (
+          <Fragment key={id}>
+            <div id={sectionAnchorId(id)} style={{ scrollMarginTop: 96 }}>
+              {sectionFor(id, { clientData, isLoading }, template)}
+            </div>
+            {slots.after?.[id]}
+          </Fragment>
+        )
+      })}
       {template !== 'minimalista' &&
         template !== 'moderno2' &&
         !(template && CONTACT_SOCIAL_SCHEMES[template]) && (

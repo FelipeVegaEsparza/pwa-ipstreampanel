@@ -4,6 +4,7 @@ import { firstPublicImageUrl } from '@/core/api'
 import { useTenant } from '@/core/config/TenantContext'
 import { useStreaming } from '@/core/hooks/useStreaming'
 import type { TemplateProps } from '../index'
+import { useServiceMode } from '@/core/service'
 import { InstallPrompt } from '@/modules/pwa/InstallPrompt'
 import { NextTrack } from '@/modules/player/NextTrack'
 import { useMediaSession } from '@/modules/player/useMediaSession'
@@ -13,6 +14,7 @@ import { VuMeter } from '@/modules/player/VuMeter'
 import { ShareButton } from '@/modules/share/ShareButton'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
 import { GcBar } from '@/modules/content/GcBar'
+import { TvPlayer } from '@/modules/tv/TvPlayer'
 import { Weather } from '@/modules/weather/Weather'
 import { SmartImage } from '@/ui'
 import styles from './CoveredTemplate.module.css'
@@ -28,7 +30,11 @@ function longDate(date: Date): string {
 export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
   const tenant = useTenant()
   const { setStreamUrl, isPlaying, toggle } = usePlayer()
-  const { data: streaming } = useStreaming(tenant.clientId ?? '')
+  const radioEnabled = useServiceMode(clientData) !== 'tv'
+  const tvUrl = (clientData?.basicData?.videoStreamingUrl ?? '').trim() || null
+  const { data: streaming } = useStreaming(tenant.clientId ?? '', {
+    enabled: radioEnabled
+  })
 
   const basic = clientData?.basicData
   const name = basic?.projectName ?? tenant.clientId ?? 'IPStream'
@@ -62,11 +68,14 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
     )
   }, [cover])
 
-  useMediaSession({
-    title: currentTrack?.title,
-    artist: currentTrack?.artist,
-    artwork: cover
-  })
+  useMediaSession(
+    {
+      title: currentTrack?.title,
+      artist: currentTrack?.artist,
+      artwork: cover
+    },
+    { enabled: radioEnabled }
+  )
 
   const { progress } = useTrackProgress(
     currentTrack?.duration,
@@ -86,24 +95,26 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
   return (
     <div className={styles.page}>
       <section className={styles.hero}>
-        <div className={styles.heroBg} aria-hidden="true">
-          {bg.previous && (
-            <img
-              className={`${styles.bgImg} ${styles.bgOut}`}
-              src={bg.previous}
-              alt=""
-            />
-          )}
-          {bg.current && <img className={styles.bgImg} src={bg.current} alt="" />}
-          <VuMeter className={styles.vuLayer} />
-          <div className={styles.bgOverlay} />
-        </div>
+        {radioEnabled && (
+          <div className={styles.heroBg} aria-hidden="true">
+            {bg.previous && (
+              <img
+                className={`${styles.bgImg} ${styles.bgOut}`}
+                src={bg.previous}
+                alt=""
+              />
+            )}
+            {bg.current && <img className={styles.bgImg} src={bg.current} alt="" />}
+            <VuMeter className={styles.vuLayer} />
+            <div className={styles.bgOverlay} />
+          </div>
+        )}
 
         <div className={styles.container}>
           <header className={styles.header}>
             <SmartImage className={styles.logo} src={basic?.logoUrl} alt={name} />
             <div className={styles.headerRight}>
-              {onAir && (
+              {radioEnabled && onAir && (
                 <span className={styles.live}>
                   <span className={styles.liveDot} />
                   {isLive ? 'EN VIVO' : 'EN EL AIRE'}
@@ -129,71 +140,77 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
             </div>
           </header>
 
-          <div className={styles.heroInner}>
-            <div className={styles.coverCard}>
-              <SmartImage
-                className={styles.cover}
-                crossfade
-                src={trackCover}
-                fallbacks={[basic?.coverUrl, basic?.logoUrl]}
-                alt=""
-              />
-              <div className={styles.coverBar}>
-                <div
-                  className={styles.coverBarFill}
-                  style={{ width: `${progress * 100}%` }}
+          {radioEnabled ? (
+            <div className={styles.heroInner}>
+              <div className={styles.coverCard}>
+                <SmartImage
+                  className={styles.cover}
+                  crossfade
+                  src={trackCover}
+                  fallbacks={[basic?.coverUrl, basic?.logoUrl]}
+                  alt=""
+                />
+                <div className={styles.coverBar}>
+                  <div
+                    className={styles.coverBarFill}
+                    style={{ width: `${progress * 100}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.heroInfo}>
+                <span className={styles.onAir}>
+                  {status === 'off'
+                    ? 'FUERA DEL AIRE'
+                    : isLive
+                      ? 'ON AIR'
+                      : 'EN EL AIRE'}
+                </span>
+                <span className={styles.nowLabel}>Reproduciendo ahora</span>
+                <h1 className={styles.title}>
+                  {isLoading ? 'Cargando…' : currentTrack?.title ?? name}
+                </h1>
+                <p className={styles.artist}>
+                  {currentTrack?.artist ?? 'En Vivo'}
+                </p>
+                {currentTrack?.album && (
+                  <p className={styles.album}>{currentTrack.album}</p>
+                )}
+
+                <div className={styles.controls}>
+                  <button
+                    type="button"
+                    className={styles.play}
+                    onClick={toggle}
+                    disabled={!streamUrl}
+                  >
+                    {isPlaying ? '❚❚ Detener' : '▶ Reproducir ahora'}
+                  </button>
+                  <ShareButton title={name} />
+                </div>
+
+                <div className={styles.meta}>
+                  <span>
+                    <b>{streaming?.listeners ?? 0}</b> oyentes
+                  </span>
+                  {streaming?.bitrate ? (
+                    <span>
+                      <b>{streaming.bitrate}</b> kbps
+                    </span>
+                  ) : null}
+                </div>
+
+                <NextTrack
+                  next={streaming?.nextTrack}
+                  fallbackCover={basic?.coverUrl}
                 />
               </div>
             </div>
-
-            <div className={styles.heroInfo}>
-              <span className={styles.onAir}>
-                {status === 'off'
-                  ? 'FUERA DEL AIRE'
-                  : isLive
-                    ? 'ON AIR'
-                    : 'EN EL AIRE'}
-              </span>
-              <span className={styles.nowLabel}>Reproduciendo ahora</span>
-              <h1 className={styles.title}>
-                {isLoading ? 'Cargando…' : currentTrack?.title ?? name}
-              </h1>
-              <p className={styles.artist}>
-                {currentTrack?.artist ?? 'En Vivo'}
-              </p>
-              {currentTrack?.album && (
-                <p className={styles.album}>{currentTrack.album}</p>
-              )}
-
-              <div className={styles.controls}>
-                <button
-                  type="button"
-                  className={styles.play}
-                  onClick={toggle}
-                  disabled={!streamUrl}
-                >
-                  {isPlaying ? '❚❚ Detener' : '▶ Reproducir ahora'}
-                </button>
-                <ShareButton title={name} />
-              </div>
-
-              <div className={styles.meta}>
-                <span>
-                  <b>{streaming?.listeners ?? 0}</b> oyentes
-                </span>
-                {streaming?.bitrate ? (
-                  <span>
-                    <b>{streaming.bitrate}</b> kbps
-                  </span>
-                ) : null}
-              </div>
-
-              <NextTrack
-                next={streaming?.nextTrack}
-                fallbackCover={basic?.coverUrl}
-              />
+          ) : (
+            <div className={styles.heroInner}>
+              {tvUrl && <TvPlayer src={tvUrl} autoPlay />}
             </div>
-          </div>
+          )}
         </div>
       </section>
 

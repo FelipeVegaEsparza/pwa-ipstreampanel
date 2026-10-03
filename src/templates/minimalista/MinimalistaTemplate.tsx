@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { firstPublicImageUrl } from '@/core/api'
+import { useServiceMode } from '@/core/service'
 import { useTenant } from '@/core/config/TenantContext'
 import { useStreaming } from '@/core/hooks/useStreaming'
 import type { TemplateProps } from '../index'
@@ -13,7 +14,7 @@ import { VuMeter } from '@/modules/player/VuMeter'
 import { ShareButton } from '@/modules/share/ShareButton'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
 import { GcBar } from '@/modules/content/GcBar'
-import { useHlsVideo } from '@/modules/tv/useHlsVideo'
+import { TvPlayer } from '@/modules/tv/TvPlayer'
 import { Weather } from '@/modules/weather/Weather'
 import { DigitalClock, SmartImage } from '@/ui'
 import styles from './MinimalistaTemplate.module.css'
@@ -21,7 +22,10 @@ import styles from './MinimalistaTemplate.module.css'
 export function MinimalistaTemplate({ clientData, isLoading }: TemplateProps) {
   const tenant = useTenant()
   const { setStreamUrl, isPlaying, toggle } = usePlayer()
-  const { data: streaming } = useStreaming(tenant.clientId ?? '')
+  const radioEnabled = useServiceMode(clientData) !== 'tv'
+  const { data: streaming } = useStreaming(tenant.clientId ?? '', {
+    enabled: radioEnabled
+  })
   const { pathname } = useLocation()
   const isHome = pathname === '/'
 
@@ -35,8 +39,6 @@ export function MinimalistaTemplate({ clientData, isLoading }: TemplateProps) {
     trackCover ?? `${currentTrack?.title ?? ''}|${currentTrack?.artist ?? ''}`
 
   const [tvOpen, setTvOpen] = useState(false)
-  const tvVideoRef = useRef<HTMLVideoElement>(null)
-  useHlsVideo(tvVideoRef, tvOpen ? tvUrl : null)
 
   useEffect(() => {
     if (streamUrl) setStreamUrl(streamUrl)
@@ -60,11 +62,14 @@ export function MinimalistaTemplate({ clientData, isLoading }: TemplateProps) {
     setBg((prev) => (prev.current === artwork ? prev : { current: artwork, previous: prev.current }))
   }, [artwork])
 
-  useMediaSession({
-    title: currentTrack?.title,
-    artist: currentTrack?.artist,
-    artwork
-  })
+  useMediaSession(
+    {
+      title: currentTrack?.title,
+      artist: currentTrack?.artist,
+      artwork
+    },
+    { enabled: radioEnabled }
+  )
 
   const { progress } = useTrackProgress(
     currentTrack?.duration,
@@ -78,11 +83,13 @@ export function MinimalistaTemplate({ clientData, isLoading }: TemplateProps) {
   return (
     <div className={styles.page}>
       <div className={styles.bg} aria-hidden="true">
-        {bg.previous && (
+        {radioEnabled && bg.previous && (
           <img className={`${styles.bgImg} ${styles.bgOut}`} src={bg.previous} alt="" />
         )}
-        {bg.current && <img className={styles.bgImg} src={bg.current} alt="" />}
-        <VuMeter className={styles.vuLayer} />
+        {radioEnabled && bg.current && (
+          <img className={styles.bgImg} src={bg.current} alt="" />
+        )}
+        {radioEnabled && <VuMeter className={styles.vuLayer} />}
         <div className={styles.bgOverlay} />
       </div>
 
@@ -96,62 +103,70 @@ export function MinimalistaTemplate({ clientData, isLoading }: TemplateProps) {
 
         {isHome ? (
           <div className={styles.columns}>
-            <section className={styles.current}>
-              <div className={styles.artworkWrap}>
-                <SmartImage
-                  className={styles.artwork}
-                  crossfade
-                  src={trackCover}
-                  fallbacks={[basic?.coverUrl, basic?.logoUrl]}
-                  alt=""
-                />
-                <div className={styles.coverBar}>
-                  <div
-                    className={styles.coverBarFill}
-                    style={{ width: `${progress * 100}%` }}
+            {radioEnabled ? (
+              <section className={styles.current}>
+                <div className={styles.artworkWrap}>
+                  <SmartImage
+                    className={styles.artwork}
+                    crossfade
+                    src={trackCover}
+                    fallbacks={[basic?.coverUrl, basic?.logoUrl]}
+                    alt=""
                   />
+                  <div className={styles.coverBar}>
+                    <div
+                      className={styles.coverBarFill}
+                      style={{ width: `${progress * 100}%` }}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div className={styles.status}>
-                {status === 'off' ? 'Fuera del aire' : isLive ? '● EN VIVO' : 'En el aire'}
-              </div>
+                <div className={styles.status}>
+                  {status === 'off' ? 'Fuera del aire' : isLive ? '● EN VIVO' : 'En el aire'}
+                </div>
 
-              <h1 className={styles.title}>
-                {isLoading ? 'Cargando…' : currentTrack?.title ?? 'Sintoniza nuestra señal'}
-              </h1>
-              <p className={styles.artist}>
-                {currentTrack?.artist ?? (isLoading ? '' : name)}
-              </p>
+                <h1 className={styles.title}>
+                  {isLoading ? 'Cargando…' : currentTrack?.title ?? 'Sintoniza nuestra señal'}
+                </h1>
+                <p className={styles.artist}>
+                  {currentTrack?.artist ?? (isLoading ? '' : name)}
+                </p>
 
-              <div className={styles.playerArea}>
-                <button
-                  type="button"
-                  className={styles.play}
-                  onClick={toggle}
-                  disabled={!streamUrl}
-                  aria-label={isPlaying ? 'Pausar' : 'Reproducir'}
-                >
-                  {isPlaying ? '❚❚' : '▶'}
-                </button>
-              </div>
-            </section>
+                <div className={styles.playerArea}>
+                  <button
+                    type="button"
+                    className={styles.play}
+                    onClick={toggle}
+                    disabled={!streamUrl}
+                    aria-label={isPlaying ? 'Pausar' : 'Reproducir'}
+                  >
+                    {isPlaying ? '❚❚' : '▶'}
+                  </button>
+                </div>
+              </section>
+            ) : (
+              <section className={styles.current}>
+                {tvUrl && <TvPlayer src={tvUrl} autoPlay />}
+              </section>
+            )}
 
             <aside className={styles.side}>
               <div className={styles.clockArea}>
                 <DigitalClock />
               </div>
 
-              <div className={styles.sideNext}>
-                <NextTrack
-                  variant="large"
-                  next={streaming?.nextTrack}
-                  fallbackCover={basic?.coverUrl}
-                />
-              </div>
+              {radioEnabled && (
+                <div className={styles.sideNext}>
+                  <NextTrack
+                    variant="large"
+                    next={streaming?.nextTrack}
+                    fallbackCover={basic?.coverUrl}
+                  />
+                </div>
+              )}
 
               <div className={styles.toolbar}>
-                {tvUrl && (
+                {radioEnabled && tvUrl && (
                   <button
                     type="button"
                     className={styles.toolbarBtn}
@@ -207,13 +222,7 @@ export function MinimalistaTemplate({ clientData, isLoading }: TemplateProps) {
             >
               ×
             </button>
-            <video
-              ref={tvVideoRef}
-              className={styles.tvVideo}
-              controls
-              playsInline
-              autoPlay
-            />
+            <TvPlayer src={tvUrl} autoPlay />
           </div>
         </div>
       )}

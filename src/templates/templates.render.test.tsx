@@ -34,7 +34,7 @@ const clientData = {
   gcBar: [{ id: 'gc1', text: 'Mensaje GC', order: 0 }]
 } as unknown as FullClientData
 
-function renderTemplate(templateId: string) {
+function renderTemplate(templateId: string, data: FullClientData = clientData) {
   const Template = getTemplate(templateId)
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } }
@@ -44,7 +44,7 @@ function renderTemplate(templateId: string) {
       <TenantProvider>
         <PlayerProvider>
           <MemoryRouter>
-            <Template clientData={clientData} isLoading={false} />
+            <Template clientData={data} isLoading={false} />
           </MemoryRouter>
         </PlayerProvider>
       </TenantProvider>
@@ -75,6 +75,24 @@ describe('templates nuevos', () => {
     expect(
       screen.queryByRole('button', { name: 'Instalar en iPhone o iPad' })
     ).toBeNull()
+  })
+
+  it('cada template renderiza el video en modo solo TV', () => {
+    baked.clientId = 'cmtest'
+    const tvData = {
+      basicData: {
+        projectName: 'Radio Test',
+        radioStreamingUrl: null,
+        videoStreamingUrl: 'https://panelipstream.cl/live/tv.m3u8'
+      },
+      gcBar: []
+    } as unknown as FullClientData
+
+    for (const template of NEW_TEMPLATES) {
+      const { container, unmount } = renderTemplate(template.id, tvData)
+      expect(container.querySelector('video')).not.toBeNull()
+      unmount()
+    }
   })
 
   it('aplica el accentColor del cliente como token global', () => {

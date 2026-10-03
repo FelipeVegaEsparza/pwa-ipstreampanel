@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import { firstPublicImageUrl } from '@/core/api'
+import { deriveServiceMode } from '@/core/service'
 import { useTenant } from '@/core/config/TenantContext'
 import { useStreaming } from '@/core/hooks/useStreaming'
 import { PlayerBar } from '@/modules/player/PlayerBar'
@@ -10,13 +11,18 @@ import { useMediaSession } from '@/modules/player/useMediaSession'
 import { NextTrack } from '@/modules/player/NextTrack'
 import { TrackProgress } from '@/modules/player/TrackProgress'
 import { GcBar } from '@/modules/content/GcBar'
+import { TvPlayer } from '@/modules/tv/TvPlayer'
 import type { TemplateProps } from '../index'
 import styles from './ModernaTemplate.module.css'
 
 export function ModernaTemplate({ clientData, isLoading }: TemplateProps) {
   const tenant = useTenant()
   const { setStreamUrl, isPlaying, toggle } = usePlayer()
-  const { data: streaming } = useStreaming(tenant.clientId ?? '')
+  const radioEnabled = deriveServiceMode(clientData?.basicData) !== 'tv'
+  const tvUrl = (clientData?.basicData?.videoStreamingUrl ?? '').trim() || null
+  const { data: streaming } = useStreaming(tenant.clientId ?? '', {
+    enabled: radioEnabled
+  })
 
   const basic = clientData?.basicData
   const name = basic?.projectName ?? tenant.clientId ?? 'IPStream'
@@ -38,11 +44,14 @@ export function ModernaTemplate({ clientData, isLoading }: TemplateProps) {
   const status = streaming?.status ?? 'off'
   const isLive = streaming?.isLive ?? false
 
-  useMediaSession({
-    title: streaming?.currentTrack?.title,
-    artist: streaming?.currentTrack?.artist,
-    artwork: cover
-  })
+  useMediaSession(
+    {
+      title: streaming?.currentTrack?.title,
+      artist: streaming?.currentTrack?.artist,
+      artwork: cover
+    },
+    { enabled: radioEnabled }
+  )
 
   return (
     <div className={styles.page}>
@@ -57,47 +66,51 @@ export function ModernaTemplate({ clientData, isLoading }: TemplateProps) {
       <GcBar messages={clientData?.gcBar} />
 
       <main className={styles.main}>
-        <section
-          className={styles.hero}
-          style={cover ? { backgroundImage: `url(${cover})` } : undefined}
-        >
-          <div className={styles.heroOverlay}>
-            <p className={styles.status}>
-              {status === 'off' ? 'Fuera del aire' : isLive ? 'EN VIVO' : 'En el aire'}
-            </p>
-            <h1 className={styles.track}>
-              {streaming?.currentTrack?.title ?? 'Sintoniza nuestra señal'}
-            </h1>
-            <p className={styles.artist}>
-              {streaming?.currentTrack?.artist ?? name}
-            </p>
-            <div className={styles.controls}>
-              <button
-                type="button"
-                className={styles.play}
-                onClick={toggle}
-                disabled={!streamUrl}
-              >
-                {isPlaying ? 'Pausar' : 'Reproducir en vivo'}
-              </button>
-              <span className={styles.listeners}>
-                {streaming?.listeners ?? 0} oyentes
-              </span>
+        {radioEnabled ? (
+          <section
+            className={styles.hero}
+            style={cover ? { backgroundImage: `url(${cover})` } : undefined}
+          >
+            <div className={styles.heroOverlay}>
+              <p className={styles.status}>
+                {status === 'off' ? 'Fuera del aire' : isLive ? 'EN VIVO' : 'En el aire'}
+              </p>
+              <h1 className={styles.track}>
+                {streaming?.currentTrack?.title ?? 'Sintoniza nuestra señal'}
+              </h1>
+              <p className={styles.artist}>
+                {streaming?.currentTrack?.artist ?? name}
+              </p>
+              <div className={styles.controls}>
+                <button
+                  type="button"
+                  className={styles.play}
+                  onClick={toggle}
+                  disabled={!streamUrl}
+                >
+                  {isPlaying ? 'Pausar' : 'Reproducir en vivo'}
+                </button>
+                <span className={styles.listeners}>
+                  {streaming?.listeners ?? 0} oyentes
+                </span>
+              </div>
+              <div className={styles.progressArea}>
+                <TrackProgress
+                  duration={currentTrack?.duration}
+                  trackKey={trackKey}
+                  isPlaying={isPlaying}
+                  serverElapsed={currentTrack?.elapsed}
+                />
+                <NextTrack
+                  next={streaming?.nextTrack}
+                  fallbackCover={basic?.coverUrl}
+                />
+              </div>
             </div>
-            <div className={styles.progressArea}>
-              <TrackProgress
-                duration={currentTrack?.duration}
-                trackKey={trackKey}
-                isPlaying={isPlaying}
-                serverElapsed={currentTrack?.elapsed}
-              />
-              <NextTrack
-                next={streaming?.nextTrack}
-                fallbackCover={basic?.coverUrl}
-              />
-            </div>
-          </div>
-        </section>
+          </section>
+        ) : (
+          tvUrl && <TvPlayer src={tvUrl} autoPlay />
+        )}
 
         <div className={styles.contentArea}>
           <Outlet />
@@ -105,7 +118,9 @@ export function ModernaTemplate({ clientData, isLoading }: TemplateProps) {
       </main>
 
       <footer className={styles.footer}>{name} · IPStream Panel</footer>
-      <PlayerBar fallbackCovers={[basic?.coverUrl, basic?.logoUrl]} />
+      {radioEnabled && (
+        <PlayerBar fallbackCovers={[basic?.coverUrl, basic?.logoUrl]} />
+      )}
     </div>
   )
 }

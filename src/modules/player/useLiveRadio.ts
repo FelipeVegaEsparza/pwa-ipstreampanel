@@ -30,9 +30,13 @@ export interface LiveRadio {
  * el tema actual/siguiente, artwork y controles de reproducción, y mantiene
  * sincronizada la sesión de medios del dispositivo.
  */
-export function useLiveRadio(clientData: FullClientData | undefined): LiveRadio {
+export function useLiveRadio(
+  clientData: FullClientData | undefined,
+  options: { enabled?: boolean } = {}
+): LiveRadio {
   const tenant = useTenant()
-  const { data: streaming } = useStreaming(tenant.clientId ?? '')
+  const enabled = options.enabled ?? true
+  const { data: streaming } = useStreaming(tenant.clientId ?? '', { enabled })
   const { isPlaying, toggle, setStreamUrl, corsCapable } = usePlayer()
 
   const basic = clientData?.basicData
@@ -51,11 +55,14 @@ export function useLiveRadio(clientData: FullClientData | undefined): LiveRadio 
     if (streamUrl) setStreamUrl(streamUrl)
   }, [streamUrl, setStreamUrl])
 
-  useMediaSession({
-    title: currentTrack?.title,
-    artist: currentTrack?.artist,
-    artwork
-  })
+  useMediaSession(
+    {
+      title: currentTrack?.title,
+      artist: currentTrack?.artist,
+      artwork
+    },
+    { enabled }
+  )
 
   return {
     basic,

@@ -24,7 +24,7 @@ function fullData(selectedTemplate: string): FullClientData {
       logoUrl: null,
       coverUrl: null,
       websiteUrl: null,
-      radioStreamingUrl: null,
+      radioStreamingUrl: 'https://stream.example/radio.mp3',
       videoStreamingUrl: 'https://stream.example/tv.m3u8',
       ...base
     },
@@ -338,6 +338,27 @@ describe('ContentSectionStack', () => {
   it('en moderno2 la programación usa tabs por día', () => {
     const { container } = renderStack('moderno2')
     expect(container.querySelectorAll('[role="tab"]')).toHaveLength(7)
+  })
+
+  it('en modo solo TV omite la sección de TV del stack', () => {
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } }
+    })
+    const data = fullData('moderna')
+    if (data.basicData) {
+      data.basicData.radioStreamingUrl = null
+      data.basicData.videoStreamingUrl = 'https://stream.example/tv.m3u8'
+    }
+    const { container } = render(
+      <QueryClientProvider client={queryClient}>
+        <TenantProvider>
+          <MemoryRouter>
+            <ContentSectionStack clientData={data} isLoading={false} />
+          </MemoryRouter>
+        </TenantProvider>
+      </QueryClientProvider>
+    )
+    expect(sectionTitles(container)).not.toContain('TV en vivo')
   })
 
   it('combina contacto y síguenos en una sección de dos columnas en covered', () => {

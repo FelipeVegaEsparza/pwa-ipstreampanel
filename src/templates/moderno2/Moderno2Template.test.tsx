@@ -176,13 +176,26 @@ describe('Moderno2Template', () => {
 
   it('habilita el play sólo si hay streamUrl', () => {
     const data = clientData()
-    if (data.basicData) data.basicData.radioStreamingUrl = null
+    if (data.basicData) {
+      data.basicData.radioStreamingUrl = null
+      data.basicData.videoStreamingUrl = null
+    }
     const { unmount } = renderTemplate(data)
     expect(screen.getByRole('button', { name: 'REPRODUCIR' })).toBeDisabled()
     unmount()
 
     renderTemplate(clientData())
     expect(screen.getByRole('button', { name: 'REPRODUCIR' })).toBeEnabled()
+  })
+
+  it('en modo solo TV muestra el video y oculta la radio', () => {
+    const data = clientData()
+    if (data.basicData) data.basicData.radioStreamingUrl = null
+
+    const { container } = renderTemplate(data)
+
+    expect(screen.queryByRole('button', { name: 'REPRODUCIR' })).toBeNull()
+    expect(container.querySelector('video')).not.toBeNull()
   })
 
   it('integra la vista de clima multi-ciudad', async () => {

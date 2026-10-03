@@ -9,11 +9,9 @@ cómo se presenta el sitio cuando el cliente solo ofrece TV.
 
 ### Requirement: Detección del modo de servicio
 El sistema SHALL derivar el modo de servicio del cliente a partir de los datos
-públicos: `radio` cuando exista `radioStreamingUrl`, `tv` cuando exista
-`videoStreamingUrl` y no radio, y `both` cuando existan ambos. Si no se puede
-determinar (sin URLs), SHALL asumir `radio` (comportamiento actual). El campo
-`services`, si viene y es reconocible, SHALL usarse solo como refuerzo de la
-inferencia.
+públicos y documentados: `radio` cuando exista `radioStreamingUrl`, `tv` cuando
+exista `videoStreamingUrl` y no radio, y `both` cuando existan ambos. Si no hay
+ninguna URL, SHALL asumir `radio` (comportamiento actual).
 
 #### Scenario: Cliente solo radio
 - **WHEN** el cliente tiene `radioStreamingUrl` y no `videoStreamingUrl`

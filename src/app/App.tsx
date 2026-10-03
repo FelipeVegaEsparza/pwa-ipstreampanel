@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom'
 import { ErrorScreen } from './ErrorScreen'
 import { LoadingScreen } from './LoadingScreen'
 import { getStreaming } from '@/core/api'
+import { deriveServiceMode } from '@/core/service'
 import { useTenant } from '@/core/config/TenantContext'
 import { useFullClientData } from '@/core/hooks/useFullClientData'
 import { usePwaRegistration } from '@/modules/pwa/usePwaRegistration'
@@ -66,12 +67,15 @@ function TenantApp({ clientId }: { clientId: string }) {
 
   // Prefetch del estado de streaming durante el splash: al montar el template
   // la carátula del tema ya está en caché y no hay salto desde el logo.
+  // En clientes solo TV no se consulta el streaming.
   useEffect(() => {
+    if (!data) return
+    if (deriveServiceMode(data.basicData) === 'tv') return
     void queryClient.prefetchQuery({
       queryKey: ['streaming', clientId],
       queryFn: () => getStreaming(clientId)
     })
-  }, [clientId, queryClient])
+  }, [clientId, queryClient, data])
 
   if (isError && !data) {
     return (

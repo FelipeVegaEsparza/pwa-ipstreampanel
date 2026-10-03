@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
+import { useServiceMode } from '@/core/service'
 import { useLiveRadio } from '@/modules/player/useLiveRadio'
 import { NextTrack } from '@/modules/player/NextTrack'
 import { TrackProgress } from '@/modules/player/TrackProgress'
 import { InstallPrompt } from '@/modules/pwa/InstallPrompt'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
 import { GcBar } from '@/modules/content/GcBar'
+import { TvPlayer } from '@/modules/tv/TvPlayer'
 import { SmartImage } from '@/ui'
 import {
   getSectionOrder,
@@ -17,7 +19,9 @@ import type { TemplateProps } from '../index'
 import styles from './PlaylistTemplate.module.css'
 
 export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
-  const live = useLiveRadio(clientData)
+  const radioEnabled = useServiceMode(clientData) !== 'tv'
+  const tvUrl = (clientData?.basicData?.videoStreamingUrl ?? '').trim() || null
+  const live = useLiveRadio(clientData, { enabled: radioEnabled })
   const socialLinks = getSocialLinks(clientData?.socialNetworks)
   const displayName = isLoading ? 'Cargando…' : live.name
   const liveTag =
@@ -72,61 +76,67 @@ export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
             <span className={styles.srOnly}>Playlist</span>
           </div>
 
-          <div className={styles.coverWrap}>
-            <SmartImage
-              className={styles.cover}
-              crossfade
-              src={live.trackCover}
-              fallbacks={live.fallbacks}
-              alt=""
-            />
-            <div className={styles.coverGlow} aria-hidden="true" />
-            {live.isPlaying && (
-              <div className={styles.eq} aria-hidden="true">
-                <span />
-                <span />
-                <span />
+          {radioEnabled ? (
+            <>
+              <div className={styles.coverWrap}>
+                <SmartImage
+                  className={styles.cover}
+                  crossfade
+                  src={live.trackCover}
+                  fallbacks={live.fallbacks}
+                  alt=""
+                />
+                <div className={styles.coverGlow} aria-hidden="true" />
+                {live.isPlaying && (
+                  <div className={styles.eq} aria-hidden="true">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          <p className={styles.liveTag}>
-            <span className={live.status === 'off' ? styles.offDot : styles.onDot} />
-            {liveTag}
-          </p>
-          <h1 className={styles.song}>
-            {live.currentTrack?.title ?? 'La lista suena sola'}
-          </h1>
-          {showArtist && <p className={styles.artist}>{live.currentTrack?.artist}</p>}
+              <p className={styles.liveTag}>
+                <span className={live.status === 'off' ? styles.offDot : styles.onDot} />
+                {liveTag}
+              </p>
+              <h1 className={styles.song}>
+                {live.currentTrack?.title ?? 'La lista suena sola'}
+              </h1>
+              {showArtist && <p className={styles.artist}>{live.currentTrack?.artist}</p>}
 
-          <div className={styles.progressWrap}>
-            <TrackProgress
-              duration={live.currentTrack?.duration}
-              trackKey={live.trackKey}
-              isPlaying={live.isPlaying}
-              serverElapsed={live.currentTrack?.elapsed}
-            />
-          </div>
+              <div className={styles.progressWrap}>
+                <TrackProgress
+                  duration={live.currentTrack?.duration}
+                  trackKey={live.trackKey}
+                  isPlaying={live.isPlaying}
+                  serverElapsed={live.currentTrack?.elapsed}
+                />
+              </div>
 
-          <div className={styles.controls}>
-            <button
-              type="button"
-              className={styles.play}
-              onClick={live.toggle}
-              disabled={!live.streamUrl}
-              aria-label={live.isPlaying ? 'Pausar la playlist' : 'Reproducir la playlist'}
-            >
-              {live.isPlaying ? '❚❚' : '▶'}
-            </button>
-            <div className={styles.metaCol}>
-              <span className={styles.listeners}>{live.listeners} oyentes</span>
-              <span className={styles.bitrate}>{live.bitrate ? `${live.bitrate} kbps` : 'stream'}</span>
-            </div>
-          </div>
+              <div className={styles.controls}>
+                <button
+                  type="button"
+                  className={styles.play}
+                  onClick={live.toggle}
+                  disabled={!live.streamUrl}
+                  aria-label={live.isPlaying ? 'Pausar la playlist' : 'Reproducir la playlist'}
+                >
+                  {live.isPlaying ? '❚❚' : '▶'}
+                </button>
+                <div className={styles.metaCol}>
+                  <span className={styles.listeners}>{live.listeners} oyentes</span>
+                  <span className={styles.bitrate}>{live.bitrate ? `${live.bitrate} kbps` : 'stream'}</span>
+                </div>
+              </div>
 
-          <div className={styles.deckNext}>
-            <NextTrack next={live.nextTrack} fallbackCover={live.basic?.coverUrl} />
-          </div>
+              <div className={styles.deckNext}>
+                <NextTrack next={live.nextTrack} fallbackCover={live.basic?.coverUrl} />
+              </div>
+            </>
+          ) : (
+            tvUrl && <TvPlayer src={tvUrl} autoPlay />
+          )}
 
           {socialLinks.length > 0 && (
             <div className={styles.socials}>

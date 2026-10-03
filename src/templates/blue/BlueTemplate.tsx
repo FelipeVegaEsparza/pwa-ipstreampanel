@@ -1,9 +1,11 @@
 import { useEffect, useState, type ComponentType } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
+import { useServiceMode } from '@/core/service'
 import { useLiveRadio } from '@/modules/player/useLiveRadio'
 import { PlayerBar } from '@/modules/player/PlayerBar'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
 import { GcBar } from '@/modules/content/GcBar'
+import { TvPlayer } from '@/modules/tv/TvPlayer'
 import { SmartImage } from '@/ui'
 import {
   FaBullhorn,
@@ -49,7 +51,10 @@ const SECTION_ICONS: Record<SectionId, ComponentType<{ size?: number }>> = {
 }
 
 export function BlueTemplate({ clientData, isLoading }: TemplateProps) {
-  const live = useLiveRadio(clientData)
+  const mode = useServiceMode(clientData)
+  const radioEnabled = mode !== 'tv'
+  const tvUrl = (clientData?.basicData?.videoStreamingUrl ?? '').trim() || null
+  const live = useLiveRadio(clientData, { enabled: radioEnabled })
   const socialLinks = getSocialLinks(clientData?.socialNetworks)
   const displayName = isLoading ? 'Cargando…' : live.name
   const { pathname } = useLocation()
@@ -134,11 +139,14 @@ export function BlueTemplate({ clientData, isLoading }: TemplateProps) {
       <GcBar messages={clientData?.gcBar} className={styles.gcBar} />
 
       <main className={styles.main}>
+        {!radioEnabled && tvUrl && <TvPlayer src={tvUrl} autoPlay />}
         <Outlet />
       </main>
 
       <footer className={styles.footer}>{displayName} · IPStream Panel</footer>
-      <PlayerBar fallbackCovers={[live.basic?.coverUrl, live.basic?.logoUrl]} />
+      {radioEnabled && (
+        <PlayerBar fallbackCovers={[live.basic?.coverUrl, live.basic?.logoUrl]} />
+      )}
 
       {isHome && navItems.length > 0 && (
         <>
