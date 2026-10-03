@@ -5,6 +5,12 @@ export type HlsVideoStatus = 'loading' | 'playing' | 'error'
 
 export interface HlsVideoHandle {
   status: HlsVideoStatus
+  /** `true` cuando el autoplay con sonido fue bloqueado y se reprodujo en silencio. */
+  muted: boolean
+  /** `true` cuando el navegador bloqueó incluso el autoplay silenciado. */
+  needsInteraction: boolean
+  /** Quita el silencio y reproduce; debe llamarse desde un gesto del usuario. */
+  enableSound: () => void
   reload: () => void
 }
 
@@ -16,6 +22,8 @@ export function useHlsVideo(
   src: string | null
 ): HlsVideoHandle {
   const [status, setStatus] = useState<HlsVideoStatus>('loading')
+  const [muted, setMuted] = useState(false)
+  const [needsInteraction, setNeedsInteraction] = useState(false)
   const [reloadTick, setReloadTick] = useState(0)
   const networkRetries = useRef(0)
   const mediaRetries = useRef(0)
@@ -25,6 +33,22 @@ export function useHlsVideo(
     mediaRetries.current = 0
     setReloadTick((tick) => tick + 1)
   }, [])
+
+  const enableSound = useCallback(() => {
+    const video = videoRef.current
+    if (!video) return
+    video.muted = false
+    setMuted(false)
+    try {
+      void video.play().catch(() => {
+        // Si el gesto no alcanza, se mantiene silenciado.
+        video.muted = true
+        setMuted(true)
+      })
+    } catch {
+      // play() no implementado: se mantiene el estado actual.
+    }
+  }, [videoRef])
 
   useEffect(() => {
     const video = videoRef.current
@@ -36,14 +60,63 @@ export function useHlsVideo(
     networkRetries.current = 0
     mediaRetries.current = 0
     setStatus('loading')
+    setMuted(false)
+    setNeedsInteraction(false)
+
+    let disposed = false
+
+    // Intenta autoplay con sonido; si el navegador lo bloquea, cae a silenciado.
+    const attemptPlay = () => {
+      if (disposed) return
+      let result: Promise<void> | undefined
+      try {
+        result = video.play()
+      } catch {
+        return
+      }
+      if (!result || typeof result.then !== 'function') return
+
+      result
+        .then(() => {
+          if (disposed) return
+          setMuted(video.muted)
+          setNeedsInteraction(false)
+        })
+        .catch((error: unknown) => {
+          if (disposed) return
+          if ((error as { name?: string } | null)?.name !== 'NotAllowedError') {
+            return
+          }
+          // Autoplay con sonido bloqueado: reintentar silenciado.
+          video.muted = true
+          setMuted(true)
+          let mutedResult: Promise<void> | undefined
+          try {
+            mutedResult = video.play()
+          } catch {
+            setNeedsInteraction(true)
+            return
+          }
+          if (!mutedResult || typeof mutedResult.then !== 'function') return
+          mutedResult
+            .then(() => {
+              if (!disposed) setNeedsInteraction(false)
+            })
+            .catch(() => {
+              if (!disposed) setNeedsInteraction(true)
+            })
+        })
+    }
+
+    const handlePlaying = () => setStatus('playing')
+    const handleError = () => setStatus('error')
+    video.addEventListener('playing', handlePlaying)
+    video.addEventListener('error', handleError)
 
     // Reproducción nativa (p. ej. Safari): la fuente se asigna al elemento.
     if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      const handlePlaying = () => setStatus('playing')
-      const handleError = () => setStatus('error')
-
-      video.addEventListener('playing', handlePlaying)
-      video.addEventListener('error', handleError)
+      const handleLoaded = () => attemptPlay()
+      video.addEventListener('loadedmetadata', handleLoaded)
 
       video.src = src
       // Reasignar el mismo src no reinicia el elemento nativo: load() fuerza
@@ -51,14 +124,15 @@ export function useHlsVideo(
       video.load()
 
       return () => {
+        disposed = true
         video.removeEventListener('playing', handlePlaying)
         video.removeEventListener('error', handleError)
+        video.removeEventListener('loadedmetadata', handleLoaded)
       }
     }
 
     // hls.js se carga bajo demanda (chunk aparte) para no engordar el bundle
     // inicial de las radios que no usan señal de TV.
-    let disposed = false
     let hls: InstanceType<typeof import('hls.js')['default']> | null = null
 
     void import('hls.js')
@@ -75,7 +149,7 @@ export function useHlsVideo(
         instance.attachMedia(video)
 
         instance.on(HlsModule.Events.MANIFEST_PARSED, () => {
-          if (!disposed) setStatus('playing')
+          if (!disposed) attemptPlay()
         })
 
         instance.on(HlsModule.Events.ERROR, (_event, data) => {
@@ -116,8 +190,10 @@ export function useHlsVideo(
     return () => {
       disposed = true
       hls?.destroy()
+      video.removeEventListener('playing', handlePlaying)
+      video.removeEventListener('error', handleError)
     }
   }, [src, videoRef, reloadTick])
 
-  return { status, reload }
+  return { status, muted, needsInteraction, enableSound, reload }
 }

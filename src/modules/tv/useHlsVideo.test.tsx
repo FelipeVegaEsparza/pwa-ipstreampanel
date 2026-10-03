@@ -44,11 +44,13 @@ vi.mock('hls.js', () => ({ default: hlsMock.MockHls }))
 
 function Harness({ src }: { src: string | null }) {
   const ref = useRef<HTMLVideoElement>(null)
-  const { status } = useHlsVideo(ref, src)
+  const { status, muted, needsInteraction } = useHlsVideo(ref, src)
   return (
     <>
       <video ref={ref} data-testid="video" />
       <span>{status}</span>
+      <span>{muted ? 'muted' : 'unmuted'}</span>
+      <span>{needsInteraction ? 'needs-interaction' : 'no-interaction'}</span>
     </>
   )
 }
@@ -115,5 +117,37 @@ describe('useHlsVideo', () => {
     })
 
     expect(screen.getByText('loading')).toBeInTheDocument()
+  })
+
+  it('reproduce automáticamente y marca "playing" con el evento playing', async () => {
+    vi.spyOn(HTMLMediaElement.prototype, 'play').mockResolvedValue(undefined)
+    const instance = await renderHls()
+
+    act(() => {
+      instance.handlers.manifestParsed?.('manifestParsed')
+    })
+
+    const video = screen.getByTestId('video')
+    act(() => {
+      video.dispatchEvent(new Event('playing'))
+    })
+
+    expect(screen.getByText('playing')).toBeInTheDocument()
+    expect(screen.getByText('unmuted')).toBeInTheDocument()
+  })
+
+  it('cae a reproducción silenciada si el autoplay con sonido es rechazado', async () => {
+    const play = vi
+      .spyOn(HTMLMediaElement.prototype, 'play')
+      .mockRejectedValueOnce(new DOMException('blocked', 'NotAllowedError'))
+      .mockResolvedValue(undefined)
+    const instance = await renderHls()
+
+    await act(async () => {
+      instance.handlers.manifestParsed?.('manifestParsed')
+    })
+
+    await waitFor(() => expect(screen.getByText('muted')).toBeInTheDocument())
+    expect(play).toHaveBeenCalledTimes(2)
   })
 })

@@ -11,7 +11,10 @@ interface TvPlayerProps {
 /** Reproductor de TV en vivo (HLS) reutilizable por la sección y los templates. */
 export function TvPlayer({ src, className, autoPlay = false }: TvPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
-  const { status, reload } = useHlsVideo(videoRef, src)
+  const { status, muted, needsInteraction, enableSound, reload } = useHlsVideo(
+    videoRef,
+    src
+  )
 
   return (
     <div className={`${styles.player} ${className ?? ''}`}>
@@ -22,6 +25,19 @@ export function TvPlayer({ src, className, autoPlay = false }: TvPlayerProps) {
         playsInline
         autoPlay={autoPlay}
       />
+
+      {(needsInteraction || muted) && (
+        <button
+          type="button"
+          className={styles.soundBtn}
+          onClick={enableSound}
+          aria-label={needsInteraction ? 'Reproducir' : 'Activar sonido'}
+          aria-pressed={false}
+        >
+          {needsInteraction ? 'Reproducir' : 'Activar sonido'}
+        </button>
+      )}
+
       {status === 'error' && (
         <div className={styles.error} role="status">
           <p className={styles.errorText}>
