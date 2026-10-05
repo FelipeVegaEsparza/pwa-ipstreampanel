@@ -1,6 +1,6 @@
 import { useEffect, useState, type ComponentType } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
-import { useServiceMode } from '@/core/service'
+import { getTvStreamUrl, useServiceMode } from '@/core/service'
 import { useLiveRadio } from '@/modules/player/useLiveRadio'
 import { PlayerBar } from '@/modules/player/PlayerBar'
 import { BrandIcon, getSocialLinks } from '@/modules/social/brand'
@@ -53,7 +53,7 @@ const SECTION_ICONS: Record<SectionId, ComponentType<{ size?: number }>> = {
 export function BlueTemplate({ clientData, isLoading }: TemplateProps) {
   const mode = useServiceMode(clientData)
   const radioEnabled = mode !== 'tv'
-  const tvUrl = (clientData?.basicData?.videoStreamingUrl ?? '').trim() || null
+  const tvUrl = getTvStreamUrl(clientData?.basicData)
   const live = useLiveRadio(clientData, { enabled: radioEnabled })
   const socialLinks = getSocialLinks(clientData?.socialNetworks)
   const displayName = isLoading ? 'Cargando…' : live.name

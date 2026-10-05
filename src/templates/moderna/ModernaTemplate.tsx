@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import { firstPublicImageUrl } from '@/core/api'
-import { deriveServiceMode } from '@/core/service'
+import { deriveServiceMode, getTvStreamUrl } from '@/core/service'
 import { useTenant } from '@/core/config/TenantContext'
 import { useStreaming } from '@/core/hooks/useStreaming'
 import { PlayerBar } from '@/modules/player/PlayerBar'
@@ -19,7 +19,7 @@ export function ModernaTemplate({ clientData, isLoading }: TemplateProps) {
   const tenant = useTenant()
   const { setStreamUrl, isPlaying, toggle } = usePlayer()
   const radioEnabled = deriveServiceMode(clientData?.basicData) !== 'tv'
-  const tvUrl = (clientData?.basicData?.videoStreamingUrl ?? '').trim() || null
+  const tvUrl = getTvStreamUrl(clientData?.basicData)
   const { data: streaming } = useStreaming(tenant.clientId ?? '', {
     enabled: radioEnabled
   })

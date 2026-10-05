@@ -30,3 +30,18 @@ export function useServiceMode(
 ): ServiceMode {
   return deriveServiceMode(clientData?.basicData)
 }
+
+/**
+ * Devuelve la URL estable de la TV en vivo del cliente, o `null` si no existe.
+ * Es la única fuente de la señal: la app nunca construye rutas `/live`, `/dj`
+ * ni `/vod`; el panel entrega `videoStreamingUrl` y su redirect decide la señal
+ * al aire.
+ */
+export function getTvStreamUrl(
+  basicData: BasicData | null | undefined
+): string | null {
+  const url = basicData?.videoStreamingUrl
+  if (typeof url !== 'string') return null
+  const trimmed = url.trim()
+  return trimmed.length > 0 ? trimmed : null
+}

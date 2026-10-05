@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { firstPublicImageUrl } from '@/core/api'
-import { useServiceMode } from '@/core/service'
+import { getTvStreamUrl, useServiceMode } from '@/core/service'
 import { useTenant } from '@/core/config/TenantContext'
 import { useStreaming } from '@/core/hooks/useStreaming'
 import type { TemplateProps } from '../index'
@@ -32,7 +32,7 @@ export function MinimalistaTemplate({ clientData, isLoading }: TemplateProps) {
   const basic = clientData?.basicData
   const name = basic?.projectName ?? tenant.clientId ?? 'IPStream'
   const streamUrl = basic?.radioStreamingUrl ?? null
-  const tvUrl = (basic?.videoStreamingUrl ?? '').trim() || null
+  const tvUrl = getTvStreamUrl(basic)
   const currentTrack = streaming?.currentTrack
   const trackCover = currentTrack?.coverUrl ?? null
   const trackKey =

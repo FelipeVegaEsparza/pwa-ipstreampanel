@@ -83,7 +83,7 @@ describe('templates nuevos', () => {
       basicData: {
         projectName: 'Radio Test',
         radioStreamingUrl: null,
-        videoStreamingUrl: 'https://panelipstream.cl/live/tv.m3u8'
+        videoStreamingUrl: 'https://panelipstream.cl/tv/tv_test.m3u8'
       },
       gcBar: []
     } as unknown as FullClientData

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
-import { useServiceMode } from '@/core/service'
+import { getTvStreamUrl, useServiceMode } from '@/core/service'
 import { useLiveRadio } from '@/modules/player/useLiveRadio'
 import { PlayerBar } from '@/modules/player/PlayerBar'
 import { GcBar } from '@/modules/content/GcBar'
@@ -27,7 +27,7 @@ type NavId = SectionId | 'inicio'
 
 export function Moderno2Template({ clientData, isLoading }: TemplateProps) {
   const radioEnabled = useServiceMode(clientData) !== 'tv'
-  const tvUrl = (clientData?.basicData?.videoStreamingUrl ?? '').trim() || null
+  const tvUrl = getTvStreamUrl(clientData?.basicData)
   const live = useLiveRadio(clientData, { enabled: radioEnabled })
   const socialLinks = getSocialLinks(clientData?.socialNetworks)
   const history = useSongHistory(

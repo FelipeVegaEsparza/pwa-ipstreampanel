@@ -4,7 +4,7 @@ import { firstPublicImageUrl } from '@/core/api'
 import { useTenant } from '@/core/config/TenantContext'
 import { useStreaming } from '@/core/hooks/useStreaming'
 import type { TemplateProps } from '../index'
-import { useServiceMode } from '@/core/service'
+import { getTvStreamUrl, useServiceMode } from '@/core/service'
 import { InstallPrompt } from '@/modules/pwa/InstallPrompt'
 import { NextTrack } from '@/modules/player/NextTrack'
 import { useMediaSession } from '@/modules/player/useMediaSession'
@@ -31,7 +31,7 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
   const tenant = useTenant()
   const { setStreamUrl, isPlaying, toggle } = usePlayer()
   const radioEnabled = useServiceMode(clientData) !== 'tv'
-  const tvUrl = (clientData?.basicData?.videoStreamingUrl ?? '').trim() || null
+  const tvUrl = getTvStreamUrl(clientData?.basicData)
   const { data: streaming } = useStreaming(tenant.clientId ?? '', {
     enabled: radioEnabled
   })
