@@ -17,6 +17,22 @@ export interface HlsVideoHandle {
 const MAX_NETWORK_RETRIES = 3
 const MAX_MEDIA_RETRIES = 3
 
+/**
+ * Ajustes de hls.js para señales en vivo. Por defecto hls.js no reajusta su
+ * posición a la ventana en vivo (`maxLiveSyncPlaybackRate: 1` y
+ * `liveMaxLatencyDurationCount: Infinity`): con playlists deslizantes cortas, si
+ * el buffer se atrasa (red lenta o app en segundo plano) el borde en vivo avanza
+ * y la imagen queda congelada. Mantenemos la reproducción cerca del borde y
+ * permitimos acelerar para recuperar el atraso.
+ */
+const HLS_LIVE_CONFIG = {
+  lowLatencyMode: false,
+  liveSyncDurationCount: 2,
+  liveMaxLatencyDurationCount: 6,
+  maxLiveSyncPlaybackRate: 1.5,
+  backBufferLength: 30
+}
+
 export function useHlsVideo(
   videoRef: RefObject<HTMLVideoElement | null>,
   src: string | null
@@ -143,10 +159,10 @@ export function useHlsVideo(
           return
         }
 
-        const instance = new HlsModule()
+        const instance = new HlsModule(HLS_LIVE_CONFIG)
         hls = instance
-        instance.loadSource(src)
         instance.attachMedia(video)
+        instance.loadSource(src)
 
         instance.on(HlsModule.Events.MANIFEST_PARSED, () => {
           if (!disposed) attemptPlay()

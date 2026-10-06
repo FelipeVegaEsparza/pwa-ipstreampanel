@@ -6,6 +6,7 @@ import { useHlsVideo } from './useHlsVideo'
 type Handler = (...args: unknown[]) => void
 interface MockInstance {
   handlers: Record<string, Handler>
+  config: Record<string, unknown>
   startLoad: ReturnType<typeof vi.fn>
   recoverMediaError: ReturnType<typeof vi.fn>
   destroy: ReturnType<typeof vi.fn>
@@ -25,12 +26,14 @@ const hlsMock = vi.hoisted(() => {
       OTHER_ERROR: 'otherError'
     }
     handlers: Record<string, Handler> = {}
+    config: Record<string, unknown> = {}
     startLoad = vi.fn()
     recoverMediaError = vi.fn()
     destroy = vi.fn()
     loadSource = vi.fn()
     attachMedia = vi.fn()
-    constructor() {
+    constructor(config: Record<string, unknown> = {}) {
+      this.config = config
       instances.push(this as unknown as MockInstance)
     }
     on(event: string, cb: Handler) {
@@ -72,6 +75,16 @@ afterEach(() => {
 })
 
 describe('useHlsVideo', () => {
+  it('configura hls.js para mantenerse cerca del borde en vivo', async () => {
+    const instance = await renderHls()
+
+    expect(instance.config).toMatchObject({
+      liveSyncDurationCount: 2,
+      liveMaxLatencyDurationCount: 6,
+      maxLiveSyncPlaybackRate: 1.5
+    })
+  })
+
   it('ignora los errores no fatales (no consume reintentos ni marca error)', async () => {
     const instance = await renderHls()
 
