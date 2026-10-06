@@ -16,6 +16,7 @@ export interface HlsVideoHandle {
 
 const MAX_NETWORK_RETRIES = 3
 const MAX_MEDIA_RETRIES = 3
+const MAX_NATIVE_RETRIES = 3
 
 /**
  * Ajustes de hls.js para señales en vivo. Por defecto hls.js no reajusta su
@@ -43,10 +44,12 @@ export function useHlsVideo(
   const [reloadTick, setReloadTick] = useState(0)
   const networkRetries = useRef(0)
   const mediaRetries = useRef(0)
+  const nativeRetries = useRef(0)
 
   const reload = useCallback(() => {
     networkRetries.current = 0
     mediaRetries.current = 0
+    nativeRetries.current = 0
     setReloadTick((tick) => tick + 1)
   }, [])
 
@@ -75,6 +78,7 @@ export function useHlsVideo(
 
     networkRetries.current = 0
     mediaRetries.current = 0
+    nativeRetries.current = 0
     setStatus('loading')
     setMuted(false)
     setNeedsInteraction(false)
@@ -125,89 +129,109 @@ export function useHlsVideo(
     }
 
     const handlePlaying = () => setStatus('playing')
-    const handleError = () => setStatus('error')
     video.addEventListener('playing', handlePlaying)
-    video.addEventListener('error', handleError)
 
-    // Reproducción nativa (p. ej. Safari): la fuente se asigna al elemento.
+    let hls: InstanceType<typeof import('hls.js')['default']> | null = null
+    let detachNative = () => {}
+
+    // hls.js se carga bajo demanda (chunk aparte) para no engordar el bundle
+    // inicial de las radios que no usan señal de TV. Se usa cuando el navegador
+    // no reproduce HLS de forma nativa.
+    const setupHls = () => {
+      void import('hls.js')
+        .then(({ default: HlsModule }) => {
+          if (disposed) return
+          if (!HlsModule.isSupported()) {
+            setStatus('error')
+            return
+          }
+
+          const instance = new HlsModule(HLS_LIVE_CONFIG)
+          hls = instance
+          instance.attachMedia(video)
+          instance.loadSource(src)
+
+          instance.on(HlsModule.Events.MANIFEST_PARSED, () => {
+            if (!disposed) attemptPlay()
+          })
+
+          instance.on(HlsModule.Events.ERROR, (_event, data) => {
+            if (disposed) return
+
+            // Los errores no fatales (buffer, fragmentos recuperables) no deben
+            // consumir reintentos ni marcar la señal como caída.
+            if (!data.fatal) return
+
+            if (data.type === HlsModule.ErrorTypes.NETWORK_ERROR) {
+              if (networkRetries.current < MAX_NETWORK_RETRIES) {
+                networkRetries.current += 1
+                instance.startLoad()
+              } else {
+                setStatus('error')
+              }
+              return
+            }
+
+            if (data.type === HlsModule.ErrorTypes.MEDIA_ERROR) {
+              if (mediaRetries.current < MAX_MEDIA_RETRIES) {
+                mediaRetries.current += 1
+                instance.recoverMediaError()
+              } else {
+                setStatus('error')
+              }
+              return
+            }
+
+            // Cualquier otro error fatal (mux/keySystem/other): sin recuperación.
+            setStatus('error')
+          })
+        })
+        .catch(() => {
+          if (!disposed) setStatus('error')
+        })
+    }
+
+    // El HLS nativo (`<video src>`) reproduce la señal directamente: sigue el
+    // redirect del panel sin las restricciones CORS de XHR, que rechazan el 302
+    // de `/tv/...` para los dominios de los clientes. Es la vía preferida cuando
+    // el navegador lo soporta (Chrome/Safari); hls.js queda como respaldo.
     if (video.canPlayType('application/vnd.apple.mpegurl')) {
       const handleLoaded = () => attemptPlay()
+      const handleNativeError = () => {
+        if (disposed) return
+        // El HLS nativo no se recupera solo: un error aislado no debe tumbar la
+        // señal, así que reintentamos reasignando la fuente.
+        if (nativeRetries.current < MAX_NATIVE_RETRIES) {
+          nativeRetries.current += 1
+          video.src = src
+          video.load()
+          return
+        }
+        // Sin más margen nativo: último intento con hls.js antes de rendirse.
+        video.removeEventListener('error', handleNativeError)
+        setupHls()
+      }
+
       video.addEventListener('loadedmetadata', handleLoaded)
+      video.addEventListener('error', handleNativeError)
+      detachNative = () => {
+        video.removeEventListener('loadedmetadata', handleLoaded)
+        video.removeEventListener('error', handleNativeError)
+      }
 
       video.src = src
       // Reasignar el mismo src no reinicia el elemento nativo: load() fuerza
       // la recarga cuando reintentamos tras un error.
       video.load()
-
-      return () => {
-        disposed = true
-        video.removeEventListener('playing', handlePlaying)
-        video.removeEventListener('error', handleError)
-        video.removeEventListener('loadedmetadata', handleLoaded)
-      }
+    } else {
+      setupHls()
     }
-
-    // hls.js se carga bajo demanda (chunk aparte) para no engordar el bundle
-    // inicial de las radios que no usan señal de TV.
-    let hls: InstanceType<typeof import('hls.js')['default']> | null = null
-
-    void import('hls.js')
-      .then(({ default: HlsModule }) => {
-        if (disposed) return
-        if (!HlsModule.isSupported()) {
-          setStatus('error')
-          return
-        }
-
-        const instance = new HlsModule(HLS_LIVE_CONFIG)
-        hls = instance
-        instance.attachMedia(video)
-        instance.loadSource(src)
-
-        instance.on(HlsModule.Events.MANIFEST_PARSED, () => {
-          if (!disposed) attemptPlay()
-        })
-
-        instance.on(HlsModule.Events.ERROR, (_event, data) => {
-          if (disposed) return
-
-          // Los errores no fatales (buffer, fragmentos recuperables) no deben
-          // consumir reintentos ni marcar la señal como caída.
-          if (!data.fatal) return
-
-          if (data.type === HlsModule.ErrorTypes.NETWORK_ERROR) {
-            if (networkRetries.current < MAX_NETWORK_RETRIES) {
-              networkRetries.current += 1
-              instance.startLoad()
-            } else {
-              setStatus('error')
-            }
-            return
-          }
-
-          if (data.type === HlsModule.ErrorTypes.MEDIA_ERROR) {
-            if (mediaRetries.current < MAX_MEDIA_RETRIES) {
-              mediaRetries.current += 1
-              instance.recoverMediaError()
-            } else {
-              setStatus('error')
-            }
-            return
-          }
-
-          // Cualquier otro error fatal (mux/keySystem/other): sin recuperación.
-          setStatus('error')
-        })
-      })
-      .catch(() => {
-        if (!disposed) setStatus('error')
-      })
 
     return () => {
       disposed = true
       hls?.destroy()
+      detachNative()
       video.removeEventListener('playing', handlePlaying)
-      video.removeEventListener('error', handleError)
     }
   }, [src, videoRef, reloadTick])
 

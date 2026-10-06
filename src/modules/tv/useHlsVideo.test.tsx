@@ -120,16 +120,56 @@ describe('useHlsVideo', () => {
     await waitFor(() => expect(screen.getByText('error')).toBeInTheDocument())
   })
 
-  it('no trata "stalled" como fatal en HLS nativo', async () => {
+  it('usa HLS nativo cuando el navegador lo declara', async () => {
     vi.spyOn(HTMLMediaElement.prototype, 'canPlayType').mockReturnValue('maybe')
     render(<Harness src="https://x/stream.m3u8" />)
 
-    const video = screen.getByTestId('video')
+    const video = await screen.findByTestId('video')
+    await waitFor(() => expect(video.getAttribute('src')).toBe('https://x/stream.m3u8'))
+    expect(hlsMock.instances.length).toBe(0)
+  })
+
+  it('no marca error en HLS nativo ante un evento "stalled" aislado', async () => {
+    vi.spyOn(HTMLMediaElement.prototype, 'canPlayType').mockReturnValue('maybe')
+    render(<Harness src="https://x/stream.m3u8" />)
+
+    const video = await screen.findByTestId('video')
     act(() => {
       video.dispatchEvent(new Event('stalled'))
     })
 
     expect(screen.getByText('loading')).toBeInTheDocument()
+  })
+
+  it('reintenta el HLS nativo ante un error aislado antes de marcarlo', async () => {
+    vi.spyOn(HTMLMediaElement.prototype, 'canPlayType').mockReturnValue('maybe')
+    render(<Harness src="https://x/stream.m3u8" />)
+
+    const video = await screen.findByTestId('video')
+    await waitFor(() => expect(video.getAttribute('src')).toBe('https://x/stream.m3u8'))
+
+    act(() => {
+      video.dispatchEvent(new Event('error'))
+    })
+
+    expect(screen.getByText('loading')).toBeInTheDocument()
+    expect(screen.queryByText('error')).toBeNull()
+  })
+
+  it('cae a hls.js cuando el HLS nativo agota sus reintentos', async () => {
+    vi.spyOn(HTMLMediaElement.prototype, 'canPlayType').mockReturnValue('maybe')
+    render(<Harness src="https://x/stream.m3u8" />)
+
+    const video = await screen.findByTestId('video')
+    await waitFor(() => expect(video.getAttribute('src')).toBe('https://x/stream.m3u8'))
+
+    for (let i = 0; i < 4; i += 1) {
+      act(() => {
+        video.dispatchEvent(new Event('error'))
+      })
+    }
+
+    await waitFor(() => expect(hlsMock.instances.length).toBe(1))
   })
 
   it('reproduce automáticamente y marca "playing" con el evento playing', async () => {
