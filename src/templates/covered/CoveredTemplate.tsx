@@ -207,7 +207,7 @@ export function CoveredTemplate({ clientData, isLoading }: TemplateProps) {
               </div>
             </div>
           ) : (
-            <div className={styles.heroInner}>
+            <div className={`${styles.heroInner} ${styles.heroInnerTv}`}>
               {tvUrl && <TvPlayer src={tvUrl} autoPlay />}
             </div>
           )}

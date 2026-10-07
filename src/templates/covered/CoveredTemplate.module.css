@@ -195,6 +195,19 @@
   padding: clamp(3rem, 8vh, 5.5rem) 0 clamp(5rem, 14vh, 9rem);
 }
 
+/* Hero TV: reproductor grande y centrado en pantallas grandes */
+.heroInnerTv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(2.5rem, 7vh, 5rem) 0 clamp(3rem, 10vh, 6rem);
+}
+
+.heroInnerTv > * {
+  width: min(100%, 1040px);
+  margin: 0 auto;
+}
+
 .coverCard {
   display: flex;
   flex-direction: column;
