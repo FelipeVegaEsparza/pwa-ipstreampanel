@@ -136,7 +136,7 @@ export function ModernoTemplate({ clientData, isLoading }: TemplateProps) {
           </section>
         ) : (
           <section className={styles.hero} id="vivo">
-            {tvUrl && <TvPlayer src={tvUrl} autoPlay />}
+            {tvUrl && <TvPlayer src={tvUrl} autoPlay hero />}
           </section>
         )}
 

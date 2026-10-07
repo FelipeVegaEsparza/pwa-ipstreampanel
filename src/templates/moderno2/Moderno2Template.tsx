@@ -173,7 +173,7 @@ export function Moderno2Template({ clientData, isLoading }: TemplateProps) {
               </div>
             </div>
           ) : (
-            tvUrl && <TvPlayer src={tvUrl} autoPlay />
+            tvUrl && <TvPlayer src={tvUrl} autoPlay hero />
           )}
         </div>
       </header>

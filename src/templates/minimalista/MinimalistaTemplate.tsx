@@ -146,7 +146,7 @@ export function MinimalistaTemplate({ clientData, isLoading }: TemplateProps) {
               </section>
             ) : (
               <section className={styles.current}>
-                {tvUrl && <TvPlayer src={tvUrl} autoPlay />}
+                {tvUrl && <TvPlayer src={tvUrl} autoPlay hero />}
               </section>
             )}
 

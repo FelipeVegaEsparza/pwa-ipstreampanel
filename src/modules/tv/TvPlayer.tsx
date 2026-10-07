@@ -6,10 +6,17 @@ interface TvPlayerProps {
   src: string
   className?: string
   autoPlay?: boolean
+  /** Limita y centra el reproductor para usarlo como hero en pantallas grandes. */
+  hero?: boolean
 }
 
 /** Reproductor de TV en vivo (HLS) reutilizable por la sección y los templates. */
-export function TvPlayer({ src, className, autoPlay = false }: TvPlayerProps) {
+export function TvPlayer({
+  src,
+  className,
+  autoPlay = false,
+  hero = false
+}: TvPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const { status, muted, needsInteraction, enableSound, reload } = useHlsVideo(
     videoRef,
@@ -17,7 +24,7 @@ export function TvPlayer({ src, className, autoPlay = false }: TvPlayerProps) {
   )
 
   return (
-    <div className={`${styles.player} ${className ?? ''}`}>
+    <div className={`${styles.player} ${hero ? styles.hero : ''} ${className ?? ''}`}>
       <video
         ref={videoRef}
         className={styles.video}

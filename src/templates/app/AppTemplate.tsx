@@ -99,7 +99,7 @@ export function AppTemplate({ clientData, isLoading }: TemplateProps) {
             )}
           </>
         ) : (
-          tvUrl && <TvPlayer src={tvUrl} autoPlay />
+          tvUrl && <TvPlayer src={tvUrl} autoPlay hero />
         )}
 
         <div className={styles.feed}>

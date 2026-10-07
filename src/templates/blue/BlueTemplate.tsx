@@ -139,7 +139,7 @@ export function BlueTemplate({ clientData, isLoading }: TemplateProps) {
       <GcBar messages={clientData?.gcBar} className={styles.gcBar} />
 
       <main className={styles.main}>
-        {!radioEnabled && tvUrl && <TvPlayer src={tvUrl} autoPlay />}
+        {!radioEnabled && tvUrl && <TvPlayer src={tvUrl} autoPlay hero />}
         <Outlet />
       </main>
 

@@ -109,7 +109,7 @@ export function ModernaTemplate({ clientData, isLoading }: TemplateProps) {
             </div>
           </section>
         ) : (
-          tvUrl && <TvPlayer src={tvUrl} autoPlay />
+          tvUrl && <TvPlayer src={tvUrl} autoPlay hero />
         )}
 
         <div className={styles.contentArea}>

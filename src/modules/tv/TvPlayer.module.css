@@ -3,6 +3,12 @@
   width: 100%;
 }
 
+/* Reproductor grande y centrado para el hero de los templates. */
+.hero {
+  max-width: 1040px;
+  margin-inline: auto;
+}
+
 .video {
   width: 100%;
   aspect-ratio: 16 / 9;

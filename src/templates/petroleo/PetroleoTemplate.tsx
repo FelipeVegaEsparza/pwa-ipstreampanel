@@ -165,7 +165,9 @@ export function PetroleoTemplate({
             </div>
           </section>
         ) : (
-          tvUrl && <TvPlayer src={tvUrl} autoPlay />
+          <div className={styles.tvHero}>
+            {tvUrl && <TvPlayer src={tvUrl} autoPlay hero />}
+          </div>
         )}
 
         <div className={styles.installRow}>

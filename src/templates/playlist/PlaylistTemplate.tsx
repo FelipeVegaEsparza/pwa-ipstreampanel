@@ -68,6 +68,12 @@ export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
 
       <GcBar messages={clientData?.gcBar} />
 
+      {!radioEnabled && tvUrl && (
+        <div className={styles.tvHero}>
+          <TvPlayer src={tvUrl} autoPlay hero />
+        </div>
+      )}
+
       <div className={styles.layout}>
         <aside className={styles.deck}>
           <div className={styles.deckHead}>
@@ -134,9 +140,7 @@ export function PlaylistTemplate({ clientData, isLoading }: TemplateProps) {
                 <NextTrack next={live.nextTrack} fallbackCover={live.basic?.coverUrl} />
               </div>
             </>
-          ) : (
-            tvUrl && <TvPlayer src={tvUrl} autoPlay />
-          )}
+          ) : null}
 
           {socialLinks.length > 0 && (
             <div className={styles.socials}>

@@ -124,7 +124,7 @@ export function TradicionalTemplate({ clientData, isLoading }: TemplateProps) {
             )}
           </>
         ) : (
-          tvUrl && <TvPlayer src={tvUrl} autoPlay />
+          tvUrl && <TvPlayer src={tvUrl} autoPlay hero />
         )}
 
         <div className={styles.content}>
